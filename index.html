@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f4e79">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAADqklEQVR4Xu3dMW7bZhiAYbnInjlTguw9RtfkED1FcoDcoofI3GN0D7Jlzg2KgoAgyI1s8KX9/6SfZydt/Xz9kRJl6e7th08nWOu3tRvCfwREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiCSV2nrPfv+9cu2v/67j5+33eEuHDygG5V8+/Fz2yN042cduK27I31r8/1DuHkl67x/8/pqw8Mkte+AroqZJJfHuEpqvz3tL6DLaHZUzG2XPe0rpt0EdO7mMNH8yjmmXZQ0e0Avp5v7dlHSpAG95G72VdJ0AS3pHP48tc4yk6Y6tU0UkHQeaaqMZrmV8f3rl28/fho8j7Es1OavpK8zfgIZPKvNMIoGTyCDp5hhFI0MaKmnrCDLE46Bp7NhAalnQwMbGhOQejY3qqExAXEYAwIyfp7IkCE0ICCOREAkAiIREMmAgN59/Hz/PcJ079+8fv4b9QMC4kgGBLS87m4IbWtZz+e/pzEgoDMNbWXgSo4MyBzaxMB6TqcJ/jN1efxuy68wNp3F4AnkdLbaDPVMMYGuGjKKHjRJOovpPlzBGe2GqdKZNKDFeaUMpMmfakw3ga685JImnDf3zR7Q/avsw8+kXXRztpuA/vf52mFi2lc0l/YX0KWrdd9RT/st5sq+A/rVBdPZJEkdJpcdXwOtc+PIbd7WgSu54VAT6PKTKx68L/2Y431+e82De3uMbfc2iVluZbBTAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiCSAQGdv/2azT3/2g4IiCMZE9Dz/6G8BENWdUxAp9OYR3tgQ+o5ncYFpKENjarndDrdvf3wacNHcumfP/9+oj2zwu9//bFiqwcNO4VxDAIiERCJgEgERCIgEgGRCIjkVdr6pid65YqpmEAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiORfObvPHuSCUyMAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAADqklEQVR4Xu3dMW7bZhiAYbnInjlTguw9RtfkED1FcoDcoofI3GN0D7Jlzg2KgoAgyI1s8KX9/6SfZydt/Xz9kRJl6e7th08nWOu3tRvCfwREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiCSV2nrPfv+9cu2v/67j5+33eEuHDygG5V8+/Fz2yN042cduK27I31r8/1DuHkl67x/8/pqw8Mkte+AroqZJJfHuEpqvz3tL6DLaHZUzG2XPe0rpt0EdO7mMNH8yjmmXZQ0e0Avp5v7dlHSpAG95G72VdJ0AS3pHP48tc4yk6Y6tU0UkHQeaaqMZrmV8f3rl28/fho8j7Es1OavpK8zfgIZPKvNMIoGTyCDp5hhFI0MaKmnrCDLE46Bp7NhAalnQwMbGhOQejY3qqExAXEYAwIyfp7IkCE0ICCOREAkAiIREMmAgN59/Hz/PcJ079+8fv4b9QMC4kgGBLS87m4IbWtZz+e/pzEgoDMNbWXgSo4MyBzaxMB6TqcJ/jN1efxuy68wNp3F4AnkdLbaDPVMMYGuGjKKHjRJOovpPlzBGe2GqdKZNKDFeaUMpMmfakw3ga685JImnDf3zR7Q/avsw8+kXXRztpuA/vf52mFi2lc0l/YX0KWrdd9RT/st5sq+A/rVBdPZJEkdJpcdXwOtc+PIbd7WgSu54VAT6PKTKx68L/2Y431+e82De3uMbfc2iVluZbBTAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiCSAQGdv/2azT3/2g4IiCMZE9Dz/6G8BENWdUxAp9OYR3tgQ+o5ncYFpKENjarndDrdvf3wacNHcumfP/9+oj2zwu9//bFiqwcNO4VxDAIiERCJgEgERCIgEgGRCIjkVdr6pid65YqpmEAkAiIREImASAREIiASAZEIiERAJAIiERCJgEgERCIgEgGRCIhEQCQCIhEQiYBIBEQiIBIBkQiIREAkAiIREImASAREIiASAZEIiORfObvPHuSCUyMAAAAASUVORK5CYII=">
+<title>Отчёт СМР</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:16px/1.4 system-ui,-apple-system,Roboto,sans-serif;background:#eef1f5;color:#1b2430;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:#1f4e79;color:#fff;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));font-size:19px;font-weight:600}
+main{padding:12px;max-width:720px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid #d5dbe3;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;padding:8px 2px;font-size:12px;color:#6b7686}
+nav button span{display:block;font-size:22px}
+nav button.on{color:#1f4e79;font-weight:700}
+.card{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.banner{border-radius:12px;padding:12px 14px;margin-bottom:10px;font-weight:600}
+.banner.ok{background:#d8f0dd;color:#1b6b2f}.banner.no{background:#fdeccb;color:#8a5a00}
+label{display:block;font-size:13px;color:#566274;margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:11px 12px;border:1px solid #c5ccd6;border-radius:10px;background:#fff}
+textarea{min-height:76px}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:15px;font:inherit;font-weight:600;background:#1f4e79;color:#fff;margin-top:12px}
+.btn.sec{background:#dde6f0;color:#1f4e79}.btn.del{background:#fadcdc;color:#a42424}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.work{border:1px solid #d5dbe3;border-radius:12px;padding:10px;margin-top:10px;background:#f8fafc}
+.work .top{display:flex;justify-content:space-between;font-size:13px;color:#6b7686}
+.work .top b{color:#a42424;padding:0 6px}
+.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.photos div{position:relative}
+.photos img{width:80px;height:80px;object-fit:cover;border-radius:8px}
+.photos b{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;background:#a42424;color:#fff;text-align:center;line-height:24px;font-size:14px}
+/* RD viewer */
+.rdbtn{display:block;width:100%;margin-top:8px;padding:10px;border:1px solid #1f4e79;background:#eaf1f8;color:#1f4e79;border-radius:10px;font:inherit;font-size:14px;font-weight:600}
+#rd{position:fixed;inset:0;z-index:40;background:#fff;display:flex;flex-direction:column}
+#rd .rdh{display:flex;align-items:center;gap:10px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top));background:#1f4e79;color:#fff;font-size:14px}
+#rd .rdh b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#rd .rdh a{color:#fff;font-size:13px}
+#rd .rdh button{border:0;background:rgba(255,255,255,.2);color:#fff;border-radius:8px;width:36px;height:36px;font-size:18px}
+#rd iframe{flex:1;border:0;width:100%}
+@media(min-width:900px){
+ #rd{left:50%}
+ body.rdopen header,body.rdopen nav{width:50vw}
+ body.rdopen main{margin:0;max-width:none;width:50vw}
+}
+/* chips */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.chip{border:1px solid #c5ccd6;background:#fff;border-radius:20px;padding:8px 13px;font:inherit;font-size:14px;color:#1b2430}
+.chip.on{background:#1f4e79;color:#fff;border-color:#1f4e79}
+.trow{display:grid;grid-template-columns:1fr 90px;gap:8px}
+/* diameters */
+.drow{border:1px dashed #c5ccd6;border-radius:10px;padding:8px;margin-top:8px;background:#fff}
+.drow .top{display:flex;justify-content:space-between;font-size:13px;color:#6b7686;margin-bottom:4px}
+.drow .top b{color:#a42424;padding:0 6px}
+pre{white-space:pre-wrap;word-break:break-word;font:14px/1.45 ui-monospace,Menlo,monospace;margin:6px 0 0}
+.sub{color:#6b7686;font-size:13px}
+h3{margin:0 0 4px;font-size:16px}
+.empty{text-align:center;color:#6b7686;padding:40px 10px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1b2430;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;z-index:30}
+.dlg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:25;display:flex;align-items:flex-end}
+.dlg>div{background:#fff;width:100%;border-radius:18px 18px 0 0;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+/* чек-листы и заявки */
+.badge{display:inline-block;font-size:12px;padding:2px 9px;border-radius:20px;background:#dde6f0;color:#1f4e79;white-space:nowrap}
+.badge.ok{background:#d8f0dd;color:#1b6b2f}.badge.bad{background:#fadcdc;color:#a42424}.badge.warn{background:#fdeccb;color:#8a5a00}
+.xrow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card.tap:active{background:#e6edf5}
+.item{border-top:1px solid #e3e8ee;padding:10px 0}.item:first-child{border-top:0}
+.sbtns{display:flex;gap:6px;margin-top:6px}
+.sbtns button{flex:1;padding:9px;border:1px solid #c5ccd6;background:#fff;border-radius:10px;font:inherit;font-size:16px}
+.sbtns button.y.on{background:#d8f0dd;border-color:#1b6b2f}.sbtns button.n.on{background:#fadcdc;border-color:#a42424}.sbtns button.x.on{background:#e8e8e8;border-color:#888}
+</style>
+</head>
+<body>
+<header id="hd">Отчёт СМР</header>
+<main id="view"></main>
+<datalist id="cl"></datalist>
+<nav><button id="n1" onclick="tab('new')"><span>📝</span>Отчёт</button><button id="n2" onclick="tab('hist')"><span>🗂</span>История</button><button id="n4" onclick="tab('chk')"><span>✅</span>Чек-листы</button><button id="n5" onclick="tab('req')"><span>🧾</span>Заявки</button><button id="n3" onclick="tab('set')"><span>⚙️</span>Настройки</button></nav>
+<script>
+let tt;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const fd=s=>s?s.split('-').reverse().join('.'):'';
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Не удалось сохранить на телефоне')}}};
+
+/* ---------- шифры РД (из «Состав РД», ГНТ.61.2024.01-СРД Изм. 4) ---------- */
+const PRJ='ГНТ.61.2024.01-';
+const MARK={ГП:'Генеральный план',ПОД:'Ведомость объёмов по демонтажу',ТХ:'Технологические решения',ПТ:'Пожаротушение',АТХ:'Автоматизация техпроцессов',КЖ:'Конструкции железобетонные',КМ:'Конструкции металлические',КМ1:'Конструкции металлические (КМ1)',НК:'Наружные сети канализации',ПС:'Пожарная сигнализация',СС:'Сети связи',ЭГ:'Заземление и молниезащита',АНК:'Автоматизация сетей канализации',АК:'Автоматизация комплексная',АР:'Архитектурные решения',ЭМ:'Силовое электрооборудование',ВК:'Водопровод и канализация',НВ:'Наружные сети водоснабжения',НВ1:'Наружные сети водоснабжения (НВ1)',ЭС:'Электроснабжение',ЭН:'Наружное освещение',ОГ:'Огнезащита металлоконструкций'};
+const GROUPS=[
+ ['Генплан и общие','11.01.00',['ГП','ПОД','ТХ']],
+ ['Площадка резервуарного парка','10.02.4',['ПТ','АТХ','КЖ','КМ','КМ1','НК','ПС','СС','ТХ','ЭГ']],
+ ['Станция налива в автоцистерны','06.01.5',['ПТ','КМ']],
+ ['Дизельная генераторная установка','11.06.15',['КЖ']],
+ ['Локальные очистные сооружения','11.09.16',['АНК','НК','КЖ']],
+ ['Противопожарные резервуары','05.04.18',['ПТ','АК','КЖ']],
+ ['Гараж','07.01.22',['ПТ','КМ','ЭМ']],
+ ['Павильон скважин','05.02.23',['АР','КЖ','ЭМ','ВК']],
+ ['Модули хранения проб','03.02.36',['АР','КЖ']],
+ ['БМЗ водителей','01.09.55',['АР','НК','КЖ']],
+ ['Технологические трубопроводы','11.01.100',['КЖ','КМ','ТХ','НК']],
+ ['Внутриплощадочные сети','11.01.00',['НВ','НВ1','НК','ЭС','ЭН','ЭГ','ПС','СС','КЖ','КМ','АК','ОГ']]
+];
+const CIPHERS=GROUPS.flatMap(([g,code,ms])=>ms.map(m=>({v:`${PRJ}${code}.${m}`,l:`${code}.${m} — ${MARK[m]}`,g})));
+/* ---------- виды работ по маркам РД ---------- */
+const WT={
+ 'КЖ':[['Разработка грунта','м³'],['Устройство подготовки (песок / щебень)','м³'],['Устройство бетонной подготовки','м³'],['Монтаж опалубки','м²'],['Армирование','т'],['Установка закладных деталей и анкеров','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Гидроизоляция','м²'],['Обратная засыпка','м³']],
+ 'КМ':[['Монтаж металлоконструкций','т'],['Монтаж площадок, лестниц, ограждений','т'],['Сварка монтажных стыков','м'],['Установка анкерных болтов','шт'],['Антикоррозионная защита','м²'],['Подливка опорных плит','м³'],['Контроль сварных соединений (ВИК / РК)','стык']],
+ 'ТХ':[['Монтаж технологических трубопроводов','м'],['Монтаж опор и подвесок','шт'],['Сварка стыков трубопроводов','стык'],['Монтаж запорной арматуры','шт'],['Монтаж оборудования','шт'],['Монтаж резервуара: днище','т'],['Монтаж резервуара: стенка','т'],['Монтаж резервуара: понтон / кровля','т'],['Антикоррозионная защита и изоляция','м²'],['Гидравлические испытания','м'],['Разработка грунта','м³'],['Обратная засыпка','м³']],
+ 'ПТ':[['Монтаж трубопроводов пожаротушения','м'],['Монтаж арматуры и гидрантов','шт'],['Монтаж оросителей / генераторов пены','шт'],['Монтаж насосного оборудования','шт'],['Гидравлические испытания','м'],['Окраска трубопроводов','м²'],['Земляные работы (траншея, засыпка)','м³']],
+ 'НК':[['Разработка траншеи','м³'],['Устройство основания','м³'],['Укладка трубопровода канализации','м'],['Монтаж колодцев','шт'],['Обратная засыпка','м³'],['Испытание трубопровода','м']],
+ 'НВ':[['Разработка траншеи','м³'],['Устройство основания','м³'],['Укладка водопроводных труб','м'],['Монтаж колодцев и арматуры','шт'],['Гидравлическое испытание и промывка','м'],['Обратная засыпка','м³']],
+ 'ЭС':[['Прокладка кабеля','м'],['Монтаж кабельных лотков и каналов','м'],['Монтаж опор освещения','шт'],['Монтаж светильников','шт'],['Монтаж щитов и шкафов','шт'],['Подключение и прозвонка кабелей','шт'],['Устройство кабельных траншей','м³'],['Измерения и испытания','компл.']],
+ 'ЭГ':[['Монтаж заземлителей','шт'],['Прокладка заземляющего проводника','м'],['Монтаж молниеприёмников и токоотводов','м'],['Измерение сопротивления','компл.'],['Земляные работы','м³']],
+ 'КИП':[['Прокладка кабеля','м'],['Монтаж кабельных трасс','м'],['Монтаж извещателей / датчиков','шт'],['Монтаж шкафов и приборов','шт'],['Монтаж трубных проводок','м'],['Пусконаладочные работы','компл.']],
+ 'АР':[['Монтаж блок-модуля','шт'],['Устройство стен и перегородок','м²'],['Устройство кровли','м²'],['Установка окон и дверей','шт'],['Внутренняя отделка','м²'],['Устройство полов','м²']],
+ 'ОГ':[['Подготовка поверхности','м²'],['Огнезащитная обработка металлоконструкций','м²']],
+ 'ГП':[['Планировка территории','м²'],['Устройство дорожной одежды','м²'],['Установка бортового камня','м'],['Устройство ограждения','м'],['Благоустройство','м²'],['Перемещение грунта','м³']],
+ 'ПОД':[['Демонтаж трубопроводов','м'],['Демонтаж металлоконструкций','т'],['Демонтаж арматуры','шт'],['Демонтаж ж/б конструкций','м³'],['Демонтаж кабелей','м'],['Демонтаж фундаментов','м³']]
+};
+const BASE=[['Разработка грунта (котлован / траншея)','м³'],['Устройство песчаной / щебёночной подготовки','м³'],['Устройство бетонной подготовки','м³'],['Монтаж опалубки','м²'],['Армирование','т'],['Установка закладных деталей и анкеров','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Гидроизоляция','м²'],['Обратная засыпка','м³']];
+const STR={'КЖ':[
+ ['Фундаменты монолитные',BASE],
+ ['Фундаментные плиты',BASE],
+ ['Кольцевой фундамент резервуара',[['Разработка грунта','м³'],['Устройство песчаной подушки','м³'],['Монтаж опалубки','м²'],['Армирование','т'],['Установка закладных деталей','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Гидроизоляция','м²'],['Устройство гидрофобного слоя / песчаного основания внутри кольца','м³'],['Обратная засыпка','м³']]],
+ ['Опоры и стойки под трубопроводы',[['Разработка грунта','м³'],['Устройство подготовки','м³'],['Монтаж опалубки','м²'],['Армирование','т'],['Установка закладных деталей и анкеров','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Монтаж сборных опор','шт'],['Обратная засыпка','м³']]],
+ ['Стены и перекрытия',[['Монтаж опалубки','м²'],['Армирование','т'],['Установка закладных деталей','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Гидроизоляция','м²'],['Монтаж сборных плит перекрытия','шт']]],
+ ['Лотки и каналы',[['Разработка грунта','м³'],['Устройство основания','м³'],['Монтаж сборных лотков','шт'],['Устройство монолитных лотков (бетонирование)','м³'],['Монтаж плит перекрытия лотков','шт'],['Гидроизоляция','м²'],['Обратная засыпка','м³']]],
+ ['Колодцы и приямки',[['Разработка грунта','м³'],['Устройство основания / днища','м³'],['Монтаж колец / стеновых блоков','шт'],['Бетонирование','м³'],['Гидроизоляция','м²'],['Монтаж плит перекрытия и люков','шт'],['Обратная засыпка','м³']]],
+ ['Плиты покрытия, площадки, проезды',[['Планировка основания','м²'],['Устройство щебёночного основания','м³'],['Укладка сборных ж/б плит','м²'],['Армирование монолитной плиты','т'],['Бетонирование монолитной плиты','м³'],['Заливка швов','м']]],
+ ['Обвалование, поддоны, ограждающие стенки',[['Разработка грунта','м³'],['Монтаж опалубки','м²'],['Армирование','т'],['Бетонирование','м³'],['Демонтаж опалубки','м²'],['Гидроизоляция','м²'],['Обратная засыпка','м³']]]
+]};
+const TXW=[['Земляные работы (траншея, котлован)','м³'],['Устройство основания / ложа','м³'],['Монтаж опор и подвесок','шт'],['Укладка / монтаж трубопровода','м'],['Сварка стыков','стык'],['Контроль сварных соединений (ВИК / РК)','стык'],['Монтаж запорной арматуры','шт'],['Монтаж фланцевых соединений','шт'],['Антикоррозионная защита','м²'],['Тепловая изоляция','м²'],['Гидравлическое испытание','м'],['Продувка / промывка','м'],['Обратная засыпка','м³'],['Демонтаж трубопровода','м']];
+const TXRES=[['Монтаж днища (с приямком)','т'],['Монтаж стенки (рулонная сборка)','т'],['Монтаж кровли','т'],['Монтаж патрубков на кровле и стенке','т'],['Монтаж направляющих понтона','шт'],['Монтаж площадок и ограждений на кровле','т'],['Монтаж шахтной лестницы','т'],['Монтаж блочного алюминиевого понтона','шт'],['Монтаж ПРУ, люков, крана сифонного, пробоотборника','шт'],['Монтаж предохранителей огневых и вентпроёмов','шт'],['Монтаж камер низкократной пены','шт'],['ВИК сварных швов','м'],['Вакуумирование швов','м'],['Проба мел-керосин / капиллярный контроль','м'],['Радиографический / ультразвуковой контроль','м'],['Монтаж (демонтаж) трубных лесов','м²'],['Гидроиспытание резервуара','раз'],['Очистка днища','м²'],['Окраска наружной поверхности','м²'],['Окраска внутренней поверхности','м²'],['Нанесение логотипов','м²']]
+const TXEQ=[['Монтаж оборудования на фундамент','шт'],['Обвязка оборудования трубопроводами','шт'],['Монтаж КИП на узле','шт'],['Центровка / выверка','шт'],['Испытание / опробование','шт']];
+const DIAM={"per": {"00-8.1.1-01-300": ["325×8,0", "159×5,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-01-300": ["325×8,0", "159×5,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.1-02-300": ["325×8,0", "108×4,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.5-02-300": ["325×8,0", "108×4,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-02-300": ["325×8,0", "108×4,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.1-01-100": ["108×4,0"], "00-8.1.4-01-100": ["108×4,0"], "00-8.1.1-03-300": ["325×8,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-03-300": ["325×8,0", "45×4,0", "32×4,0"], "00-8.1.1-04-300": ["325×8,0", "159×5,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-04-300": ["325×8,0", "45×4,0", "32×4,0"], "00-8.1.5-01-300": ["325×8,0", "45×4,0", "32×4,0"], "00-8.1.1-05-300": ["325×8,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.1-06-300": ["325×8,0", "159×5,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.1-07-300": ["325×8,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.1-08-300": ["325×8,0", "159×5,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-05-300": ["325×8,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-06-300": ["325×8,0", "159×5,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.5-03-300": ["325×8,0", "45×4,0", "32×4,0"], "00-8.1.4-07-300": ["325×8,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.4-08-300": ["325×8,0", "159×5,0", "57×4,0", "45×4,0", "32×4,0"], "00-8.1.5-04-300": ["325×8,0", "45×4,0", "32×4,0"], "00-8.9.4-01-80": ["89×4,5"], "00-2.2.1-01-80": ["89×4,5"], "00-8.9.4-02-80": ["89×4,5"], "00-2.2.1-02-80": ["89×4,5"], "00-8.9.4-03-80": ["89×4,5"], "00-2.2.1-03-80": ["89×4,5"], "00-8.9.4-04-80": ["89×4,5"], "00-2.2.1-04-80": ["89×4,5"], "00-8.9.4-05-80": ["89×4,5"], "00-2.2.1-05-80": ["89×4,5"]}, "all": ["325×8,0", "159×5,0", "108×4,0", "89×4,5", "57×4,0", "45×4,0", "32×4,0"]};  // трубы по участкам, РД ТХ.ВТ (Ø×стенка, мм)
+const fm=(n,k)=>Array.from({length:k},(_,i)=>`Фм-${n}.${i+1}`);
+const KJN={
+ '-10.02.4.':[['Фундаменты',['Фл-1 (ленточный)','Фм-1','Фм-2','Фм-3','Фм-4','Фм-5']],['Плиты',['Фп-1 (РВСП-2000 №1)','Фп-1 (РВСП-2000 №2)','Фп-1 (РВСП-2000 №3)','Фп-1 (РВСП-2000 №4)','Фп-1 (РВСП-2000 №5)','Пм-1 (плита поддона)']],['Стены',['Стм-1']]],
+ '-11.01.100.':[['Фундаменты Фм',[1,7,2,4,3,3,4,2,5,1,6,2,7,15,8,5,9,5,10,1,11,2,12,1,13,1,14,1,15,1,16,2,17,2].reduce((a,x,i,arr)=>i%2?a:a.concat(fm(x,arr[i+1])),[])],['Плиты',['Пм-1','Пм-2','Пт-1','Пт-2']],['Лотки',['Лк-1','Лк-2','Лк-3','Лк-4']],['Узлы запорной арматуры',['Узел №1 (Ф-1)','Узел №2 (Ф-1)','Узел №3 (Ф-1)','Узел №4 (Ф-1)']]],
+ '-11.01.00.':[['Фундаменты Фм',[...fm(1,10),...fm(2,4),...fm(3,15)]],['Мачты освещения',['МФм-1']],['Сваи',['Св-1 (свая винтовая)','Нс1']]]
+};
+const kjGroups=c=>{const k=Object.keys(KJN).find(x=>(c||'').includes(x));return k?KJN[k]:null};
+const hasMarks=w=>markOf(w.c)==='КЖ'&&w.s&&w.s!==OTHER;
+const mk=w=>(w.nm||[]).map(x=>(x.v||'').trim()).filter(Boolean).join(', ');
+const P_='ГНТ.61.2024.01-';
+const RDF={  // шифр -> [id файла на Google Диске, изменение]
+ [P_+'11.01.100.КЖ']:['14mDFfw1I8FnNrpfgwVbobbLp8dwmYfNM','Изм. 4'],
+ [P_+'11.01.100.ТХ']:['1bsDXwZDf86Yxt5ceXHfx1TH3XnEJGylb','Изм. 4'],
+ [P_+'11.01.100.НК']:['1EI-zL9vYYcEMRYvLLNk0toIKvc_S19eF','Изм. 2'],
+ [P_+'11.01.00.КЖ']:['1gji2XfM8_Ni9MidNDzKcScHE0wROwzRm','Изм. 3'],
+ [P_+'11.01.00.ЭС']:['1BWkjQUR2vLHqOdF2HC9qVkDNnqxw_7pE','Изм. 3'],
+ [P_+'11.01.00.НВ1']:['11CK3KE_8zfXKXwJUIrQ475Lg8FpM-PLE','Изм. 2'],
+ [P_+'10.02.4.КЖ']:['1X71rtPAyGMY3vsqy3Ufrx_RWj_O5EXWa','Изм. 4'],
+ [P_+'10.02.4.ТХ']:['1oZSrf8At599mEE_x4lzPhvLluCjQUlrk','Изм. 3'],
+ [P_+'05.02.23.КЖ']:['1wGcmrlAcPEW93cHCNH2Yr8Nysa_LgHTr','Изм. 1'],
+ [P_+'05.02.23.ЭМ']:['1tTq7-8IyjrxNXp8OV2ALwcEYK6om2daq','Изм. 1'],
+ [P_+'11.09.16.КЖ']:['1Zn_5afCG2jJQIvXv6bpp7XsAD8QP09XR','Изм. 2'],
+ [P_+'05.04.18.КЖ']:['1yl7K4Yx0KsCW7mBY9_ApWbqVsLDig7F_','Изм. 3'],
+ [P_+'03.02.36.КЖ']:['1yXKu_bN-_mtasRd30d0SGfsio4_J7R5j','Изм. 1'],
+ [P_+'01.09.55.КЖ']:['1fWvWt0biMMmbM78nY60_h57OCogcRUTX','Изм. 3'],
+ [P_+'11.06.15.КЖ']:['1VKnPPr7kS_o-i83jnuaeTnhbFvDn6Gv0','Изм. 1']
+};
+const driveSearch=c=>'https://drive.google.com/drive/search?q='+encodeURIComponent(c);
+let RDcur='';
+function openRD(c){
+ const f=RDF[c];
+ if(!f){window.open(driveSearch(c),'_blank','noopener');return}
+ let d=$('#rd');if(!d){d=document.createElement('div');d.id='rd';document.body.appendChild(d)}
+ d.innerHTML=`<div class="rdh"><b>${esc(c.replace(P_,''))} · ${esc(f[1])}</b><a href="https://drive.google.com/file/d/${f[0]}/view" target="_blank" rel="noopener">Открыть в Диске ↗</a><button onclick="closeRD()">✕</button></div><iframe src="https://drive.google.com/file/d/${f[0]}/preview" allow="autoplay"></iframe>`;
+ document.body.classList.add('rdopen');RDcur=c;
+}
+function closeRD(){const d=$('#rd');if(d)d.remove();document.body.classList.remove('rdopen');RDcur=''}
+const STRL={'КЖ':'Конструктив','ТХ':'Линия трубопровода'};
+const ALIAS={КМ1:'КМ',НВ1:'НВ',ВК:'НВ',ЭМ:'ЭС',ЭН:'ЭС',ПС:'КИП',СС:'КИП',АК:'КИП',АТХ:'КИП',АНК:'КИП'};
+const OTHER='__other';
+const markOf=c=>{const m=(c||'').split('.').pop();return ALIAS[m]||m};
+const kinds=c=>WT[markOf(c)]||[];
+const RVS=[['РВСП-2000 №1 · аварийный','РВСП-2000 №1 (аварийный)'],['РВСП-2000 №2 · АИ-92','РВСП-2000 №2'],['РВСП-2000 №3 · АИ-92','РВСП-2000 №3'],['РВСП-2000 №4 · ДТ','РВСП-2000 №4'],['РВСП-2000 №5 · ДТ','РВСП-2000 №5']];
+const txStr=c=>{
+ const eq=['Оборудование и узлы (колодцы, задвижки, узлы учёта)',TXEQ];
+ if((c||'').includes('-10.02.4.'))return [...RVS.map(([l,n])=>[n,TXRES,l]),['Оборудование и узлы резервуарного парка',TXEQ]];
+ return [...cfg.lineList.map(n=>[n,TXW]),eq];
+};
+/* марки кабеля и типы лотков / каналов по РД (кабельные журналы КЖ, спецификации СО, ведомости ВР); ЭН — по сметам 04-02, 04-05 (кабельный журнал в dwg) */
+const CAB={
+ '11.01.00.ЭС':['ВВГнг(А)-LS','ВВГнг(А)','ВВГнг(А)-FRLS','ВБШвнг(А)-LS','КВВГЭнг(А)-LS','КВБШвнг(А)-LS','ППГнг(А)-FRHF','ПуГВ'],
+ '11.01.00.ЭН':['ВВГнг(А)-LS','ВБШвнг(А)-LS'],
+ '05.02.23.ЭМ':['ВВГнг(А)-LS','ВВГнг(А)-FRLS','ПуГВ'],
+ '07.01.22.ЭМ':['ВВГнг(А)-LS','ВВГнг(А)-FRLS','ПуГВ'],
+ '10.02.4.ПС':['КСБнг(А)-FRHF'],
+ '10.02.4.СС':['СКАБ 250нг(А)-LS'],
+ '10.02.4.АТХ':['КВВГЭнг(А)-FRLS','КВВГЭнг(А)-LS','МЕТРОЛАН-В-Эмзнг(А)-LS','ПВЗ-6'],
+ '11.01.00.АК':['КВВГЭнг(А)-FRLS','КВВГЭнг(А)-LS','МЕТРОЛАН-В-Эмзнг(А)-LS'],
+ '05.04.18.АК':['МЕТРОЛАН-В-Эмзнг(А)-LS'],
+ '11.09.16.АНК':['КВВГЭнг(А)-LS','КВВГЭнг(А)-FRLS','МЕТРОЛАН-В-Эмзнг(А)-LS'],
+ '11.01.00.ПС':['КСБнг(А)-FRLS','КСБнг(А)-FRHF','КПСнг(А)-FRLS'],
+ '11.01.00.СС':['СКАБ 250нг(А)-FRHF-ХЛ','КПСЭнг(А)-FRLS']
+};
+const TRAY={
+ '11.01.00.ЭС':['Лоток лестничный HDKLL85.400 (БКТП)','Лоток перфорированный HDKBS110.400.125','Лоток перфорированный HDKBS110.200.125','Лоток перфорированный HDKBS110.100.125','Лоток перфорированный HDKBS85.400.125','Труба ПНД двустенная гофр. Ø63','Труба ПНД двустенная гофр. Ø110','Труба стальная оцинк. Ц-25х3,2','Металлорукав МРПИ 20','Металлорукав МРПИ 25','Металлорукав МРПИ 50'],
+ '10.02.4.АТХ':['Лоток перфорированный HDKBS110.100.100','Труба ВГП 20х2,8','Металлорукав МРПИнг 20'],
+ '07.01.22.ЭМ':['Короб DKC TA-GN 80х60','Короб DKC TA-EN 40х40','Гофротруба PA612329F0 Ø23','Металлорукав МРПИ 20']
+};
+/* число жил и сечение по маркам (кабельные журналы КЖ и спецификации СО РД) */
+const SEC={
+ '11.01.00.ЭС|ВВГнг(А)-LS':['3х4','4х16','4х25','4х50','4х70','5х2,5','5х4','5х50'],
+ '11.01.00.ЭС|ВВГнг(А)':['4х70'],
+ '11.01.00.ЭС|ВБШвнг(А)-LS':['4х10','4х70','4х185','5х10','5х16'],
+ '11.01.00.ЭС|ВВГнг(А)-FRLS':['3х1,5','3х4','4х16','4х120','5х4'],
+ '11.01.00.ЭС|КВБШвнг(А)-LS':['7х1,5'],
+ '11.01.00.ЭС|КВВГЭнг(А)-LS':['7х1,5'],
+ '11.01.00.ЭС|ППГнг(А)-FRHF':['3х1,5'],
+ '11.01.00.ЭС|ПуГВ':['1х6','1х25','1х35'],
+ '05.02.23.ЭМ|ВВГнг(А)-LS':['5х2,5','5х6'],
+ '05.02.23.ЭМ|ВВГнг(А)-FRLS':['5х35'],
+ '05.02.23.ЭМ|ПуГВ':['1х10'],
+ '07.01.22.ЭМ|ВВГнг(А)-LS':['5х25'],
+ '07.01.22.ЭМ|ВВГнг(А)-FRLS':['3х1,5','3х4'],
+ '07.01.22.ЭМ|ПуГВ':['1х6','1х16'],
+ '10.02.4.ПС|КСБнг(А)-FRHF':['1х2х0,98'],
+ '10.02.4.СС|СКАБ 250нг(А)-LS':['1х2х0,75'],
+ '10.02.4.АТХ|КВВГЭнг(А)-FRLS':['4х1,5','5х1,5','10х1,5','14х1,5','19х1,5','27х1,5'],
+ '10.02.4.АТХ|КВВГЭнг(А)-LS':['4х1,5','10х1,5','27х1,5'],
+ '10.02.4.АТХ|МЕТРОЛАН-В-Эмзнг(А)-LS':['2х2х1,0','3х2х1,0'],
+ '11.01.00.АК|КВВГЭнг(А)-FRLS':['4х1,5','5х1,5','7х1,5','10х1,5','14х1,5','19х1,5','27х1,5'],
+ '11.01.00.АК|КВВГЭнг(А)-LS':['4х1,5','7х1,5','10х1,5','19х1,5','27х1,5'],
+ '11.01.00.АК|МЕТРОЛАН-В-Эмзнг(А)-LS':['2х2х1,0','3х2х1,0'],
+ '05.04.18.АК|МЕТРОЛАН-В-Эмзнг(А)-LS':['2х2х1,0'],
+ '11.09.16.АНК|КВВГЭнг(А)-LS':['7х1,5','10х1,5'],
+ '11.09.16.АНК|КВВГЭнг(А)-FRLS':['4х1,5','5х1,5'],
+ '11.09.16.АНК|МЕТРОЛАН-В-Эмзнг(А)-LS':['2х2х1,0'],
+ '11.01.00.ПС|КСБнг(А)-FRLS':['2х2х0,98'],
+ '11.01.00.ПС|КСБнг(А)-FRHF':['1х2х0,98'],
+ '11.01.00.ПС|КПСнг(А)-FRLS':['1х2х0,75','2х2х0,75','6х2х0,75','12х2х0,75'],
+ '11.01.00.СС|СКАБ 250нг(А)-FRHF-ХЛ':['1х2х1,5','2х2х1,5'],
+ '11.01.00.СС|КПСЭнг(А)-FRLS':['1х2х0,75']
+};
+const SECM={};Object.entries(SEC).forEach(([k,v])=>{const m=k.split('|')[1];SECM[m]=[...new Set([...(SECM[m]||[]),...v])]});
+const uniq=o=>[...new Set(Object.values(o).flat())];
+const CAB_ALL=uniq(CAB),TRAY_ALL=uniq(TRAY);
+const rdKey=c=>(c||'').replace(PRJ,'');
+const LK={
+ 'Прокладка кабеля':{unit:'м',lab:'Марки кабеля',ph:'Длина, м',man:'Например: ВВГнг(А)-LS',sec:'Число жил и сечение, например 5х4',tit:'Кабели',list:c=>CAB[rdKey(c)]||CAB_ALL},
+ 'Монтаж кабельных лотков и каналов':{unit:'м',lab:'Типы лотков и каналов',ph:'Длина, м',man:'Например: HDKBS110.100.125',sec:'',tit:'Лотки и каналы',list:c=>TRAY[rdKey(c)]||TRAY_ALL}
+};
+const lk=w=>(w.c&&LK[w.k||''])||null;
+const DK={'Сварка стыков':{unit:'стык',lab:'Диаметры стыков',ph:'Количество стыков'},'Укладка / монтаж трубопровода':{unit:'м',lab:'Диаметры труб',ph:'Длина, м'}};
+const dk=w=>lk(w)||DK[w.k||''];
+const needDiam=w=>(markOf(w.c)==='ТХ'&&isLine(w.s)&&!!DK[w.k||''])||!!lk(w);
+const diamList=w=>lk(w)?lk(w).list(w.c):(DIAM.per[(w.s||'').split(' · ')[0]]||DIAM.all);
+const isLine=x=>/^\d+-\d/.test(x||'');
+const structs=c=>{const m=markOf(c);return m==='ТХ'?txStr(c):(STR[m]||null)};
+const structLabel=c=>markOf(c)==='ТХ'?((c||'').includes('-10.02.4.')?'Резервуар':'Линия трубопровода'):(STRL[markOf(c)]||'Конструктив');
+const structAcc=c=>markOf(c)==='ТХ'?((c||'').includes('-10.02.4.')?'резервуар':'линию трубопровода'):'конструктив';
+const kindsOf=w=>{const st=structs(w.c);if(!st)return kinds(w.c);const x=st.find(a=>a[0]===w.s);return x?x[1]:[]};
+function cipherSelect(i,val){
+ const known=CIPHERS.some(c=>c.v===val),other=R.works[i].co||(val&&!known);
+ let h=`<select onchange="pickCipher(${i},this.value)"><option value="">— выберите шифр РД —</option>`;
+ for(const [g] of GROUPS)h+=`<optgroup label="${esc(g)}">`+CIPHERS.filter(c=>c.g===g).map(c=>`<option value="${esc(c.v)}" ${c.v===val?'selected':''}>${esc(c.l)}</option>`).join('')+`</optgroup>`;
+h+=`<option value="${OTHER}" ${other?'selected':''}>Другое (ввести вручную)</option></select>`;
+ if(val&&known)h+=RDF[val]?`<button class="rdbtn" onclick="openRD(${JSON.stringify(val).replace(/"/g,'&quot;')})">📄 Открыть РД (${esc(RDF[val][1])})</button>`:`<button class="rdbtn" onclick="openRD(${JSON.stringify(val).replace(/"/g,'&quot;')})">🔍 Найти РД на Диске</button>`;
+ h+=`<input placeholder="Шифр вручную" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(val):''}" oninput="R.works[${i}].c=this.value;save()">`;
+ return h;
+}
+
+/* ---------- состояние ---------- */
+const OLD_TECH=['Автокран','Экскаватор','Экскаватор-погрузчик','Бульдозер','Самосвал','Бортовой автомобиль с манипулятором','Трубоукладчик','Автовышка (АГП)','Погрузчик','Каток','Автобетоносмеситель','Бетононасос','Компрессор','Сварочный агрегат (АДД)','Дизель-генератор','Вахтовый автобус'];
+const DEF_TECH=["Экскаватор HITACHI ZX200LC-5G", "Экскаватор KOMATSU PC300-8MO", "Экскаватор-погрузчик JCB CX 5", "Автокран ZOOMLION ZTC-300V1", "Камаз 780520 КМУ", "Грузовой самосвал FAW J6 6х6", "Бульдозер KOMATSU D65E-12", "Каток дорожный", "Генератор дизельный AD-100-T400/H-CS", "Агрегат сварочный HOMOPARTS DNK-500W SEVERUS", "УАЗ АТЗ", "УАЗ ПРОФИ", "Sollers Atlant", "Автобус ПАЗ 3206-110", "Toyota Fortuner", "Haval Great Wall Poer"];
+const OLD_LINES=['Приёмо-раздаточный трубопровод резервуара','Трубопровод подачи / откачки нефтепродукта','Коллектор и обвязка насосов','Линия налива в автоцистерны','Дренажный трубопровод','Трубопровод подтоварной воды','Линия аварийного слива / утечек','Продувочные и воздушные линии'];
+const DEF_LINES=["00-8.1.1-01-300 · Бензин АИ-92: Технологический колодец ТК2 → Заглушка", "00-8.1.4-01-300 · Дизельное топливо ДТ: Технологический колодец ТК2 → Заглушка", "00-8.1.1-02-300 · Бензин АИ-92: Площадки для установки передвижного НА → Узел задвижек ТК4", "00-8.1.5-02-300 · Дизельное топливо ДТз: Площадки для установки передвижного НА → Узел задвижек ТК4", "00-8.1.4-02-300 · Дизельное топливо ДТл: Площадки для установки передвижного НА → Узел задвижек ТК4", "00-8.1.1-01-100 · Бензин АИ-92: 00-8.1.1-01-300 → Площадки для установки передвижного НА", "00-8.1.4-01-100 · Дизельное топливо ДТ: 00-8.1.4-01-300 → Площадки для установки передвижного НА", "00-8.1.1-03-300 · Бензин АИ-92: 00-8.1.1-01-300 → РВСП-2000 №1", "00-8.1.4-03-300 · Дизельное топливо ДТ: 00-8.1.4-01-300 → 00-8.1.1-03-300", "00-8.1.1-04-300 · Бензин АИ-92: РВСП-2000 №1 → 00-8.1.1-02-300", "00-8.1.4-04-300 · Дизельное топливо ДТл: 00-8.1.1-04-300 → 00-8.1.4-02-300", "00-8.1.5-01-300 · Дизельное топливо ДТз: 00-8.1.1-04-300 → 00-8.1.5-02-300", "00-8.1.1-05-300 · Бензин АИ-92: 00-8.1.1-01-300 → РВСП-2000 №2", "00-8.1.1-06-300 · Бензин АИ-92: РВСП-2000 №2 → 00-8.1.1-02-300", "00-8.1.1-07-300 · Бензин АИ-92: 00-8.1.1-01-300 → РВСП-2000 №3", "00-8.1.1-08-300 · Бензин АИ-92: РВСП-2000 №3 → 00-8.1.1-02-300", "00-8.1.4-05-300 · Дизельное топливо ДТл: 00-8.1.4-01-300 → РВСП-2000 №4", "00-8.1.4-06-300 · Дизельное топливо ДТл: РВСП-2000 №4 → 00-8.1.4-02-300", "00-8.1.5-03-300 · Дизельное топливо ДТз: 00-8.1.4-06-300 → 00-8.1.5-02-300", "00-8.1.4-07-300 · Дизельное топливо ДТл: 00-8.1.4-01-300 → РВСП-2000 №5", "00-8.1.4-08-300 · Дизельное топливо ДТл: РВСП-2000 №5 → 00-8.1.4-02-300", "00-8.1.5-04-300 · Дизельное топливо ДТз: 00-8.1.4-08-300 → 00-8.1.5-02-300", "00-8.9.4-01-80 · Дренаж АИ-92, ДТ: РВСП-2000 №1 → БРС", "00-2.2.1-01-80 · Пар: РВСП-2000 №1 → БРС", "00-8.9.4-02-80 · Дренаж АИ-92: РВСП-2000 №2 → БРС", "00-2.2.1-02-80 · Пар: РВСП-2000 №2 → БРС", "00-8.9.4-03-80 · Дренаж АИ-92: РВСП-2000 №3 → БРС", "00-2.2.1-03-80 · Пар: РВСП-2000 №3 → БРС", "00-8.9.4-04-80 · Дренаж ДТ: РВСП-2000 №4 → БРС", "00-2.2.1-04-80 · Пар: РВСП-2000 №4 → БРС", "00-8.9.4-05-80 · Дренаж ДТ: РВСП-2000 №5 → БРС", "00-2.2.1-05-80 · Пар: РВСП-2000 №5 → БРС"];
+const DEF_SINK='https://script.google.com/macros/s/AKfycbwFbYSZtSYhrVnBr9C0saIcVwmWJIa_26HUpKHpb1xfR4boLd3Mb0jRi6V_3aSUHKAUPQ/exec',DEF_KEY='';   // адрес и ключ сбора отчётов в Google Таблицу (можно вписать в «Настройках»)
+const DEF_RESP=[];
+let cfg=Object.assign({resp:'',t1:'',t2:'',list:DEF_RESP,techList:DEF_TECH,lineList:DEF_LINES,sink:'',key:'',me:'',meList:[],regReq:[],nextReq:0,applicant:'',listsAt:0},ls.get('cfg',{}));
+if(!cfg.sink&&DEF_SINK){cfg.sink=DEF_SINK;cfg.key=DEF_KEY}
+if(!Array.isArray(cfg.lineList)||!cfg.lineList.length||cfg.lineList.join('|')===OLD_LINES.join('|'))cfg.lineList=DEF_LINES.slice();
+if(!Array.isArray(cfg.techList)||!cfg.techList.length)cfg.techList=DEF_TECH.slice();
+if(!cfg.techV){if(cfg.techList.join('|')===OLD_TECH.join('|'))cfg.techList=DEF_TECH.slice();else DEF_TECH.forEach(x=>{if(!cfg.techList.includes(x))cfg.techList.push(x)});cfg.techV=1;ls.set('cfg',cfg)}
+if(!Array.isArray(cfg.list)||!cfg.list.length)cfg.list=DEF_RESP.slice();
+let hist=ls.get('hist',[]);                          // отправленные отчёты
+let SM=ls.get('smeta',{at:0,items:[]});              // позиции смет из таблицы: [позиция, шифр РД, раздел, название, ед., объём, выполнено, остаток]
+let R=ls.get('draft',null);                          // черновик
+let photos=[];                                       // фото текущего отчёта (в память)
+let page='new';
+const newWork=()=>({c:'',co:0,s:'',ln:'',k:'',ds:[],nm:[],t:'',vol:'',unit:'',pos:'',pq:''});
+function blank(){return{date:today(),resp:cfg.resp||'',t1:cfg.t1||'',t2:cfg.t2||'',works:[newWork()],people:'',tech:[{n:'',o:0,h:''}],problems:'',plan:''}}
+if(!R||!R.works||R.works.some(w=>!('c'in w)))R=blank();   // старый формат черновика
+if(typeof R.tech==='string')R.tech=R.tech.split(',').map(x=>x.trim()).filter(Boolean);
+if(!Array.isArray(R.tech))R.tech=[];
+R.tech=R.tech.map(x=>typeof x==='string'?{n:x,o:0,h:''}:x);
+if(R.techOther){R.tech.push({n:R.techOther,o:1,h:''});delete R.techOther}
+if(!R.tech.length)R.tech=[{n:'',o:0,h:''}];
+const save=()=>ls.set('draft',R);
+const sname=x=>{const h=(x||'').split(' · ')[0];return isLine(h)?'Линия '+h:h};
+const dsText=w=>(w.ds||[]).filter(r=>r.d&&r.n).map(r=>lk(w)?`${r.d}${r.s?' '+r.s:''} — ${r.n} м`:`Ø${r.d} мм — ${r.n}${dk(w)&&dk(w).unit==='м'?' м':''}`).join('; ');
+function workBlock(w,n){
+ const L=[`${n}. Шифр: ${w.c||'—'}`],m=hasMarks(w)?mk(w):'';
+ if(w.s&&w.s!==OTHER){
+  const mark=markOf(w.c),line=isLine(w.s);
+  const lab=mark==='ТХ'?(line?'Линия':(/^РВСП/.test(w.s)?'Резервуар':'Оборудование')):'Конструктив';
+  const val=w.s.split(' · ')[0];
+  L.push(`   ${lab}: ${val}`);
+  if(m)L.push(`   Название: ${m}`);
+  if(line&&w.ln&&w.ln.trim())L.push(`   Участок линии: ${w.ln.trim()}`);
+ }
+ const other=!w.k||w.k===OTHER;
+ L.push(`   Вид работ: ${other?(w.t.trim()||'—'):w.k}`);
+ if(!other&&w.t.trim())L.push(`   Уточнение: ${w.t.trim()}`);
+ if(needDiam(w)){const dt=dsText(w);if(dt)L.push(`   ${lk(w)?lk(w).tit:'Диаметры'}: ${dt}`)}
+ if(w.vol)L.push(`   Объём: ${w.vol}${w.unit?' '+w.unit:''}`);
+ return L;
+}
+const workName=w=>{const dt=needDiam(w)?dsText(w):'';const kn=w.k&&w.k!==OTHER?w.k+(dt?` (${dt})`:''):'';const base=kn?(w.t.trim()?`${kn} — ${w.t.trim()}`:kn):w.t.trim();const sn=sname(w.s),m=hasMarks(w)?mk(w):'';return base&&w.s&&w.s!==OTHER?`${sn}${m?' ('+m+')':''}${w.ln&&w.ln.trim()?' ['+w.ln.trim()+']':''}: ${base}`:base};
+
+/* ---------- текст отчёта (шаблон) ---------- */
+function buildText(r){
+ const L=[`ОТЧЁТ СМР — ${fd(r.date)}`];
+ const sites=[...new Set(r.works.filter(w=>workName(w)&&w.c).map(w=>w.c))];
+ L.push(`Участок: ${sites.length?sites.join(', '):'—'}`);
+ L.push(`Ответственный: ${r.resp||'—'}`);
+ L.push(`Время работы: ${r.t1&&r.t2?r.t1+'–'+r.t2:'—'}`);
+ L.push('','Выполнено:');
+ const ws=r.works.filter(w=>workName(w));
+ if(ws.length)ws.forEach((w,i)=>{if(i)L.push('');L.push(...workBlock(w,i+1))});
+ else L.push('—');
+ if(r.people)L.push('',`Персонал: ${r.people} чел.`);
+ const tech=(r.tech||[]).filter(x=>(x.n||'').trim());
+ if(tech.length)L.push(`Техника: ${tech.map(x=>x.n.trim()+(x.h?' — '+x.h+' ч':'')).join('; ')}`);
+ if(r.problems)L.push('',`Проблемы / замечания: ${r.problems}`);
+ if(r.plan)L.push('',`План на завтра: ${r.plan}`);
+ return L.join('\n');
+}
+
+/* ---------- строки для листа «Журнал» (одна строка на работу / диаметр / технику) ---------- */
+const jc=c=>(c||'').replace(/\.([^.]+)$/,' $1');          // ГНТ…-11.01.100.КЖ → ГНТ…-11.01.100 КЖ, как в журнале
+const jnum=v=>{const x=parseFloat(String(v??'').replace(',','.'));return isNaN(x)?'':x};
+function buildRows(r){
+ const rows=[],resp=r.resp?`Ответственный: ${r.resp}`:'';
+ const extra=[r.people?`персонал ${r.people} чел.`:'',r.t1&&r.t2?`время ${r.t1}–${r.t2}`:''].filter(Boolean).join('; ');
+ const ws=r.works.filter(w=>workName(w));
+ ws.forEach(w=>{
+  const c=jc(w.c),first=rows.length===0,note=[resp,first?extra:''].filter(Boolean).join('; ');
+  const ok=needDiam(w)?(w.ds||[]).filter(x=>x.d&&x.n):[];
+  if(ok.length)ok.forEach(x=>{const w2=Object.assign({},w,{ds:[x]});rows.push({b:c,d:c,e:workName(w2),f:jnum(x.n),g:dk(w).unit,i:rows.length?resp:note,j:w.pos||''})});
+  else rows.push({b:c,d:c,e:workName(w),f:jnum(w.vol),g:w.unit||'',i:rows.length?resp:note,j:w.pos||''});
+ });
+ const sites=[...new Set(ws.map(w=>jc(w.c)).filter(Boolean))].join(', ')||'Не указан в отчёте';
+ (r.tech||[]).filter(x=>(x.n||'').trim()).forEach(x=>rows.push({b:sites,d:'Техника',e:x.n.trim(),f:jnum(x.h),g:'маш.-ч',i:''}));
+ return rows;
+}
+
+/* ---------- экраны ---------- */
+function tab(p){page=p;XS={view:'list',rec:null,q:'',flt:''};render();if(p==='req')loadLists()}
+function render(){
+ [['n1','new'],['n2','hist'],['n4','chk'],['n5','req'],['n3','set']].forEach(([id,p])=>$('#'+id).className=p===page?'on':'');
+ window.scrollTo(0,0);
+ if(page==='new')return newView();
+ if(page==='hist')return histView();
+ if(page==='chk'||page==='req')return xView(page);
+ setView();
+}
+function respSelect(){
+ const known=cfg.list.includes(R.resp),other=R.resp&&!known;
+ return `<select onchange="pickResp(this.value)"><option value="">— выберите ответственного —</option>`+cfg.list.map(n=>`<option ${n===R.resp?'selected':''}>${esc(n)}</option>`).join('')+`<option value="${OTHER}" ${other?'selected':''}>Другой (ввести вручную)</option></select><input id="respOther" placeholder="Фамилия И.О." style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(R.resp):''}" oninput="R.resp=this.value;save()">`;
+}
+function pickResp(v){const o=$('#respOther');if(v===OTHER){o.style.display='';o.value='';R.resp='';o.focus()}else{o.style.display='none';R.resp=v}save()}
+function newView(){
+ const sent=hist.some(h=>h.date===today());
+ $('#hd').textContent='Отчёт СМР';
+ $('#view').innerHTML=`<div class="banner ${sent?'ok':'no'}">${sent?'✓ Отчёт за сегодня отправлен':'Отчёт за сегодня ещё не отправлен'}</div>
+ <div class="card">
+ <label style="margin-top:0">Дата</label><input type="date" value="${R.date}" oninput="R.date=this.value;save()">
+ <label>Ответственный</label>${respSelect()}
+ <label>Время работы</label>
+ <div class="grid"><div><div class="sub">с</div><input type="time" value="${esc(R.t1)}" oninput="R.t1=this.value;save()"></div><div><div class="sub">по</div><input type="time" value="${esc(R.t2)}" oninput="R.t2=this.value;save()"></div></div>
+ </div>
+ <div class="card">
+ <label style="margin-top:0">Выполненные работы</label>
+ <div id="works">${R.works.map(workHtml).join('')}</div>
+ <button class="btn sec" onclick="addWork()">＋ Добавить работу</button>
+ </div>
+ <div class="card">
+ <label style="margin-top:0">Персонал, чел.</label><input type="number" inputmode="numeric" value="${esc(R.people)}" oninput="R.people=this.value;save()">
+ <label>Техника и отработанные часы</label><div id="techRows">${techHtml()}</div>
+ <button class="btn sec" style="margin-top:8px;padding:10px" onclick="addTech()">＋ Ещё техника</button>
+ <label>Проблемы / замечания</label><textarea oninput="R.problems=this.value;save()">${esc(R.problems)}</textarea>
+ <label>План на завтра</label><textarea oninput="R.plan=this.value;save()">${esc(R.plan)}</textarea>
+ <label>Фото</label><div class="photos" id="ph"></div>
+ <input type="file" accept="image/*" multiple onchange="addPhotos(this)" style="margin-top:8px">
+ </div>
+ <button class="btn" onclick="preview()">Проверить и отправить</button>
+ <button class="btn del" onclick="clearForm()">Очистить форму</button>`;
+ drawPhotos();
+}
+function techHtml(){
+ return R.tech.map((r,j)=>{
+  const other=r.o||(r.n&&!cfg.techList.includes(r.n));
+  return `<div class="drow"><div class="top"><span>Техника ${j+1}</span>${R.tech.length>1?`<b onclick="rmTech(${j})">✕</b>`:''}</div>
+  <div class="trow"><select onchange="pickTech(${j},this.value)"><option value="">— выберите технику —</option>${cfg.techList.map(n=>`<option ${n===r.n?'selected':''}>${esc(n)}</option>`).join('')}<option value="${OTHER}" ${other?'selected':''}>Другая (ввести вручную)</option></select>
+  <input placeholder="Часы" inputmode="decimal" value="${esc(r.h)}" oninput="R.tech[${j}].h=this.value;save()"></div>
+  <input placeholder="Название техники вручную" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(r.n):''}" oninput="R.tech[${j}].n=this.value;save()"></div>`}).join('');
+}
+function pickTech(j,v){const r=R.tech[j];if(v===OTHER){r.o=1;r.n=''}else{r.o=0;r.n=v}save();newView();if(v===OTHER){document.querySelectorAll('#techRows input[placeholder^="Название"]')[j].focus()}}
+function addTech(){R.tech.push({n:'',o:0,h:''});save();newView()}
+function rmTech(j){R.tech.splice(j,1);if(!R.tech.length)R.tech=[{n:'',o:0,h:''}];save();newView()}
+function workHtml(w,i){
+ const st=structs(w.c),hasC=w.c||w.co;
+ const ks=kindsOf(w),sOther=w.s===OTHER;
+ const isOther=w.k===OTHER||sOther||(!st&&!ks.length&&hasC);
+ const kindDisabled=!hasC||(st&&!w.s);
+ const kindHint=!hasC?'сначала выберите шифр РД':(st&&!w.s?'сначала выберите '+structAcc(w.c):'— выберите вид работ —');
+ return `<div class="work"><div class="top"><span>Работа ${i+1}</span>${R.works.length>1?`<b onclick="rmWork(${i})">✕</b>`:''}</div>
+ <label style="margin-top:6px">Шифр РД</label>${cipherSelect(i,w.c)}
+ ${st?`<label>${structLabel(w.c)}</label><select onchange="pickStruct(${i},this.value)"><option value="">— выберите ${structAcc(w.c)} —</option>${st.map(([n,,lab])=>`<option value="${esc(n)}" ${n===w.s?'selected':''}>${esc(lab||n)}</option>`).join('')}<option value="${OTHER}" ${sOther?'selected':''}>Другое (описать вручную)</option></select>`:''}
+ ${hasMarks(w)?marksHtml(i,w):''}
+ ${markOf(w.c)==='ТХ'&&isLine(w.s)?`<input placeholder="Участок линии: колодец, ПК, оси (необязательно)" style="margin-top:8px" value="${esc(w.ln||'')}" oninput="R.works[${i}].ln=this.value;save()">`:''}
+ ${sOther?'':`<label>${st?'Вид работ':'Что сделано'}</label>
+ <select onchange="pickKind(${i},this.value)" ${kindDisabled?'disabled':''}><option value="">${kindHint}</option>${ks.map(([n])=>`<option ${n===w.k?'selected':''}>${esc(n)}</option>`).join('')}<option value="${OTHER}" ${w.k===OTHER||(!st&&!ks.length&&hasC)?'selected':''}>Другое (описать вручную)</option></select>`}
+${needDiam(w)?diamHtml(i,w):''}
+ ${w.k||sOther?`<textarea style="margin-top:8px" placeholder="${isOther?'Опишите, что сделано':'Уточнение (необязательно): оси, отметки, номер'}" oninput="R.works[${i}].t=this.value;save()">${esc(w.t)}</textarea>`:''}
+ ${posHtml(i,w)}
+ <div class="grid" style="margin-top:8px"><input placeholder="${needDiam(w)?'Всего (считается само)':'Объём'}" id="vol${i}" inputmode="decimal" value="${esc(w.vol)}" ${needDiam(w)?'readonly':''} oninput="R.works[${i}].vol=this.value;save();upInfo(${i})"><input placeholder="Ед. изм." value="${esc(w.unit)}" oninput="R.works[${i}].unit=this.value;save();upInfo(${i})"></div><div id="pinfo${i}">${posInfo(i,w)}</div></div>`;
+}
+/* ---------- проектный объём и остаток по смете ---------- */
+const fmtN=v=>String(Math.round((+v||0)*1000)/1000).replace('.',',');
+const smBy=p=>SM.items.find(x=>x[0]===p);
+const smFor=w=>SM.items.filter(x=>x[1]===w.c);
+const stemsOf=(s,min)=>(s||'').toLowerCase().split(/[^а-яёa-z0-9]+/).filter(t=>t.length>=min).map(t=>t.slice(0,5));
+function smRank(w,q){
+ const kt=stemsOf(w.k&&w.k!==OTHER?w.k:w.t,5),qt=stemsOf(q,3),marks=(w.nm||[]).map(x=>(x.v||'').trim().toLowerCase()).filter(Boolean);
+ return smFor(w).map(x=>{const nm=(x[3]||'').toLowerCase(),sec=(x[2]||'').toLowerCase();let sc=0,qs=0;
+  kt.forEach(t=>{if(nm.includes(t))sc+=2});qt.forEach(t=>{if(nm.includes(t)||sec.includes(t))qs+=5});marks.forEach(m=>{if(sec.includes(m))sc+=3});
+  return [sc+qs,x,qs]}).filter(a=>q?a[2]>0:true).sort((a,b)=>b[0]-a[0]).slice(0,60).map(a=>a[1]);
+}
+const posLabel=x=>`${(x[3]||'').slice(0,70)} · ${x[4]} · ост. ${fmtN(x[7])}`;
+function posOpts(w){
+ let list=smRank(w,w.pq||'');const cur=w.pos&&smBy(w.pos);
+ if(cur&&!list.includes(cur))list=[cur,...list];
+ return `<option value="">— позиция сметы не выбрана —</option>`+list.map(x=>`<option value="${esc(x[0])}" ${x[0]===w.pos?'selected':''}>${esc(posLabel(x))}</option>`).join('');
+}
+function posHtml(i,w){
+ if(!w.c)return '';
+ if(!SM.items.length)return cfg.sink?'<div class="sub" style="margin-top:8px">Позиции смет загрузятся из таблицы («Настройки» → «Обновить списки»).</div>':'';
+ if(!smFor(w).length)return `<div class="sub" style="margin-top:8px">В сметах нет позиций с шифром ${esc(shortCipher(w.c))}.</div>`;
+ return `<label>Позиция сметы (проектный объём и остаток)</label><input placeholder="Поиск позиции: слово из названия или марка" value="${esc(w.pq||'')}" oninput="posQ(${i},this.value)" style="margin-bottom:6px"><select id="pos${i}" onchange="pickPos(${i},this.value)">${posOpts(w)}</select>`;
+}
+function posInfo(i,w){
+ const it=w.pos&&smBy(w.pos);if(!it)return '';
+ const other=R.works.reduce((a,x,k)=>a+(k!==i&&x.pos===w.pos&&workName(x)?(jnum(x.vol)||0):0),0);
+ const rest=Math.max(0,it[7]-other),cur=jnum(w.vol)||0,over=cur-rest;
+ let h=`<div class="sub" style="margin-top:6px">Проект: <b>${fmtN(it[5])} ${esc(it[4])}</b> · смонтировано: <b>${fmtN(it[6])}</b> · остаток: <b>${fmtN(rest)}</b>${other?` (с учётом других работ в этом отчёте: −${fmtN(other)})`:''}</div>`;
+ if(w.unit&&it[4]&&w.unit.trim()!==String(it[4]).trim())h+=`<div class="sub" style="color:#8a5a00">Ед. изм. в смете — ${esc(it[4])}, у вас — ${esc(w.unit)}</div>`;
+ if(over>1e-9)h+=`<div class="banner" style="margin:6px 0 0;background:#fadcdc;color:#a42424;font-weight:600">Превышение на ${fmtN(over)} ${esc(it[4])}: по смете можно не более ${fmtN(rest)}</div>`;
+ return h;
+}
+function upInfo(i){const e=document.getElementById('pinfo'+i);if(e&&R.works[i])e.innerHTML=posInfo(i,R.works[i])}
+function pickPos(i,v){const w=R.works[i];w.pos=v;if(v){const it=smBy(v);if(it&&!w.unit&&!needDiam(w))w.unit=it[4]}save();newView()}
+function posQ(i,q){const w=R.works[i];w.pq=q;save();const s=document.getElementById('pos'+i);if(s)s.innerHTML=posOpts(w)}
+function overruns(){
+ const sum={};R.works.forEach(w=>{if(w.pos&&workName(w))sum[w.pos]=(sum[w.pos]||0)+(jnum(w.vol)||0)});
+ return Object.keys(sum).map(p=>{const it=smBy(p);return it&&sum[p]>it[7]+1e-9?`${(it[3]||'').slice(0,60)}: в отчёте ${fmtN(sum[p])} ${it[4]}, остаток по смете ${fmtN(it[7])}`:null}).filter(Boolean);
+}
+async function loadSmeta(manual,force){
+ if(!cfg.sink||!cfg.key){if(manual)toast('Сначала укажите адрес и ключ в «Настройках»');return}
+ if(!manual&&!force&&Date.now()-SM.at<30*60000)return;
+ try{
+  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=smeta&key='+encodeURIComponent(cfg.key));
+  const j=await r.json();
+  if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
+  SM={at:Date.now(),items:j.items||[]};ls.set('smeta',SM);
+  if(manual){toast('Сметы обновлены: позиций '+SM.items.length);if(page==='set')setView()}
+  if(page==='new')newView();
+ }catch(e){if(manual)toast('Не удалось получить сметы: '+((e&&e.message)||'нет связи'),4500)}
+}
+function marksHtml(i,w){
+ if(!w.nm||!w.nm.length)w.nm=[{v:'',o:0}];
+ const gr=kjGroups(w.c);
+ const rows=w.nm.map((r,j)=>{
+  if(!gr)return `<div class="drow"><div class="top"><span>Название ${j+1}</span>${w.nm.length>1?`<b onclick="rmMark(${i},${j})">✕</b>`:''}</div><input placeholder="Марка / название (например Фм-7.1)" value="${esc(r.v)}" oninput="R.works[${i}].nm[${j}].v=this.value;save()"></div>`;
+  const all=gr.flatMap(g=>g[1]),other=r.o||(r.v&&!all.includes(r.v));
+  return `<div class="drow"><div class="top"><span>Название ${j+1}</span>${w.nm.length>1?`<b onclick="rmMark(${i},${j})">✕</b>`:''}</div>
+  <select onchange="pickMark(${i},${j},this.value)"><option value="">— выберите фундамент / плиту —</option>${gr.map(([g,ns])=>`<optgroup label="${esc(g)}">${ns.map(n=>`<option ${n===r.v?'selected':''}>${esc(n)}</option>`).join('')}</optgroup>`).join('')}<option value="${OTHER}" ${other?'selected':''}>Другое (ввести вручную)</option></select>
+  <input placeholder="Название вручную" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(r.v):''}" oninput="R.works[${i}].nm[${j}].v=this.value;save()"></div>`}).join('');
+ return `<label>${gr?'Фундамент / плита (название)':'Название конструкции'}</label>${rows}<button class="btn sec" style="margin-top:8px;padding:10px" onclick="addMark(${i})">＋ Ещё конструкция</button>`;
+}
+function pickMark(i,j,v){const r=R.works[i].nm[j];if(v===OTHER){r.o=1;r.v=''}else{r.o=0;r.v=v}save();newView();if(v===OTHER){document.querySelectorAll('#works .work')[i].querySelectorAll('input[placeholder="Название вручную"]')[j].focus()}}
+function addMark(i){R.works[i].nm.push({v:'',o:0});save();newView()}
+function rmMark(i,j){R.works[i].nm.splice(j,1);save();newView()}
+function diamHtml(i,w){
+ if(!w.ds||!w.ds.length)w.ds=[{d:'',o:0,n:''}];
+ const ds=diamList(w);
+ const rows=w.ds.map((r,j)=>{
+  const other=r.o||(r.d&&!ds.includes(r.d));
+  return `<div class="drow"><div class="top"><span>${lk(w)?'Позиция':'Диаметр'} ${j+1}</span>${w.ds.length>1?`<b onclick="rmDiam(${i},${j})">✕</b>`:''}</div>
+  <select onchange="pickDiam(${i},${j},this.value)"><option value="">— ${lk(w)?'выберите из списка РД':'выберите диаметр'} —</option>${ds.map(x=>`<option value="${esc(x)}" ${x===r.d?'selected':''}>${lk(w)?esc(x):'Ø'+esc(x)+' мм'}</option>`).join('')}<option value="${OTHER}" ${other?'selected':''}>Другой (ввести вручную)</option></select>
+  <input placeholder="${lk(w)?lk(w).man:'Например 219×6,0'}" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(r.d):''}" oninput="R.works[${i}].ds[${j}].d=this.value;save()">
+  ${secHtml(i,j,w,r)}
+  <input placeholder="${dk(w).ph}" inputmode="decimal" style="margin-top:8px" value="${esc(r.n)}" oninput="setDN(${i},${j},this.value)"></div>`}).join('');
+ return `<label>${dk(w).lab}</label>${rows}<button class="btn sec" style="margin-top:8px;padding:10px" onclick="addDiam(${i})">＋ Ещё ${lk(w)?'позицию':'диаметр'}</button>`;
+}
+function secHtml(i,j,w,r){
+ const L=lk(w);if(!L||!L.sec)return '';
+ const list=SEC[rdKey(w.c)+'|'+r.d]||(CAB[rdKey(w.c)]?[]:SECM[r.d])||[];   // у шифра есть свой список марок, но нет сечений в РД (ЭН) → ввод вручную
+ if(!list.length)return `<input placeholder="${L.sec}" style="margin-top:8px" value="${esc(r.s||'')}" oninput="R.works[${i}].ds[${j}].s=this.value;save()">`;
+ const other=r.so||(r.s&&!list.includes(r.s));
+ return `<select style="margin-top:8px" onchange="pickSec(${i},${j},this.value)"><option value="">— число жил и сечение —</option>${list.map(x=>`<option value="${esc(x)}" ${x===r.s?'selected':''}>${esc(x)}</option>`).join('')}<option value="${OTHER}" ${other?'selected':''}>Другое (ввести вручную)</option></select>
+  <input placeholder="Жилы и сечение вручную, например 5х4" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(r.s||''):''}" oninput="R.works[${i}].ds[${j}].s=this.value;save()">`;
+}
+function pickSec(i,j,v){const r=R.works[i].ds[j];if(v===OTHER){r.so=1;r.s=''}else{r.so=0;r.s=v}save();newView();if(v===OTHER){document.querySelectorAll('#works .work')[i].querySelectorAll('input[placeholder^="Жилы"]')[j].focus()}}
+function syncDiam(i){
+ const w=R.works[i],tot=w.ds.reduce((a,r)=>a+(parseFloat(String(r.n).replace(',','.'))||0),0);
+ w.vol=tot?String(Math.round(tot*1000)/1000):'';w.unit=dk(w)?dk(w).unit:'';save();
+ const el=document.getElementById('vol'+i);if(el){el.value=w.vol}upInfo(i);
+ const u=document.querySelectorAll('#works .work')[i];if(u){const ui=u.querySelector('input[placeholder="Ед. изм."]');if(ui)ui.value=w.unit}
+}
+function setDN(i,j,v){R.works[i].ds[j].n=v;syncDiam(i)}
+function pickDiam(i,j,v){const r=R.works[i].ds[j];r.s='';r.so=0;if(v===OTHER){r.o=1;r.d=''}else{r.o=0;r.d=v}save();newView();if(v===OTHER){document.querySelectorAll('#works .work')[i].querySelectorAll('input[placeholder^="Например"]')[j].focus()}}
+function addDiam(i){R.works[i].ds.push({d:'',o:0,n:''});save();newView()}
+function rmDiam(i,j){R.works[i].ds.splice(j,1);syncDiam(i);newView()}
+function pickStruct(i,v){
+ const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}w.s=v;w.k=v===OTHER?OTHER:'';w.ds=[];w.t='';w.unit=v===OTHER?w.unit:'';save();newView();
+}
+function pickCipher(i,v){
+ const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}
+ w.s='';w.ln='';w.ds=[];w.nm=[];w.pos='';w.pq='';if(v===OTHER){w.c='';w.co=1;w.k=OTHER}else{w.c=v;w.co=0;w.k=''}
+ if(v&&v!==OTHER&&RDF[v]&&window.innerWidth>=900)openRD(v);
+ w.unit=w.k===OTHER?w.unit:'';save();newView();
+ if(v===OTHER){const ins=document.querySelectorAll('#works .work')[i].querySelector('input[placeholder="Шифр вручную"]');ins.focus()}
+}
+function pickKind(i,v){
+ const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}w.k=v;w.ds=[];
+ const hit=kindsOf(w).find(([n])=>n===v);if(hit)w.unit=hit[1];
+ save();newView();
+}
+function addWork(){R.works.push(newWork());save();newView();setTimeout(()=>{const t=document.querySelectorAll('#works .work');t[t.length-1].scrollIntoView({block:'center'})},50)}
+function rmWork(i){R.works.splice(i,1);save();newView()}
+function dropPhotos(){photos.forEach(p=>URL.revokeObjectURL(p.url));photos=[]}
+function clearForm(){if(confirm('Очистить форму?')){R=blank();dropPhotos();save();newView()}}
+
+/* фото */
+function drawPhotos(){const p=$('#ph');if(p)p.innerHTML=photos.map((f,i)=>`<div><img src="${f.url}"><b onclick="rmPhoto(${i})">×</b></div>`).join('')}
+function rmPhoto(i){URL.revokeObjectURL(photos[i].url);photos.splice(i,1);drawPhotos()}
+async function addPhotos(inp){for(const f of inp.files){const x=await shrink(f);if(x)photos.push(x);else toast('Не удалось открыть фото: '+(f.name||''),4000)}inp.value='';drawPhotos()}
+function shrink(file){return new Promise(ok=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{const m=1600,k=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=img.width*k;c.height=img.height*k;c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>{const name=`foto_${Date.now()}_${photos.length}.jpg`;const file=new File([b],name,{type:'image/jpeg'});ok({file,url:URL.createObjectURL(b)})},'image/jpeg',.75)};img.onerror=()=>{URL.revokeObjectURL(u);ok(null)};img.src=u})}
+
+/* проверка и отправка */
+function problems(){
+ const p=[];
+ if(!R.date)p.push('не указана дата');
+ if(!R.resp.trim())p.push('не указан ответственный');
+ if(!R.t1||!R.t2)p.push('не указано время работы');
+ if(!R.works.some(w=>workName(w)))p.push('не указаны выполненные работы');
+ R.works.forEach((w,i)=>{if(!workName(w))return;if(!w.c)p.push(`работа ${i+1}: не указан шифр РД`);if(!w.vol)p.push(`работа ${i+1}: нет объёма`);if(hasMarks(w)&&!mk(w))p.push(`работа ${i+1}: не указано название фундамента / плиты`);if(needDiam(w)&&!(w.ds||[]).some(r=>r.d&&r.n))p.push(`работа ${i+1}: ${lk(w)?'не указаны марка / тип и длина':'не указан диаметр и объём'}`);else if(needDiam(w)&&(w.ds||[]).some(r=>!r.d||!r.n))p.push(`работа ${i+1}: ${lk(w)?'у одной из позиций нет марки / типа или длины':'у одного из диаметров нет значения или объёма'}`)});
+ if(!R.people)p.push('не указан персонал');
+ (R.tech||[]).forEach(x=>{if((x.n||'').trim()&&!x.h)p.push(`техника «${x.n.trim()}»: не указаны часы`)});
+ return p;
+}
+function preview(){
+ const ov=overruns();
+ if(ov.length&&!confirm('Объём больше остатка по смете:\n\n• '+ov.join('\n• ')+'\n\nОК — всё равно перейти к отправке, Отмена — вернуться и исправить.'))return;
+ const pr=problems(),d=document.createElement('div');d.className='dlg';d.id='dlg';
+ d.innerHTML=`<div><h3>Проверьте отчёт</h3>
+ ${pr.length?`<div class="banner no" style="margin-top:8px;font-weight:500">Неполный отчёт — по распоряжению это может повлиять на КТУ:<br>• ${pr.map(esc).join('<br>• ')}</div>`:''}
+ <div class="card" style="max-height:38vh;overflow:auto;background:#f8fafc"><pre>${esc(buildText(R))}</pre>${photos.length?`<div class="sub" style="margin-top:6px">📷 Фото: ${photos.length}</div>`:''}</div>
+ ${cfg.sink?`<div class="sub" style="margin:0 2px 6px">В журнал уйдёт строк: ${buildRows(R).length}${pr.length?' · в КТУ будет отметка «Подал с нарушением»':''}</div>`:''}
+ ${cfg.sink&&!(cfg.me||'').trim()?'<div class="banner no" style="font-weight:500">Не указано, кто подаёт отчёт («Настройки»): отчёт запишется на ответственного из формы.</div>':''}
+ ${cfg.sink&&(cfg.me||'').trim()&&(cfg.meList||[]).length&&!cfg.meList.includes(cfg.me.trim())?`<div class="banner no" style="font-weight:500">«${esc(cfg.me)}» нет в таблице «Ответственные» — будет добавлен(а) в неё.</div>`:''}
+ ${isDesktop()
+  ?`<div class="banner no" style="font-weight:500;margin-top:8px">На компьютере Max не появляется в меню «Поделиться». Нажмите кнопку ниже: текст отчёта скопируется, затем вставьте его в Max (Ctrl+V).</div>
+ <button class="btn" onclick="copyText(true,'Текст скопирован. Откройте Max и вставьте в группу (Ctrl+V)')">Скопировать отчёт для Max</button>
+ ${photos.length?`<button class="btn sec" onclick="savePhotos()">Сохранить фото (${photos.length}) для вложения</button>`:''}
+ ${canShare()?`<button class="btn sec" onclick="send(true)">Другой способ: меню «Поделиться»</button>`:''}`
+  :`${canShare()?'':`<div class="banner no" style="font-weight:500;margin-top:8px">Меню «Поделиться» недоступно: приложение открыто не по https-ссылке. Кнопка «Отправить» скопирует текст, его нужно вставить в Max вручную.</div>`}
+ <button class="btn" onclick="send()">Отправить в Max</button>
+ ${photos.length&&canShare()?'<button class="btn sec" onclick="send(true)">Отправить только текст (без фото)</button>':''}
+ <button class="btn sec" onclick="copyText()">Скопировать текст</button>`}
+ <button class="btn sec" onclick="$('#dlg').remove()">Вернуться к правке</button></div>`;
+ if(ov.length)d.querySelector('h3').insertAdjacentHTML('afterend',`<div class="banner" style="margin-top:8px;background:#fadcdc;color:#a42424;font-weight:500">Больше остатка по смете:<br>• ${ov.map(esc).join('<br>• ')}</div>`);
+ document.body.appendChild(d);
+}
+const isDesktop=()=>!/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+function savePhotos(){photos.forEach((p,k)=>{const a=document.createElement('a');a.href=p.url;a.download=p.file.name||('foto_'+(k+1)+'.jpg');document.body.appendChild(a);a.click();a.remove()});toast('Фото сохранены в «Загрузки». Приложите их к сообщению в Max.',6000)}
+const canShare=()=>window.isSecureContext&&!!navigator.share;
+async function tryShare(d){try{await navigator.share(d);return 'ok'}catch(e){return e&&e.name==='AbortError'?'abort':'err:'+((e&&e.name)||'')}}
+async function send(textOnly){
+ const text=buildText(R),files=textOnly===true?[]:photos.map(p=>p.file);
+ if(!canShare()){await copyText(true,'Меню «Поделиться» здесь недоступно (приложение открыто файлом, а не по https-ссылке). Текст скопирован: откройте Max и вставьте в группу.');return}
+ let r='';
+ if(files.length&&navigator.canShare&&navigator.canShare({files})){r=await tryShare({text,files});if(r==='ok'){confirmSent();return}if(r==='abort')return}
+ const r2=await tryShare({text});
+ if(r2==='abort')return;
+ if(r2==='ok'){if(files.length)toast('Фото не ушли: приложите их в Max отдельно');confirmSent();return}
+ await copyText(true,'Не удалось открыть меню «Поделиться» ('+r2.replace('err:','')+'). Текст скопирован: откройте Max и вставьте в группу.');
+}
+async function copyText(fallback,msg){
+ const text=buildText(R);
+ try{await navigator.clipboard.writeText(text)}catch(e){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
+ toast(fallback?(msg||'Текст скопирован. Откройте Max и вставьте в группу'):'Текст скопирован',fallback?7000:3200);
+ if(fallback)confirmSent();
+}
+function confirmSent(){
+ const d=$('#dlg');if(d)d.remove();
+ const x=document.createElement('div');x.className='dlg';x.id='dlg';
+ x.innerHTML=`<div><h3>Вы отправили отчёт в группу?</h3><div class="sub">Если да, он попадёт в историю и отметка «отправлен» появится на главном экране.</div>
+ <button class="btn" onclick="markSent()">Да, отправил</button><button class="btn sec" onclick="$('#dlg').remove()">Нет, ещё не отправил</button></div>`;
+ document.body.appendChild(x);
+}
+function markSent(){
+ hist.unshift({id:Date.now(),date:R.date,text:buildText(R),at:new Date().toLocaleString('ru-RU'),sync:0,rows:buildRows(R),probs:problems()});
+ ls.set('hist',hist);
+ cfg.resp=R.resp;cfg.t1=R.t1;cfg.t2=R.t2;if(!cfg.me)cfg.me=R.resp;ls.set('cfg',cfg);
+ R=blank();dropPhotos();save();$('#dlg').remove();toast('Отчёт сохранён в истории');newView();
+ syncAll();
+}
+
+/* ---------- сбор отчётов в Google Таблицу (Apps Script) ---------- */
+function payloadOf(h){
+ const t=h.text||'',pick=re=>(t.match(re)||[])[1]||'';
+ const works=((t.match(/Выполнено:\n([\s\S]*?)(?:\n\n(?:Персонал|Техника|Проблемы \/ замечания|План на завтра):|\nТехника:|$)/)||[])[1]||'');
+ return {kind:'report',key:cfg.key||'',id:String(h.id),date:h.date,rows:h.rows||[],probs:h.probs||[],sender:cfg.me||pick(/Ответственный: (.*)/),resp:pick(/Ответственный: (.*)/),
+  time:pick(/Время работы: (.*)/),sites:pick(/Участок: (.*)/),works,people:pick(/Персонал: (\d+)/),tech:pick(/Техника: (.*)/),
+  problems:pick(/Проблемы \/ замечания: ([\s\S]*?)(?:\n\nПлан на завтра: |$)/),plan:pick(/План на завтра: ([\s\S]*)$/),text:t,sentAt:h.at};
+}
+async function postJSON(obj){
+ const body=JSON.stringify(obj);
+ let r;
+ try{r=await fetch(cfg.sink,{method:'POST',body,headers:{'Content-Type':'text/plain;charset=utf-8'}})}
+ catch(e){
+  try{await fetch(cfg.sink,{method:'POST',body,mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'}});return {opaque:true}}  // CORS-сбой: повтор безопасен, сервер не дублирует по id
+  catch(e2){return {err:'нет связи'}}
+ }
+ try{return {j:await r.json()}}catch(e){return {err:'сервер ответил не так: проверьте адрес и ключ'}}
+}
+async function syncOne(h){
+ const x=await postJSON(payloadOf(h));
+ if(x.opaque){h.sync=2;h.err='';return true}
+ if(x.err){h.err=x.err;return false}
+ const j=x.j;
+ if(j&&j.ok){h.sync=1;h.err='';return true}
+ h.err=(j&&j.error)||'сервер отклонил';return false;
+}
+let syncing=false;
+async function syncAll(manual){
+ if(!cfg.sink||syncing)return;
+ const todo=hist.filter(h=>h.sync!==1&&h.sync!==2);
+ if(!todo.length){if(manual)toast('Все отчёты уже в таблице');return}
+ syncing=true;let ok=0,bad=0;
+ for(const h of todo.reverse()){(await syncOne(h))?ok++:bad++}
+ syncing=false;ls.set('hist',hist);if(ok)loadSmeta(false,true);
+ if(manual||bad)toast(bad?`В таблицу не ушло: ${bad}. Проверьте интернет и настройки.`:`Отправлено в таблицу: ${ok}`,4500);
+ else if(ok)toast('Отчёт отправлен в таблицу');
+ if(page==='hist')histView();
+}
+/* ---------- заявки → «Реестр заявок на закупку», списки из таблиц ---------- */
+let syncingR=false;
+function reqPayload(r){return {kind:'request',key:cfg.key||'',id:String(r.id),num:parseInt(r.num)||0,date:r.date,section:r.section||'',cipher:r.cipher||'',applicant:cfg.applicant||'',items:r.items.filter(i=>(i.n||'').trim()).map(i=>({n:i.n.trim(),u:(i.u||'').trim(),q:(i.q||'').trim(),d:fd(i.d||''),p:(i.p||'').trim()})),sentAt:new Date().toLocaleString('ru-RU')}}
+async function syncReqs(manual){
+ if(!cfg.sink||syncingR)return;
+ const todo=xall('req').map(reqNorm).filter(r=>r.queued&&r.sent!==1&&r.sent!==2);
+ if(!todo.length)return;
+ syncingR=true;let ok=0,bad=0,last='';
+ for(const r of todo){
+  const x=await postJSON(reqPayload(r));
+  if(x.opaque){r.sent=2;r.err='';r.queued=0;ok++}
+  else if(x.err){r.err=x.err;bad++;last=x.err}
+  else if(x.j&&x.j.ok){r.sent=1;r.err='';r.queued=0;if(x.j.num)r.num=String(x.j.num);ok++}
+  else{r.err=(x.j&&x.j.error)||'сервер отклонил';bad++;last=r.err}
+  xput('req',r);
+ }
+ syncingR=false;
+ if(manual||bad)toast(bad?`Заявка не ушла: ${last}`:`Заявок отправлено в реестр: ${ok}`,5000);
+ if(ok)loadLists(false,true);
+ if(page==='req'&&XS.view==='list')render();
+}
+let lastLists=0;
+async function loadLists(manual,force){
+ if(!cfg.sink||!cfg.key){if(manual)toast('Сначала укажите адрес и ключ в «Настройках»');return}
+ if(!manual&&!force&&Date.now()-lastLists<60000)return;
+ lastLists=Date.now();
+ try{
+  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=lists&key='+encodeURIComponent(cfg.key));
+  const j=await r.json();
+  if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
+  if(Array.isArray(j.names)&&j.names.length){cfg.meList=j.names;if(!cfg.list.length)cfg.list=j.names.slice()}
+  if(Array.isArray(j.requests))cfg.regReq=j.requests;
+  if(j.nextReq)cfg.nextReq=j.nextReq;
+  cfg.listsAt=Date.now();ls.set('cfg',cfg);
+  if(manual){toast('Списки обновлены из таблицы');if(page==='set')setView()}
+  else if(page==='req'&&XS.view==='list'&&!XS.q)render();
+ }catch(e){if(manual)toast('Не удалось получить списки: '+((e&&e.message)||'нет связи'),4500)}
+}
+window.addEventListener('online',()=>{syncAll();syncReqs();loadLists();loadSmeta()});
+
+/* история */
+function syncBadge(h){
+ if(!cfg.sink)return '';
+ if(h.sync===1)return '<span class="badge ok">✓ в таблице</span>';
+ if(h.sync===2)return '<span class="badge ok">✓ отправлен</span>';
+ return `<span class="badge warn">⏳ ждёт отправки${h.err?': '+esc(h.err):''}</span>`;
+}
+function histView(){
+ $('#hd').textContent='История отчётов';
+ const pend=cfg.sink?hist.filter(h=>h.sync!==1&&h.sync!==2).length:0;
+ $('#view').innerHTML=(pend?`<button class="btn" style="margin-top:0" onclick="syncAll(true)">Отправить в таблицу неотправленные (${pend})</button>`:'')+(hist.length?hist.map((h,i)=>`<div class="card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><h3>${fd(h.date)}</h3>${syncBadge(h)}</div><div class="sub">отправлен ${esc(h.at)}</div><pre>${esc(h.text)}</pre>
+ <div class="grid"><button class="btn sec" onclick="copyHist(${i})">Копировать</button><button class="btn sec" onclick="reuse(${i})">Взять за основу</button></div></div>`).join(''):`<div class="empty">Отправленных отчётов пока нет.</div>`);
+}
+async function copyHist(i){try{await navigator.clipboard.writeText(hist[i].text);toast('Скопировано')}catch(e){toast('Не удалось скопировать')}}
+function reuse(i){
+ const t=hist[i].text,pick=re=>(t.match(re)||[])[1]||'';
+ R=blank();
+ R.people=pick(/Персонал: (\d+)/);{const items=pick(/Техника: (.+)/).split('; ').filter(Boolean).map(x=>{const m=x.match(/^(.*?) — ([\d.,]+) ч$/);return m?{n:m[1],o:cfg.techList.includes(m[1])?0:1,h:m[2]}:{n:x,o:cfg.techList.includes(x)?0:1,h:''}});R.tech=items.length?items:[{n:'',o:0,h:''}]}
+ save();tab('new');toast('Персонал и техника подставлены из прошлого отчёта');
+}
+
+/* настройки */
+function setView(){
+ $('#hd').textContent='Настройки';
+ $('#view').innerHTML=`<div class="card"><label style="margin-top:0">Список ответственных (по одному на строку)</label>
+ <textarea style="min-height:160px" oninput="cfg.list=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.list.join('\n'))}</textarea>
+ <div class="sub" style="margin-top:6px">Этот список показывается в поле «Ответственный» на экране отчёта.</div></div>
+ <div class="card"><label style="margin-top:0">Список техники (по одной на строку)</label>
+ <textarea style="min-height:160px" oninput="cfg.techList=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.techList.join('\n'))}</textarea></div>
+ <div class="card"><label style="margin-top:0">Линии трубопроводов (по одной на строку)</label>
+ <textarea style="min-height:160px" oninput="cfg.lineList=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.lineList.join('\n'))}</textarea>
+ <div class="sub" style="margin-top:6px">Показываются в разделах ТХ. Впишите свои линии: например, «Л-1 нефть, Ду200».</div></div>
+ <div class="card"><h3>Сбор отчётов в Google Таблицу</h3>
+ <div class="sub">Отчёт попадает в «Журнал работ» (по строке на работу и технику) и в «Контроль отчётов (КТУ)». Заявка создаёт лист «Заявка N» в «Реестре заявок на закупку». Адрес и ключ — после установки скрипта приёма.</div>
+ <label>Кто подаёт отчёт (как в таблице «Ответственные»)</label><input list="meL" value="${esc(cfg.me)}" oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О. как в таблице"><datalist id="meL">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+ <label>Составитель заявок (ФИО в листе заявки)</label><input value="${esc(cfg.applicant)}" oninput="cfg.applicant=this.value;ls.set('cfg',cfg)" placeholder="Фамилия Имя Отчество">
+ <label>Адрес приёма отчётов</label><input value="${esc(cfg.sink)}" oninput="cfg.sink=this.value.trim();ls.set('cfg',cfg)" placeholder="https://script.google.com/macros/s/.../exec">
+ <label>Ключ</label><input value="${esc(cfg.key)}" oninput="cfg.key=this.value.trim();ls.set('cfg',cfg)" placeholder="Ключ доступа">
+ <button class="btn sec" onclick="testSink()">Проверить связь</button><button class="btn sec" onclick="syncAll(true).then(()=>syncReqs(true))">Отправить неотправленные</button><button class="btn sec" onclick="loadLists(true);loadSmeta(true)">Обновить списки и сметы</button>
+ <div class="sub" style="margin-top:6px">${cfg.listsAt?'Списки из таблицы получены '+new Date(cfg.listsAt).toLocaleString('ru-RU'):'Списки из таблицы ещё не загружались.'} · позиций смет: ${SM.items.length}</div></div>
+ <div class="card"><h3>Копия данных</h3>
+ <div class="sub">История, чек-листы, заявки, настройки и черновик хранятся на этом устройстве. Сохраните копию в файл, чтобы не потерять их при очистке браузера или смене телефона. Фото и ключ доступа к таблице в копию не входят.</div>
+ <button class="btn sec" onclick="backupAll()">Сохранить копию в файл</button>
+ <label class="btn sec" style="text-align:center">Восстановить из файла<input type="file" accept=".json" hidden onchange="restoreAll(this)"></label>
+ <div class="sub" id="persistInfo" style="margin-top:8px"></div></div>
+ <div class="card"><div class="sub">Шифры РД взяты из состава рабочей документации ГНТ.61.2024.01-СРД (Изм. 4). Данные хранятся только на этом телефоне.</div></div>
+ <button class="btn sec" onclick="if(confirm('Вернуть списки по умолчанию? Ваши правки списков будут потеряны.')){cfg.list=DEF_RESP.slice();cfg.techList=DEF_TECH.slice();cfg.lineList=DEF_LINES.slice();ls.set('cfg',cfg);setView()}">Вернуть списки по умолчанию</button>`;
+ protectStorage();
+}
+function toast(m,ms){document.querySelectorAll('.toast').forEach(e=>e.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(tt);tt=setTimeout(()=>t.remove(),ms||3200)}
+async function testSink(){
+ if(!cfg.sink){toast('Сначала вставьте адрес приёма отчётов');return}
+ if(!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(cfg.sink)){toast('Адрес неверный: он должен начинаться с https://script.google.com/macros/s/ и заканчиваться на /exec',6000);return}
+ try{const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'ping=1');const j=await r.json();toast(j&&j.ok?('Связь есть. Журнал: '+(j.journal===false?'нет доступа':'ок')+', реестр заявок: '+(j.registry===false?'нет доступа':'ок')):'Таблица ответила с ошибкой',5000)}
+ catch(e){toast('Нет ответа. Проверьте адрес и интернет',4500)}
+}
+function dlFile(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function backupAll(){dlFile(`otchet_smr_kopiya_${today()}.json`,JSON.stringify({v:1,cfg:Object.assign({},cfg,{key:''}),hist,draft:R,chk:ls.get('chk',[]),req:ls.get('req',[])}),'application/json');toast('Копия сохранена в «Загрузки»')}
+async function restoreAll(inp){
+ const f=inp.files[0];if(!f)return;
+ try{const o=JSON.parse(await f.text());if(!o||!o.hist)throw 0;
+  if(!confirm('Текущие история и настройки на этом устройстве будут заменены данными из копии. Продолжить?'))return;
+  ls.set('cfg',Object.assign({},o.cfg||cfg,{key:cfg.key||''}));ls.set('hist',o.hist);if(o.draft)ls.set('draft',o.draft);if(o.chk)ls.set('chk',o.chk);if(o.req)ls.set('req',o.req);location.reload();
+ }catch(e){toast('Не удалось прочитать файл копии')}
+}
+async function protectStorage(){
+ try{if(navigator.storage&&navigator.storage.persist){const ok=await navigator.storage.persist();const el=$('#persistInfo');if(el)el.textContent=ok?'Хранилище защищено от автоочистки браузера.':'Браузер может очистить данные при нехватке места: делайте копии в файл.'}}catch(e){}
+}
+
+
+/* ---------- Чек-листы и заявки (отдельные страницы) ---------- */
+const TPL={
+'Ежедневный обход площадки':['Ограждение и знаки безопасности в порядке','Проходы и подъезды свободны','Леса и ограждения на высоте исправны','Электроустановки и кабели защищены','Огнетушители на местах, пожарные щиты укомплектованы','СИЗ у всех работников','Места складирования материалов в порядке','Мусор убран, площадка чистая'],
+'Монтаж резервуара: приёмка работ':['Наличие РД и ППР на рабочем месте','Входной контроль металла (сертификаты)','Геометрия днища и стенки в допуске','Сварные швы: визуальный контроль','Контроль сварных швов (ВИК / РК / вакуум) выполнен','Лист сварщика и удостоверения НАКС','Исполнительная съёмка выполнена','Акты скрытых работ оформлены'],
+'Охрана труда и ПБ: допуск к работам':['Наряд-допуск оформлен','Инструктаж проведён, записи в журнале','Огневые / газоопасные работы согласованы','Работы на высоте: страховочные системы проверены','Грузоподъёмные механизмы: документы и освидетельствование','Заземление оборудования выполнено','Аптечка и средства связи на месте']
+};
+/* ---------- база чек-листов по видам работ ---------- */
+const CK_G={p:'Подготовка к работе',m:'Основные этапы работ',f:'Завершение и сдача'};
+const CK_PREP=['РД (действующее изменение) и ППР / технологическая карта на месте','Инструктаж проведён, наряд-допуск оформлен (если требуется)','Персонал допущен: удостоверения, квалификация','Материалы: паспорта и сертификаты, входной контроль выполнен','Техника, инструмент и ГПМ исправны, документы в наличии','Рабочая зона ограждена, знаки и первичные средства пожаротушения на месте'];
+const CK_FIN=['Выполнено по РД, отклонения согласованы с проектировщиком','Освидетельствование: акты (АОСР и др.) оформлены','Исполнительная схема / съёмка выполнена','Запись в журнале работ внесена, фото сделаны'];
+const CK_T={
+scaf:{p:['Проект/схема лесов, паспорт на леса','Основание под стойки проверено (несущая способность, уклон)','Монтажники лесов допущены к работам на высоте'],m:['Монтаж по схеме: стойки, связи, ригели','Настил, ограждение и бортовые доски установлены','Приёмка лесов, бирка «Допущено к эксплуатации», акт','Ежесменный осмотр, журнал приёмки лесов','Демонтаж сверху вниз, зона под лесами огорожена']},
+strip:{p:['Прочность бетона достигла распалубочной (протокол лаборатории)','Разрешение на распалубку от ответственного'],m:['Демонтаж щитов без повреждения бетона','Осмотр поверхности, дефекты выявлены и зафиксированы','Ремонт раковин и сколов по согласованной технологии','Геодезическая проверка отметок и положения']},
+demo:{p:['Оборудование/трубопровод/кабель отключён, опорожнен, продут, заглушки установлены','Электроснабжение отключено, видимый разрыв','Наряд-допуск (огневые / газоопасные при необходимости) оформлен','Схема демонтажа (ППР), опасная зона ограждена'],m:['Демонтаж в последовательности по ППР','Резка/разборка без падения и обрушения элементов','Складирование демонтированных материалов, годные — по акту','Вывоз мусора и лома, подтверждающие документы','Ведомость демонтированных объёмов подписана']},
+tankhydro:{p:['Программа гидроиспытаний утверждена; все швы приняты, ВИК/НК выполнены','Вода (источник, объём), поверенные манометры, репера для замеров осадки','Люки и патрубки закрыты, арматура в положении по программе'],m:['Заполнение ступенями с выдержкой, осмотр швов и уторного узла','Замеры осадки основания по реперам на каждой ступени','Выдержка при проектном уровне по программе','Течей и деформаций нет, слив воды','Акты гидроиспытания и осадки подписаны']},
+ndt:{p:['Лаборатория/специалисты НК аттестованы, документы в наличии','Схема стыков и объём контроля по проекту и нормам','Швы очищены от шлака и брызг, доступ к контролю обеспечен'],m:['Контроль выполнен в заданном объёме (ВИК / РК / УЗК / вакуум / керосин)','Заключения оформлены по каждому стыку','Дефекты вырублены и исправлены, повторный контроль','Результаты внесены в журнал, заключения приложены']},
+weld:{p:['Технология сварки (ППСР / WPS) утверждена','Сварщики аттестованы (НАКС), клейма закреплены','Сварочные материалы: сертификаты, прокалка/сушка выполнена','Кромки подготовлены, стыки собраны, зазоры в допуске','Сварочное оборудование исправно и аттестовано'],m:['Сварка по технологии (режимы, число проходов, подогрев при необходимости)','Клеймо сварщика на стыке, схема стыков ведётся','ВИК стыка выполнен на 100 %','Неразрушающий контроль в объёме по проекту','Журнал сварочных работ заполнен, дефекты исправлены']},
+hydro:{p:['Программа/схема испытаний согласована, заглушки и воздушники установлены','Манометры поверены (класс точности по требованиям), срок поверки действует','Участок отсечён от действующих сетей, источник воды готов'],m:['Заполнение водой, воздух удалён','Подъём давления ступенями до испытательного','Выдержка по нормам, осмотр стыков','Снижение давления до рабочего, повторный осмотр','Слив воды, продувка; акт испытания подписан']},
+tankclean:{p:['Люки открыты, вентиляция, замер газовоздушной среды, наряд-допуск','Освещение во взрывозащищённом исполнении, СИЗ'],m:['Удаление остатков и сварочного мусора','Осмотр днища и швов, замечания отмечены','Приёмка очистки перед окраской или испытанием']},
+tankbot:{p:['Основание резервуара принято: отметки, уклон, гидрофобный слой (акт)','Рулоны/листы днища: сертификаты, маркировка, схема раскладки','ППР на монтаж резервуара, схема сварки','Сварщики и технология сварки согласованы'],m:['Раскладка полотнищ по схеме, прихватки','Сварка стыков по технологии в установленной последовательности','Монтаж окраек, центральной части и приямка','ВИК швов, вакуумирование (контроль герметичности)','Замеры отметок и планировки днища, акт']},
+tankwall:{p:['Днище принято (акт), место уторного узла размечено','Рулон стенки: сертификаты, целостность, оснастка','Краны/механизмы, расчалки, схема развёртывания','Допуск к высотным работам'],m:['Разворот рулона, установка стенки по вертикали','Сварка вертикальных стыков и уторного шва','Монтаж верхнего уголка/колец жёсткости по РД','ВИК и НК швов (РК / УЗК по проекту), вакуумирование уторного шва','Геодезия: вертикальность, овальность, отклонения образующих — акт']},
+tankroof:{p:['Стенка принята (акт геометрии)','Элементы кровли/понтона/площадок: комплектность, маркировка, сертификаты','Допуск к высотным работам, ограждение кровли','ГПМ и стропальщики'],m:['Монтаж по схеме, выверка по осям и отметкам','Сварка или болтовое соединение по проекту, моменты затяжки','Герметичность швов: ВИК / вакуум','Монтаж патрубков, люков, лестниц, ограждений по РД','Приёмка узла, исполнительная схема']},
+foam:{p:['Оборудование: паспорта, комплектность, сертификаты пожарной безопасности','Места установки размечены, трубопроводы подведены'],m:['Установка по оси и высоте по проекту','Присоединение к трубопроводу, герметичность соединений','Окраска и маркировка','Проверка/испытание по программе','Акт монтажа и испытания']},
+arch:{p:['Основание/опорная конструкция приняты','Модули и материалы: паспорта, комплектность'],m:['Монтаж/устройство по проекту','Контроль геометрии, герметичности и швов примыканий','Антикоррозионная / огнезащитная обработка (если по РД)','Скрытые работы освидетельствованы до закрытия','Приёмка работ по помещению/модулю']},
+paint:{p:['Климатические условия: температура, влажность, точка росы (журнал замеров)','ЛКМ: паспорта, срок годности, партия, цвет','Поверхность проверена, зона защищена от осадков и пыли','Приборы для замеров (толщиномер, адгезиметр) поверены'],m:['Подготовка поверхности (степень очистки по РД)','Нанесение грунта','Нанесение последующих слоёв с выдержкой между ними','Контроль толщины сухого слоя, сплошности, адгезии','Устранение дефектов, акт / журнал антикоррозионных работ']},
+concprep:{p:['Основание принято (акт), отметки проверены'],m:['Установка маячков/опалубки бортов по отметкам','Укладка бетона (класс по РД), уплотнение','Выравнивание, выдержка','Контроль отметок и ровности, акт']},
+waterp:{p:['Основание сухое, прочное, очищено и прогрунтовано','Материалы: сертификаты, срок годности','Температура и погода допустимы','Конструкция принята по акту под гидроизоляцию'],m:['Грунтовка','Нанесение/наклейка слоёв с нахлёстами по РД','Обработка швов, углов и примыканий','Защитный слой / прижимная стенка','Освидетельствование (АОСР) до засыпки']},
+earth:{p:['Разрешение на земляные работы (ордер) получено, коммуникации согласованы','Подземные коммуникации выявлены (шурфы, трассоискатель), охранная зона учтена','Разбивочные оси и репера приняты','Водоотвод, ограждение выемки, место складирования грунта'],m:['Разработка до проектной отметки с недобором для ручной зачистки','Зачистка и планировка дна, контроль отметок и размеров','Откосы/крепление по ППР, безопасное расстояние от бровки','Приёмка основания: акт освидетельствования (при необходимости — геолог)','Вывоз/складирование грунта по проекту']},
+base:{p:['Основание из грунта принято (акт)','Песок/щебень: паспорта, лабораторное заключение'],m:['Послойная отсыпка с контролем толщины слоя','Уплотнение, контроль плотности','Проверка отметок, уклонов и ширины','Освидетельствование основания (акт)']},
+form:{p:['Опалубка и подмости: щиты, стойки, крепёж проверены','Геодезическая разбивка осей и отметок выполнена','Основание/подготовка приняты'],m:['Монтаж по осям и отметкам','Крепление, жёсткость, неизменяемость геометрии','Фиксаторы защитного слоя, закладные','Смазка, герметизация щелей','Приёмка опалубки (размеры, отметки), запись в журнале']},
+rebar:{p:['Арматура: сертификаты, диаметр и класс по спецификации','Каркасы/сетки подготовлены, выпуски проверены','Опалубка принята, основание чистое'],m:['Раскладка/вязка по проекту (диаметр, шаг, нахлёсты)','Фиксаторы защитного слоя установлены','Закладные детали и выпуски на месте','Сварные соединения (если есть): контроль','Приёмка армирования, АОСР до бетонирования']},
+grout:{p:['Опорные плиты выверены по отметкам','Подливочная смесь: паспорт, срок годности, температура'],m:['Ограждение зоны подливки','Заполнение без пустот, вытеснение воздуха','Выдержка и уход по инструкции','Контроль заполнения (простукивание), акт']},
+embed:{p:['Закладные/анкеры: сертификаты, комплектность, шаблон','Геодезическая разбивка осей и отметок'],m:['Установка по шаблону на проектные отметки и оси','Фиксация от смещения при бетонировании','Защита резьбы и поверхностей','Геодезический контроль положения, исполнительная схема','Приёмка до бетонирования (АОСР)']},
+conc:{p:['Заявка на бетон: класс, W, F, подвижность','Опалубка и армирование приняты по актам','Погода; при отрицательной температуре — способ зимнего бетонирования по ППР','Вибраторы, бадьи/насос, освещение, пути подачи подготовлены','Формы для контрольных образцов подготовлены'],m:['Приём бетона: паспорт, подвижность, температура, отбор образцов','Укладка слоями, без расслоения, высота сброса в допуске','Уплотнение вибраторами (шаг, глубина)','Рабочие швы по ППР, непрерывность бетонирования','Уход за бетоном (влага/укрытие), контроль температуры','Журнал бетонных работ, результаты испытаний образцов']},
+backfill:{p:['Скрытые работы под засыпку освидетельствованы (акты подписаны)','Грунт/песок для засыпки по проекту, не мёрзлый','Трубопроводы и конструкции защищены от повреждения'],m:['Засыпка слоями, равномерно с обеих сторон','Уплотнение каждого слоя, контроль плотности','Планировка, отметки по проекту','Сигнальная лента / защитные плиты (если по РД)','Акт приёмки засыпки, исполнительная съёмка']},
+precast:{p:['Изделия: паспорта, осмотр (трещины, сколы), маркировка','Основание/опорные площадки приняты по отметкам','ГПМ, строповка, стропальщики допущены'],m:['Подача и установка по осям с выверкой отметок','Временное крепление до закрепления','Заделка швов и стыков раствором или бетоном','Контроль геометрии, зазоров и отметок','Исполнительная схема, АОСР на скрытые узлы']},
+well:{p:['Основание готово, отметки проверены; кольца/блоки — паспорта','Трубы, выпуски и закладные определены по схеме'],m:['Устройство днища/основания','Монтаж колец/блоков, герметизация швов','Ввод труб, заделка проходок','Гидроизоляция, скобы/лестница, горловина и люк','Испытание на герметичность, акт']},
+steel:{p:['Конструкции: сертификаты, маркировка, комплектность, осмотр на деформации','Фундаменты и анкеры приняты (отметки, оси) — акт геодезии','Монтажная схема (ППР), ГПМ, такелаж проверен','Допуск к работам на высоте, страховочные системы'],m:['Укрупнительная сборка и подача в проектное положение','Установка на анкеры, выверка, временное закрепление','Окончательное закрепление: болты (момент затяжки), сварка монтажных стыков','ВИК/НК сварных соединений','Антикоррозионная защита мест монтажа и повреждений','Исполнительная геодезия, акт монтажа']},
+support:{p:['Места установки размечены по проекту','Опоры/подвески: изготовление по РД, сертификаты'],m:['Установка и крепление в проектное положение','Контроль отметок и уклонов трубопровода','Сварка/болтовое крепление, окраска','Приёмка опорных узлов']},
+sensor:{p:['Приборы/извещатели: паспорта, поверка или калибровка','Трассы и места монтажа подготовлены'],m:['Монтаж по проекту, маркировка по схеме','Подключение, контроль сопротивления изоляции','Проверка функционирования (прозвонка, имитация сигнала)','Заземление, герметичность вводов (взрывозащита)','Акты монтажа, протоколы проверок']},
+equip:{p:['Оборудование: паспорт, комплектность, ревизия при необходимости','Фундамент/опорная конструкция принят: оси, отметки, анкеры','Монтажная схема, ГПМ, такелаж'],m:['Установка на фундамент, предварительная выверка','Центровка/выверка по уровню и осям, затяжка','Обвязка трубопроводами без натяжения, подключение','Заземление, окраска, маркировка','Опробование (холостое / под нагрузкой) по программе','Акт монтажа и опробования']},
+valve:{p:['Арматура: паспорт, соответствие РД (Ду, Ру, материал)','Гидравлическая ревизия/опрессовка (при требовании)','Прокладки и крепёж — по проекту'],m:['Установка по направлению потока, положение привода','Затяжка фланцев крест-накрест, контроль момента','Маркировка по схеме','Проверка хода затвора, герметичности','Исполнительная схема узла']},
+pipe:{p:['Трубы и детали: сертификаты, входной контроль (геометрия, маркировка)','Опоры/основание/траншея готовы, отметки и уклоны проверены','Технология сварки и сварщики допущены','Схема стыков и маркировка трубопровода'],m:['Раскладка труб, сборка стыков (зазор, смещение кромок)','Сварка стыков, клеймение, ВИК','НК в объёме по проекту','Укладка/крепление на опорах, контроль уклона','Антикоррозионная защита стыков, изоляция','Испытание трубопровода (отдельным чек-листом)','Исполнительная схема / съёмка трассы']},
+cable:{p:['Кабель: сертификаты, испытание/мегомметр на барабане, целостность','Трассы, лотки, трубы, закладные готовы','Кабельный журнал и проект производства работ'],m:['Прокладка по трассе, радиусы изгиба, допустимая температура','Крепление, бирки, раскладка по кабельному журналу','Концевые заделки / муфты','Прозвонка, измерение сопротивления изоляции','Защита от механических повреждений, засыпка/укрытие','Акты скрытых работ, протоколы измерений']},
+light:{p:['Оборудование: паспорта, проверка комплектности','Фундаменты опор приняты, проект электроснабжения/освещения на месте'],m:['Монтаж опор, щитов, светильников по проекту','Подключение, маркировка, заземление','Проверка функционирования, замер освещённости (при необходимости)','Окраска, антикоррозионная защита','Акты и протоколы']},
+ground:{p:['Материал заземлителей: сертификаты, сечение по проекту','Трасса, траншея, разметка выполнены'],m:['Установка заземлителей / прокладка проводника на проектной глубине','Сварные соединения: длина шва, антикоррозионное покрытие','Присоединение к оборудованию и конструкциям','Измерение сопротивления заземления / металлосвязи','АОСР до засыпки, протоколы измерений']},
+etest:{p:['Работы смонтированы и приняты, схемы подключения на месте','Приборы поверены, лаборатория электроизмерений допущена'],m:['Внешний осмотр, проверка соединений','Измерения: изоляция, сопротивление, срабатывание защит','Опробование / пусконаладка по программе','Оформление протоколов и актов']},
+road:{p:['Основание принято, отметки и уклоны проверены','Разбивка трассы/границ выполнена'],m:['Устройство слоёв основания с уплотнением','Укладка покрытия / бортового камня / ограждения','Контроль отметок, уклонов, ровности','Исполнительная съёмка, приёмка']},
+gen:{p:[],m:['Работы выполняются по последовательности ППР / технологической карты','Промежуточный контроль качества выполнен','Скрытые работы освидетельствованы до закрытия','Отклонения от РД согласованы и зафиксированы']}
+};
+const CK_RULES=[['scaf',/трубных лесов/],['strip',/Демонтаж опалубки/],['demo',/^Демонтаж/],['tankhydro',/Гидроиспытание резервуара/],['ndt',/ВИК|Контроль сварных|Вакуумирование|Проба мел|Радиографическ/],['weld',/^Сварка/],['hydro',/Гидравлическ(ие|ое) испытан|Испытание трубопровода|Продувка/],['tankclean',/Очистка днища/],['tankbot',/Монтаж днища|резервуара: днище/],['tankwall',/стенки|резервуара: стенка/],['foam',/оросител|генератор|гидрант|пены/],['arch',/блок-модул|Устройство (стен|кровли|полов)|окон и дверей|Внутренняя отделка/],['tankroof',/кровл[ие]|понтон|патрубков|шахтной лестницы|ПРУ|предохранителей|направляющих/],['paint',/Антикоррозионн|Окраск|Подготовка поверхности|Огнезащитн|^Тепловая изоляция|Нанесение логотипов/],['concprep',/бетонной подготовки/],['waterp',/^Гидроизоляция/],['earth',/Разработка|Земляные|Планировка территории|Перемещение грунта|кабельных траншей/],['base',/Устройство (песчаной|подготовки|основания|щебёночного|гидрофобного)|Планировка основания/],['form',/^Монтаж опалубки/],['rebar',/Армирование/],['grout',/Подливка/],['embed',/закладных|анкерных болтов/],['conc',/Бетонирование|монолитных лотков/],['backfill',/Обратная засыпка/],['precast',/сборных|плит перекрытия|колец|Заливка швов/],['well',/колодц/],['steel',/Монтаж металлоконструкций|площадок, лестниц/],['support',/опор и подвесок/],['sensor',/трубных проводок|извещател|шкафов и приборов/],['equip',/оборудовани|насосного|Центровка|Испытание \/ опробование|КИП на узле/],['valve',/арматуры|фланцев|запорной/],['pipe',/трубопровод|водопроводных труб|Укладка/],['cable',/кабел|Подключение и прозвонка/],['light',/светильник|опор освещения|щитов и шкафов/],['ground',/заземл|молниеприём|Измерение сопротивления/],['etest',/Измерения и испытания|Пусконаладочные/],['road',/дорожной одежды|бортового камня|ограждения$|Благоустройство/]];
+const ckKey=k=>{for(const [key,re] of CK_RULES)if(re.test(k))return key;return 'gen'};
+function ckKinds(c){
+ const m=markOf(c),set=new Set(),add=a=>a.forEach(x=>set.add(x[0]));
+ add(WT[m]||[]);
+ if(m==='КЖ')(STR['КЖ']||[]).forEach(x=>add(x[1]));
+ if(m==='ТХ'){add(TXW);add(TXEQ);if((c||'').includes('-10.02.4.'))add(TXRES)}
+ return [...set];
+}
+function ckItems(k){
+ const t=CK_T[ckKey(k)],mk=(g,a)=>a.map(x=>({g,t:x,s:'',n:''}));
+ return [...mk('p',CK_PREP),...mk('p',t.p),...mk('m',t.m),...mk('f',CK_FIN)];
+}
+const shortCipher=c=>(c||'').replace(P_,'');
+const REQ_ST=['Не отправлена','Отправлена','Согласовано','Счёт составлен','Подписан, ждёт оплаты','Оплачен'];  // этапы как в «Реестре заявок на закупку»
+const REQ_CLS={'Оплачен':'ok','Подписан, ждёт оплаты':'warn','Счёт составлен':'warn','Согласовано':'warn'};
+const xrows=p=>p==='req'?xall(p).map(reqNorm):xall(p);
+function reqNorm(r){
+ if(!Array.isArray(r.items))r.items=[{n:r.material||'',u:r.unit||'',q:r.qty||'',d:r.need||'',p:r.note||''}];   // старый формат: одна позиция
+ if(!r.section)r.section='Площадка нефтебазы';
+ return r;
+}
+const reqTitle=r=>{const it=(r.items||[]).filter(i=>(i.n||'').trim());return (r.num?'№'+r.num+' · ':'')+(it.length?it[0].n.trim():'(без названия)')+(it.length>1?` и др. (${it.length} поз.)`:'')};
+const regOf=r=>{const n=parseInt(r.num);return n?(cfg.regReq||[]).find(x=>x.num===n):null};
+function reqStatus(r){const sent=r.sent===1||r.sent===2,g=regOf(r);if(sent&&g&&g.stage&&g.stage!=='Новая')return g.stage;return sent?'Отправлена':(r.queued?'Отправка…':'Не отправлена')}
+let XS={view:'list',rec:null,q:'',flt:''};
+const xall=p=>ls.get(p,[]);
+const xput=(p,rec)=>{const a=xall(p);rec.upd=Date.now();if(!rec.id)rec.id=Date.now();const i=a.findIndex(r=>r.id===rec.id);if(i>=0)a[i]=rec;else a.push(rec);ls.set(p,a)};
+const xdel=(p,id)=>ls.set(p,xall(p).filter(r=>r.id!==id));
+function xgo(o){Object.assign(XS,o);render()}
+const xback=()=>xgo({view:'list',rec:null});
+const nextReqNum=()=>{const loc=Math.max(0,...xall('req').map(r=>parseInt(String(r.num||'').replace(/\D/g,''))||0));return (cfg.nextReq||loc)?String(Math.max(cfg.nextReq||0,loc+1)):''};
+const chkFails=r=>r.items.filter(i=>i.s==='n').length;
+function xStatus(p,r){return p==='chk'?(chkFails(r)?chkFails(r)+' замеч.':'Без замечаний'):reqStatus(r)}
+function xCls(p,r){return p==='chk'?(chkFails(r)?'bad':'ok'):(REQ_CLS[reqStatus(r)]||'')}
+function xView(p){
+ const chk=p==='chk';
+ if(XS.view==='pick')return pickView();
+ if(XS.view==='form')return chk?checkForm():reqForm();
+ $('#hd').textContent=chk?'Чек-листы':'Заявки на закупку';
+ let rows=xrows(p).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.id-a.id);
+ const q=XS.q.toLowerCase();
+ if(q)rows=rows.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+ const flts=chk?['С замечаниями']:REQ_ST;
+ if(XS.flt)rows=rows.filter(r=>chk?chkFails(r)>0:xStatus(p,r)===XS.flt);
+ let h=`<button class="btn" style="margin-top:0" onclick="${chk?"xgo({view:'pick'})":"newReq()"}">＋ ${chk?'Новый чек-лист':'Новая заявка'}</button>
+ <input type="search" style="margin-top:10px" placeholder="Поиск" value="${esc(XS.q)}" oninput="XS.q=this.value;window._xf=1;clearTimeout(window._xt);window._xt=setTimeout(render,250)">
+ <div class="chips"><button class="chip ${XS.flt?'':'on'}" onclick="xgo({flt:''})">Все</button>${flts.map(f=>`<button class="chip ${XS.flt===f?'on':''}" onclick="xgo({flt:'${f}'})">${f}</button>`).join('')}</div>`;
+ if(!chk)h+=regInfoHtml();
+ h+=rows.length?rows.map(r=>{
+  const title=chk?r.tpl:reqTitle(r);
+  const sub=chk?[fd(r.date),shortCipher(r.cipher),r.place,r.items.filter(i=>i.s).length+'/'+r.items.length+' проверено']:[fd(r.date),shortCipher(r.cipher),r.items.filter(i=>(i.n||'').trim()).length+' поз.',r.err?'⚠ '+r.err:''];
+  return `<div class="card tap" onclick="openX('${p}',${r.id})"><div class="xrow"><h3>${esc(title)}</h3><span class="badge ${xCls(p,r)}">${esc(xStatus(p,r))}</span></div><div class="sub">${esc(sub.filter(Boolean).join(' · '))}</div></div>`}).join('')
+  :`<div class="empty">Пока пусто.<br>Нажмите «＋», чтобы добавить ${chk?'чек-лист':'заявку'}.</div>`;
+ if(rows.length)h+=`<button class="btn sec" onclick="exportX('${p}')">Выгрузить в Excel (CSV)</button>`;
+ $('#view').innerHTML=h;
+ if(window._xf){window._xf=0;const i=$('#view input[type=search]');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+}
+function openX(p,id){let rec=JSON.parse(JSON.stringify(xall(p).find(r=>r.id===id)));if(p==='req')rec=reqNorm(rec);xgo({view:'form',rec})}
+function pickView(){
+ $('#hd').textContent='Новый чек-лист';
+ const c=XS.pc||'',ks=c?ckKinds(c):[];
+ let h=`<div class="card"><label style="margin-top:0">Шифр РД</label><select onchange="XS.pc=this.value;XS.pk='';XS.po='';pickView()"><option value="">— выберите шифр РД —</option>`;
+ for(const [g] of GROUPS)h+=`<optgroup label="${esc(g)}">`+CIPHERS.filter(x=>x.g===g).map(x=>`<option value="${esc(x.v)}" ${x.v===c?'selected':''}>${esc(x.l)}</option>`).join('')+`</optgroup>`;
+ h+=`</select>`;
+ if(c){
+  h+=`<label>Вид работ</label><select onchange="XS.pk=this.value;pickView()"><option value="">— выберите вид работ —</option>${ks.map(n=>`<option ${n===XS.pk?'selected':''}>${esc(n)}</option>`).join('')}<option value="${OTHER}" ${XS.pk===OTHER?'selected':''}>Другой вид работ (ввести вручную)</option></select>`;
+  if(XS.pk===OTHER)h+=`<input style="margin-top:8px" placeholder="Название вида работ" value="${esc(XS.po||'')}" oninput="XS.po=this.value">`;
+  if(XS.pk)h+=`<button class="btn" onclick="startWork()">Создать чек-лист</button>`;
+ }
+ h+=`<div class="sub" style="margin-top:10px">Чек-лист включает этапы подготовки к работе, основные этапы по выбранному виду работ и завершение со сдачей.</div></div>
+ <h3 style="margin:14px 2px 6px">Общие чек-листы (без привязки к шифру)</h3>`+Object.keys(TPL).map(n=>`<div class="card tap" onclick='startCheck(${JSON.stringify(n).replace(/'/g,"&#39;")})'><h3>${esc(n)}</h3><div class="sub">${TPL[n].length} пунктов</div></div>`).join('')+`<button class="btn sec" onclick="xback()">‹ Назад</button>`;
+ $('#view').innerHTML=h;
+}
+function startWork(){
+ const k=XS.pk===OTHER?(XS.po||'').trim():XS.pk;
+ if(!k){toast('Введите вид работ');return}
+ xgo({view:'form',rec:{tpl:k,cipher:XS.pc,date:today(),place:'',items:ckItems(k)}});
+}
+function startCheck(n){xgo({view:'form',rec:{tpl:n,date:today(),place:'',items:TPL[n].map(t=>({t,s:'',n:''}))}})}
+function checkForm(){
+ const r=XS.rec;$('#hd').textContent=r.id?'Правка чек-листа':'Новый чек-лист';
+ let cards='',last=null,buf='',cnt=0,done=0;
+ const flush=()=>{if(buf)cards+=`<div class="card">${last?`<h3>${CK_G[last]} <span class="sub">(${done}/${cnt})</span></h3>`:''}${buf}</div>`;buf='';cnt=0;done=0};
+ r.items.forEach((it,i)=>{
+  const gg=it.g||null;if(gg!==last){flush();last=gg}
+  cnt++;if(it.s)done++;
+  buf+=`<div class="item"><div>${esc(it.t)}</div>
+  <div class="sbtns"><button class="y ${it.s==='y'?'on':''}" onclick="setItem(${i},'y')">✓ Да</button><button class="n ${it.s==='n'?'on':''}" onclick="setItem(${i},'n')">✗ Нет</button><button class="x ${it.s==='x'?'on':''}" onclick="setItem(${i},'x')">— Н/п</button></div>
+  ${it.s==='n'?`<input style="margin-top:6px" placeholder="Что не так" value="${esc(it.n)}" oninput="XS.rec.items[${i}].n=this.value">`:''}</div>`;
+ });
+ flush();
+ $('#view').innerHTML=`<div class="card"><h3>${esc(r.tpl)}</h3>${r.cipher?`<div class="sub">${esc(shortCipher(r.cipher))}</div>`:''}
+ <label>Дата</label><input type="date" value="${esc(r.date)}" onchange="XS.rec.date=this.value">
+ <label>Место / конструктив / линия / резервуар</label><input value="${esc(r.place)}" oninput="XS.rec.place=this.value"></div>${cards}
+ <button class="btn" onclick="saveCheck()">Сохранить</button>
+ <button class="btn sec" onclick="copyX(checkText(XS.rec))">Скопировать текст</button>
+ ${r.id?`<button class="btn del" onclick="delX('chk')">Удалить</button>`:''}
+ <button class="btn sec" onclick="xback()">‹ К списку</button>`;
+}
+function setItem(i,s){const it=XS.rec.items[i];it.s=it.s===s?'':s;const y=window.scrollY;checkForm();window.scrollTo(0,y)}
+function checkText(r){
+ const m={y:'✓',n:'✗',x:'—'},L=[`ЧЕК-ЛИСТ — ${r.tpl}`];
+ if(r.cipher)L.push(`Шифр РД: ${shortCipher(r.cipher)}`);
+ L.push(`Дата: ${fd(r.date)}`);if(r.place)L.push(`Место: ${r.place}`);
+ let g=null;
+ r.items.forEach(i=>{if(i.g&&i.g!==g){g=i.g;L.push('',CK_G[g]+':')}L.push(`${m[i.s]||'·'} ${i.t}${i.s==='n'&&i.n?' — '+i.n:''}`)});
+ return L.join('\n');
+}
+function saveCheck(){
+ const o=XS.rec;xput('chk',o);
+ const bad=o.items.filter(i=>i.s==='n');
+ if(bad.length&&confirm('Есть пункты «Нет» ('+bad.length+'). Добавить их в «Проблемы / замечания» текущего отчёта?')){
+  const add=bad.map(i=>`${o.tpl}${o.place?' ('+o.place+')':''}: ${i.t}${i.n?' — '+i.n:''}`).join('\n');
+  R.problems=(R.problems?R.problems+'\n':'')+add;save();toast('Добавлено в отчёт');
+ }
+ xback();
+}
+function newReq(){xgo({view:'form',rec:{num:nextReqNum(),date:today(),cipher:'',section:'Площадка нефтебазы',items:[{n:'',u:'',q:'',d:'',p:''}],sent:0,queued:0}})}
+function regInfoHtml(){
+ if(!cfg.sink)return '<div class="sub" style="margin:6px 2px">Чтобы заявки попадали в реестр и показывали его статусы, подключите таблицу в «Настройках».</div>';
+ const reg=(cfg.regReq||[]).slice().reverse().slice(0,8);
+ let h=`<div class="sub" style="margin:6px 2px">В реестре заявок: ${(cfg.regReq||[]).length}${cfg.listsAt?', обновлено '+new Date(cfg.listsAt).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''} · следующий № ${cfg.nextReq||'—'}</div>`;
+ if(reg.length&&!XS.q&&!XS.flt)h+=`<h3 style="margin:10px 2px 6px">Последние в реестре</h3>`+reg.map(g=>`<div class="card"><div class="xrow"><h3>№${g.num} · ${esc(g.title)}</h3><span class="badge ${REQ_CLS[g.stage]||''}">${esc(g.stage)}</span></div><div class="sub">${esc([g.date,g.note].filter(Boolean).join(' · '))}</div></div>`).join('')+`<h3 style="margin:14px 2px 6px">Заявки из приложения</h3>`;
+ return h;
+}
+function addItem(){XS.rec.items.push({n:'',u:'',q:'',d:'',p:''});reqForm()}
+function rmItem(j){XS.rec.items.splice(j,1);if(!XS.rec.items.length)XS.rec.items=[{n:'',u:'',q:'',d:'',p:''}];reqForm()}
+function reqForm(){
+ const r=XS.rec;$('#hd').textContent=r.id?'Правка заявки':'Новая заявка';
+ const inp=(k,l,t,extra)=>`<label>${l}</label><input type="${t||'text'}" ${extra||''} value="${esc(r[k])}" oninput="XS.rec.${k}=this.value" onchange="XS.rec.${k}=this.value">`;
+ const sent=r.sent===1||r.sent===2;
+ const items=r.items.map((it,j)=>`<div class="drow"><div class="top"><span>Позиция ${j+1}</span>${r.items.length>1?`<b onclick="rmItem(${j})">✕</b>`:''}</div>
+  <textarea style="min-height:56px" placeholder="Наименование МТР" oninput="XS.rec.items[${j}].n=this.value">${esc(it.n)}</textarea>
+  <div class="grid" style="margin-top:8px"><input placeholder="Ед. изм." value="${esc(it.u)}" oninput="XS.rec.items[${j}].u=this.value"><input placeholder="Кол-во" inputmode="decimal" value="${esc(it.q)}" oninput="XS.rec.items[${j}].q=this.value"></div>
+  <div class="grid" style="margin-top:8px"><div><div class="sub">Дата выполнения</div><input type="date" value="${esc(it.d)}" onchange="XS.rec.items[${j}].d=this.value"></div><div><div class="sub">Назначение (куда)</div><input placeholder="например, отсыпка РВС" value="${esc(it.p)}" oninput="XS.rec.items[${j}].p=this.value"></div></div></div>`).join('');
+ $('#view').innerHTML=`${sent?`<div class="banner ok">Заявка отправлена в реестр (лист «Заявка ${esc(r.num)}»). Правки здесь в таблицу не передаются — меняйте лист в таблице.</div>`:''}${r.err&&!sent?`<div class="banner no">Не отправлена: ${esc(r.err)}</div>`:''}
+ <div class="card" style="margin-top:0">
+ ${inp('num','Номер заявки','text','inputmode="numeric"')}<div class="sub">Номер берётся из реестра; если занят, таблица назначит следующий свободный.</div>${inp('date','Дата заявки','date')}
+ <label>Шифр РД (колонка «Ссылка»)</label>${cipherPick('XS.rec.cipher',r.cipher)}
+ ${inp('section','Участок / раздел в заявке')}
+ </div>
+ <div class="card"><label style="margin-top:0">Позиции</label>${items}<button class="btn sec" style="margin-top:8px;padding:10px" onclick="addItem()">＋ Ещё позиция</button></div>
+ <button class="btn sec" style="margin-top:0" onclick="saveReq(false)">Сохранить</button>
+ ${sent?'':`<button class="btn" onclick="saveReq(true)">Сохранить и отправить в реестр</button>`}
+ <button class="btn sec" onclick="copyX(reqText(XS.rec))">Скопировать текст</button>
+ ${r.id?`<button class="btn del" onclick="delX('req')">Удалить</button>`:''}
+ <button class="btn sec" onclick="xback()">‹ К списку</button>`;
+}
+function cipherPick(path,val){
+ let h=`<select onchange="${path}=this.value"><option value="">— без шифра —</option>`;
+ for(const [g] of GROUPS)h+=`<optgroup label="${esc(g)}">`+CIPHERS.filter(x=>x.g===g).map(x=>`<option value="${esc(x.v)}" ${x.v===val?'selected':''}>${esc(x.l)}</option>`).join('')+`</optgroup>`;
+ if(val&&!CIPHERS.some(x=>x.v===val))h+=`<option value="${esc(val)}" selected>${esc(val)}</option>`;
+ return h+`</select>`;
+}
+function reqText(r){
+ r=reqNorm(r);
+ const L=[`ЗАЯВКА ${r.num?'№'+r.num+' ':''}от ${fd(r.date)}`];
+ if(r.cipher)L.push(`Шифр РД: ${shortCipher(r.cipher)}`);
+ L.push(`Участок: ${r.section}`);
+ r.items.filter(i=>(i.n||'').trim()).forEach((i,k)=>L.push(`${k+1}. ${i.n.trim()}${i.q?' — '+i.q+(i.u?' '+i.u:''):''}${i.d?', к '+fd(i.d):''}${i.p?' ('+i.p+')':''}`));
+ return L.join('\n');
+}
+function saveReq(send){
+ const o=XS.rec;
+ o.items=o.items.filter(i=>(i.n||'').trim()||(i.q||'').trim());
+ if(!o.items.some(i=>(i.n||'').trim())){toast('Заполните хотя бы одну позицию (наименование МТР)');if(!o.items.length)o.items=[{n:'',u:'',q:'',d:'',p:''}];reqForm();return}
+ o.items.forEach(i=>{i.n=i.n.trim()});
+ if(send){
+  if(!cfg.sink||!cfg.key){toast('Сначала укажите адрес и ключ приёма в «Настройках»');return}
+  o.queued=1;o.err='';
+ }
+ xput('req',o);
+ xback();
+ if(send)syncReqs(true);
+}
+function delX(p){if(confirm('Удалить запись?')){xdel(p,XS.rec.id);xback()}}
+async function copyX(t){try{await navigator.clipboard.writeText(t);toast('Скопировано. Вставьте в Max')}catch(e){toast('Не удалось скопировать')}}
+function exportX(p){
+ const cell=x=>{let v=String(x??'').replace(/\n/g,' ');if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'},rows=xrows(p);let head,lines;
+ if(p==='chk'){head=['Дата','Чек-лист','Место','Пункт','Результат','Примечание'];lines=rows.flatMap(r=>r.items.map(i=>[fd(r.date),r.tpl,r.place,i.t,{y:'Да',n:'Нет',x:'Н/п'}[i.s]||'',i.n]))}
+ else{head=['Номер','Дата заявки','Шифр РД','Позиция','Наименование МТР','Ед. изм.','Количество','Нужно к дате','Назначение','Статус'];lines=rows.flatMap(r=>r.items.map((i,k)=>[r.num,fd(r.date),shortCipher(r.cipher),k+1,i.n,i.u,i.q,fd(i.d),i.p,reqStatus(r)]))}
+ dlFile(`${p==='chk'?'Чек-листы':'Заявки'}_${today()}.csv`,'﻿'+[head,...lines].map(l=>l.map(cell).join(';')).join('\r\n'),'text/csv');
+}
+
+$('#cl').innerHTML=CIPHERS.map(c=>`<option value="${esc(c.v)}">${esc(c.l)}</option>`).join('');
+render();
+protectStorage();setTimeout(()=>{syncAll();syncReqs();loadLists();loadSmeta()},1500);
+</script>
+</body>
+</html>
