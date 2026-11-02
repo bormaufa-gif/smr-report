@@ -735,7 +735,7 @@ function setView(){
  <label>Кто подаёт отчёт (как в таблице «Ответственные»)</label><input list="meL" value="${esc(cfg.me)}" oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О. как в таблице"><datalist id="meL">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
  <label>Составитель заявок (ФИО в листе заявки)</label><input value="${esc(cfg.applicant)}" oninput="cfg.applicant=this.value;ls.set('cfg',cfg)" placeholder="Фамилия Имя Отчество">
  <label>Адрес приёма отчётов</label><input value="${esc(cfg.sink)}" oninput="cfg.sink=this.value.trim();ls.set('cfg',cfg)" placeholder="https://script.google.com/macros/s/.../exec">
- <label>Ключ</label><input value="${esc(cfg.key)}" oninput="cfg.key=this.value.trim();ls.set('cfg',cfg)" placeholder="Ключ доступа">
+ <label>Ключ</label><input value="${esc(cfg.key)}" oninput="cfg.key=this.value.replace(/\s+/g,'');ls.set('cfg',cfg)" placeholder="Ключ доступа" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
  <button class="btn sec" onclick="testSink()">Проверить связь</button><button class="btn sec" onclick="syncAll(true).then(()=>syncReqs(true))">Отправить неотправленные</button><button class="btn sec" onclick="loadLists(true);loadSmeta(true)">Обновить списки и сметы</button>
  <div class="sub" style="margin-top:6px">${cfg.listsAt?'Списки из таблицы получены '+new Date(cfg.listsAt).toLocaleString('ru-RU'):'Списки из таблицы ещё не загружались.'} · позиций смет: ${SM.items.length}</div></div>
  <div class="card"><h3>Копия данных</h3>
@@ -751,7 +751,12 @@ function toast(m,ms){document.querySelectorAll('.toast').forEach(e=>e.remove());
 async function testSink(){
  if(!cfg.sink){toast('Сначала вставьте адрес приёма отчётов');return}
  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(cfg.sink)){toast('Адрес неверный: он должен начинаться с https://script.google.com/macros/s/ и заканчиваться на /exec',6000);return}
- try{const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'ping=1');const j=await r.json();toast(j&&j.ok?('Связь есть. Журнал: '+(j.journal===false?'нет доступа':'ок')+', реестр заявок: '+(j.registry===false?'нет доступа':'ок')):'Таблица ответила с ошибкой',5000)}
+ try{const sep=cfg.sink.includes('?')?'&':'?';const r=await fetch(cfg.sink+sep+'ping=1');const j=await r.json();
+  if(!(j&&j.ok)){toast('Таблица ответила с ошибкой',5000);return}
+  const base='Связь есть. Журнал: '+(j.journal===false?'нет доступа':'ок')+', реестр заявок: '+(j.registry===false?'нет доступа':'ок');
+  if(!cfg.key){toast(base+'. Ключ не введён',6000);return}
+  const r2=await fetch(cfg.sink+sep+'action=lists&key='+encodeURIComponent(cfg.key));const k=await r2.json();
+  toast(k&&k.ok?base+'. Ключ верный':'Адрес верный, но ключ НЕ подходит. Вставьте ключ заново (только латиница и цифры, без пробелов)',7000)}
  catch(e){toast('Нет ответа. Проверьте адрес и интернет',4500)}
 }
 function dlFile(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
