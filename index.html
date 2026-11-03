@@ -624,7 +624,7 @@ function confirmSent(){
  document.body.appendChild(x);
 }
 function markSent(){
- hist.unshift({id:Date.now(),date:R.date,text:buildText(R),at:new Date().toLocaleString('ru-RU'),sync:0,rows:buildRows(R),probs:problems()});
+ hist.unshift({id:Date.now(),date:R.date,text:buildText(R),at:new Date().toLocaleString('ru-RU'),sync:0,rows:buildRows(R),probs:problems(),ppl:attDay(R.date).map(a=>{const p=pById(a.w)||{};return {n:p.name||'',b:p.brig||'',p:p.prof||'',t:a.t,m:a.m}}).filter(x=>x.n)});
  ls.set('hist',hist);
  cfg.resp=R.resp;cfg.t1=R.t1;cfg.t2=R.t2;if(!cfg.me)cfg.me=R.resp;ls.set('cfg',cfg);
  R=blank();dropPhotos();save();$('#dlg').remove();toast('Отчёт сохранён в истории');newView();
@@ -635,7 +635,7 @@ function markSent(){
 function payloadOf(h){
  const t=h.text||'',pick=re=>(t.match(re)||[])[1]||'';
  const works=((t.match(/Выполнено:\n([\s\S]*?)(?:\n\n(?:Персонал|Техника|Прочие работы|Проблемы \/ замечания|План на завтра):|\nТехника:|$)/)||[])[1]||'');
- return {kind:'report',key:cfg.key||'',id:String(h.id),date:h.date,rows:h.rows||[],probs:h.probs||[],sender:cfg.me||pick(/Ответственный: (.*)/),resp:pick(/Ответственный: (.*)/),
+ return {kind:'report',key:cfg.key||'',id:String(h.id),date:h.date,rows:h.rows||[],probs:h.probs||[],ppl:h.ppl||[],sender:cfg.me||pick(/Ответственный: (.*)/),resp:pick(/Ответственный: (.*)/),
   time:pick(/Время работы: (.*)/),sites:pick(/Участок: (.*)/),works,people:pick(/Персонал: (\d+)/),staff:pick(/Состав: (.*)/),tech:pick(/Техника: (.*)/),
   other:pick(/Прочие работы: ([\s\S]*?)(?:\n\n(?:Проблемы \/ замечания|План на завтра): |$)/),
   problems:pick(/Проблемы \/ замечания: ([\s\S]*?)(?:\n\nПлан на завтра: |$)/),plan:pick(/План на завтра: ([\s\S]*)$/),text:t,sentAt:h.at};
@@ -833,8 +833,7 @@ function pplView(){
  const free=ppl.filter(p=>!list.some(a=>a.w===p.id)).sort((a,b)=>a.name.localeCompare(b.name));
  $('#view').innerHTML=`<div class="banner ${list.length?'ok':'no'}">${fd(day)}: на объекте ${list.length} из ${ppl.length} чел.</div>
  <div class="card"><h3>Отметить по фото</h3><div class="sub">Сфотографируйте одного рабочего или всю бригаду сразу. Лица — крупно и без тёмных очков, каска не мешает.</div>
- <label class="btn" style="text-align:center">📷 Сфотографировать<input type="file" accept="image/*" capture="environment" hidden onchange="markByPhoto(this)"></label>
- <label class="btn sec" style="text-align:center">Выбрать фото из галереи<input type="file" accept="image/*" multiple hidden onchange="markByPhoto(this)"></label></div>
+ <label class="btn" style="text-align:center">📷 Сфотографировать<input type="file" accept="image/*" capture="environment" hidden onchange="markByPhoto(this)"></label></div>
  <div class="card"><h3>Отмечены</h3>${list.length?Object.entries(g).map(([b,rows])=>`<div class="brig">${esc(b)} · ${rows.length}</div>`+rows.map(([a,p])=>`<div class="prow">${p.ph?`<img src="${p.ph}">`:'<div class="noph"></div>'}<div class="nm"><div>${esc(p.name)}</div><div class="sub">${a.t}${a.m?' · вручную':' · по фото'}</div></div><button class="x" onclick="unmark(${p.id})">×</button></div>`).join('')).join(''):'<div class="sub">Пока никого. Сфотографируйте бригаду или отметьте вручную.</div>'}
  ${free.length?`<label>Отметить вручную</label><select onchange="if(this.value)markIds([+this.value],1)"><option value="">— выберите рабочего —</option>${free.map(p=>`<option value="${p.id}">${esc(p.name)}${p.brig?' · '+esc(p.brig):''}</option>`).join('')}</select>`:''}</div>
  <div class="card"><h3>Рабочие (${ppl.length})</h3>${ppl.length?ppl.slice().sort((a,b)=>(a.brig||'').localeCompare(b.brig||'')||a.name.localeCompare(b.name)).map(p=>`<div class="prow" onclick="pfOpen(${p.id})">${p.ph?`<img src="${p.ph}">`:'<div class="noph"></div>'}<div class="nm"><div>${esc(p.name)}</div><div class="sub">${esc([p.brig,p.prof].filter(Boolean).join(' · ')||'—')} · фото: ${p.d.length}</div></div>${p.consent?'':'<span class="badge warn">нет согласия</span>'}</div>`).join(''):'<div class="sub">Добавьте рабочих: ФИО, бригада и 3–5 фото лица. Это делается один раз.</div>'}
