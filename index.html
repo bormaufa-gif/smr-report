@@ -834,7 +834,30 @@ async function loadLists(manual,force){
   else if(page==='req'&&XS.view==='list'&&!XS.q)render();
  }catch(e){if(manual)toast('Не удалось получить списки: '+((e&&e.message)||'нет связи'),4500)}
 }
-window.addEventListener('online',()=>{syncAll();syncReqs();loadLists();loadSmeta()});
+/* ---------- чек-листы → лист «Чек-листы» журнала (строка на пункт) ---------- */
+let syncingC=false;
+const CK_RES={y:'Да',n:'Нет',x:'Н/п'};
+function chkPayload(r,del){return {kind:'check',key:cfg.key||'',id:String(r.id),date:r.date,tpl:r.tpl,cipher:shortCipher(r.cipher||''),place:r.place||'',sender:cfg.me||cfg.resp||'',
+ items:del?[]:r.items.map(i=>({g:CK_G[i.g]||'',t:i.t,s:CK_RES[i.s]||'',n:i.s==='n'?(i.n||'').trim():''})),sentAt:new Date().toLocaleString('ru-RU')}}
+async function syncChks(manual){
+ if(!cfg.sink||syncingC)return;
+ const todo=xall('chk').filter(r=>r.sync!==1&&r.sync!==2);
+ if(!todo.length){if(manual)toast('Все чек-листы уже в журнале');return}
+ syncingC=true;let ok=0,bad=0,last='';
+ for(const r of todo){
+  const x=await postJSON(chkPayload(r));
+  if(x.opaque){r.sync=2;r.err='';ok++}
+  else if(x.err){r.err=x.err;bad++;last=x.err}
+  else if(x.j&&x.j.ok){r.sync=1;r.err='';ok++}
+  else{r.err=(x.j&&x.j.error)||'сервер отклонил';bad++;last=r.err}
+  const a=xall('chk'),k=a.findIndex(y=>y.id===r.id);if(k>=0){a[k].sync=r.sync;a[k].err=r.err;ls.set('chk',a)}   // без xput: не трогаем дату правки
+ }
+ syncingC=false;
+ if(manual||bad)toast(bad?`Чек-лист не ушёл в журнал: ${last}`:`Чек-листов записано в журнал: ${ok}`,4500);
+ else if(ok)toast('Чек-лист записан в журнал');
+ if(page==='chk'&&XS.view==='list')render();
+}
+window.addEventListener('online',()=>{syncAll();syncReqs();syncChks();loadLists();loadSmeta()});
 
 /* история */
 function syncBadge(h){
@@ -874,7 +897,7 @@ function setView(){
  <label>Составитель заявок (ФИО в листе заявки)</label><input value="${esc(cfg.applicant)}" oninput="cfg.applicant=this.value;ls.set('cfg',cfg)" placeholder="Фамилия Имя Отчество">
  <label>Адрес приёма отчётов</label><input value="${esc(cfg.sink)}" oninput="cfg.sink=this.value.trim();ls.set('cfg',cfg)" placeholder="https://script.google.com/macros/s/.../exec">
  <label>Ключ</label><input value="${esc(cfg.key)}" oninput="cfg.key=this.value.replace(/\s+/g,'');ls.set('cfg',cfg)" placeholder="Ключ доступа" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
- <button class="btn sec" onclick="testSink()">Проверить связь</button><button class="btn sec" onclick="syncAll(true).then(()=>syncReqs(true))">Отправить неотправленные</button><button class="btn sec" onclick="loadLists(true);loadSmeta(true)">Обновить списки и сметы</button>
+ <button class="btn sec" onclick="testSink()">Проверить связь</button><button class="btn sec" onclick="syncAll(true).then(()=>syncReqs(true)).then(()=>syncChks(true))">Отправить неотправленные</button><button class="btn sec" onclick="loadLists(true);loadSmeta(true)">Обновить списки и сметы</button>
  <div class="sub" style="margin-top:6px">${cfg.listsAt?'Списки из таблицы получены '+new Date(cfg.listsAt).toLocaleString('ru-RU'):'Списки из таблицы ещё не загружались.'} · позиций смет: ${SM.items.length}</div></div>
  <div class="card"><h3>Распознавание лиц</h3>
  <label>Строгость (меньше — строже, обычно 0,45–0,55)</label><input type="number" step="0.01" min="0.3" max="0.7" value="${cfg.faceThr||FACE_THR}" oninput="cfg.faceThr=parseFloat(this.value.replace(',','.'))||FACE_THR;ls.set('cfg',cfg)">
@@ -1143,7 +1166,7 @@ function xView(p){
  if(!chk)h+=regInfoHtml();
  h+=rows.length?rows.map(r=>{
   const title=chk?r.tpl:reqTitle(r);
-  const sub=chk?[fd(r.date),shortCipher(r.cipher),r.place,r.items.filter(i=>i.s).length+'/'+r.items.length+' проверено']:[fd(r.date),shortCipher(r.cipher),r.items.filter(i=>(i.n||'').trim()).length+' поз.',r.err?'⚠ '+r.err:''];
+  const sub=chk?[fd(r.date),shortCipher(r.cipher),r.place,r.items.filter(i=>i.s).length+'/'+r.items.length+' проверено',cfg.sink&&r.sync!==1&&r.sync!==2?'⏳ не в журнале'+(r.err?': '+r.err:''):'']:[fd(r.date),shortCipher(r.cipher),r.items.filter(i=>(i.n||'').trim()).length+' поз.',r.err?'⚠ '+r.err:''];
   return `<div class="card tap" onclick="openX('${p}',${r.id})"><div class="xrow"><h3>${esc(title)}</h3><span class="badge ${xCls(p,r)}">${esc(xStatus(p,r))}</span></div><div class="sub">${esc(sub.filter(Boolean).join(' · '))}</div></div>`}).join('')
   :`<div class="empty">Пока пусто.<br>Нажмите «＋», чтобы добавить ${chk?'чек-лист':'заявку'}.</div>`;
  if(rows.length)h+=`<button class="btn sec" onclick="exportX('${p}')">Выгрузить в Excel (CSV)</button>`;
@@ -1202,13 +1225,13 @@ function checkText(r){
  return L.join('\n');
 }
 function saveCheck(){
- const o=XS.rec;xput('chk',o);
+ const o=XS.rec;o.sync=0;o.err='';xput('chk',o);
  const bad=o.items.filter(i=>i.s==='n');
  if(bad.length&&confirm('Есть пункты «Нет» ('+bad.length+'). Добавить их в «Проблемы / замечания» текущего отчёта?')){
   const add=bad.map(i=>`${o.tpl}${o.place?' ('+o.place+')':''}: ${i.t}${i.n?' — '+i.n:''}`).join('\n');
   R.problems=(R.problems?R.problems+'\n':'')+add;save();toast('Добавлено в отчёт');
  }
- xback();
+ xback();syncChks();
 }
 function newReq(){xgo({view:'form',rec:{num:nextReqNum(),date:today(),cipher:'',section:'Площадка нефтебазы',items:[{n:'',u:'',q:'',d:'',p:''}],sent:0,queued:0}})}
 function regInfoHtml(){
@@ -1268,7 +1291,7 @@ function saveReq(send){
  xback();
  if(send)syncReqs(true);
 }
-function delX(p){if(confirm('Удалить запись?')){xdel(p,XS.rec.id);xback()}}
+function delX(p){if(confirm('Удалить запись?')){const r=XS.rec;xdel(p,r.id);if(p==='chk'&&cfg.sink&&r.sync)postJSON(chkPayload(r,true));xback()}}   // из журнала тоже
 async function copyX(t){try{await navigator.clipboard.writeText(t);toast('Скопировано. Вставьте в Max')}catch(e){toast('Не удалось скопировать')}}
 function exportX(p){
  const cell=x=>{let v=String(x??'').replace(/\n/g,' ');if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'},rows=xrows(p);let head,lines;
@@ -1279,7 +1302,7 @@ function exportX(p){
 
 $('#cl').innerHTML=CIPHERS.map(c=>`<option value="${esc(c.v)}">${esc(c.l)}</option>`).join('');
 render();
-protectStorage();setTimeout(()=>{syncAll();syncReqs();loadLists();loadSmeta()},1500);
+protectStorage();setTimeout(()=>{syncAll();syncReqs();syncChks();loadLists();loadSmeta()},1500);
 </script>
 </body>
 </html>
