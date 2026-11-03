@@ -59,6 +59,11 @@ textarea{min-height:76px}
 .drow .top b{color:#a42424;padding:0 6px}
 pre{white-space:pre-wrap;word-break:break-word;font:14px/1.45 ui-monospace,Menlo,monospace;margin:6px 0 0}
 .sub{color:#6b7686;font-size:13px}
+.pcard{border:1px solid #d5dbe3;border-radius:10px;padding:8px 10px;margin-top:6px;background:#fff;cursor:pointer}
+.pcard.sel{border-color:#1f4e79;background:#eef4fb;display:flex;align-items:center;gap:8px}
+.pcard .pn{font-weight:600;font-size:14px;flex:1}
+.pcard .pv{color:#6b7686;font-size:12px;margin-top:2px}
+.pcard .pch{color:#1f4e79;font-size:13px;white-space:nowrap}
 h3{margin:0 0 4px;font-size:16px}
 .empty{text-align:center;color:#6b7686;padding:40px 10px}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1b2430;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;z-index:30}
@@ -444,23 +449,42 @@ const fmtN=v=>String(Math.round((+v||0)*1000)/1000).replace('.',',');
 const smBy=p=>SM.items.find(x=>x[0]===p);
 const smFor=w=>SM.items.filter(x=>x[1]===w.c);
 const stemsOf=(s,min)=>(s||'').toLowerCase().split(/[^а-яёa-z0-9]+/).filter(t=>t.length>=min).map(t=>t.slice(0,5));
+// [очки, позиция, очки поиска]: по виду работ, маркам, диаметрам и строке поиска
 function smRank(w,q){
- const kt=stemsOf(w.k&&w.k!==OTHER?w.k:w.t,5),qt=stemsOf(q,3),marks=(w.nm||[]).map(x=>(x.v||'').trim().toLowerCase()).filter(Boolean);
+ const kt=stemsOf(w.k&&w.k!==OTHER?w.k:w.t,5),qt=stemsOf(q,2),marks=(w.nm||[]).map(x=>(x.v||'').trim().toLowerCase()).filter(Boolean),
+  dms=(w.ds||[]).map(r=>(String(r.d||'').match(/\d+/)||[])[0]).filter(Boolean);
  return smFor(w).map(x=>{const nm=(x[3]||'').toLowerCase(),sec=(x[2]||'').toLowerCase();let sc=0,qs=0;
   kt.forEach(t=>{if(nm.includes(t))sc+=2});qt.forEach(t=>{if(nm.includes(t)||sec.includes(t))qs+=5});marks.forEach(m=>{if(sec.includes(m))sc+=3});
-  return [sc+qs,x,qs]}).filter(a=>q?a[2]>0:true).sort((a,b)=>b[0]-a[0]).slice(0,60).map(a=>a[1]);
+  dms.forEach(d=>{if(nm.includes(' '+d+' мм'))sc+=4});
+  return [sc+qs,x,qs]}).filter(a=>q?a[2]>0:true).sort((a,b)=>b[0]-a[0]);
 }
-const posLabel=x=>`${(x[3]||'').slice(0,70)} · ${x[4]} · ост. ${fmtN(x[7])}`;
-function posOpts(w){
- let list=smRank(w,w.pq||'');const cur=w.pos&&smBy(w.pos);
- if(cur&&!list.includes(cur))list=[cur,...list];
- return `<option value="">— позиция сметы не выбрана —</option>`+list.map(x=>`<option value="${esc(x[0])}" ${x[0]===w.pos?'selected':''}>${esc(posLabel(x))}</option>`).join('');
+// сопутствующие расценки («добавлять к норме», полив) — не основные, видны только через поиск
+const ADDON=/добавлять|к норме|на каждый послед|полив водой/i;
+// «Трубопровод в помещениях или на открытых площадках…: 219 мм» → «Трубопровод в помещениях или на открытых… · 219 мм»
+function posShort(x){
+ const n=String(x[3]||'').replace(/^ДЕМОНТАЖ\.\s*/i,'Демонтаж: '),k=n.lastIndexOf(':'),tail=k>0?n.slice(k+1).trim():'';
+ let head=(k>0?n.slice(0,k):n).split(/[,(…]/)[0].trim();
+ if(head.length>42)head=head.slice(0,42).replace(/\s+\S*$/,'')+'…';
+ return tail?head+' · '+tail.slice(0,45):head;
+}
+const posNums=x=>`проект ${fmtN(x[5])} ${esc(x[4])} · смонт. ${fmtN(x[6])} · ост. <b>${fmtN(x[7])}</b>`;
+function posCards(i,w){
+ const q=(w.pq||'').trim();let list=smRank(w,q);
+ if(!q){list=list.filter(a=>!ADDON.test(a[1][3]||'')&&+a[1][7]>0);if(list.some(a=>a[0]>0))list=list.filter(a=>a[0]>0)}
+ const lim=w.pm?40:6,shown=list.slice(0,lim);
+ let h=shown.length?shown.map(([,x])=>`<div class="pcard" data-p="${esc(x[0])}" onclick="pickPos(${i},this.dataset.p)"><div class="pn">${esc(posShort(x))}</div><div class="pv">${posNums(x)}</div></div>`).join('')
+  :`<div class="sub" style="margin-top:6px">${q?'Ничего не найдено — попробуйте другое слово или диаметр':'Подходящих открытых позиций нет — найдите поиском'}</div>`;
+ if(list.length>lim)h+=`<button class="btn sec" style="margin-top:6px;padding:8px" onclick="posMore(${i})">Показать ещё (${list.length-lim})</button>`;
+ if(w.pos)h+=`<button class="btn sec" style="margin-top:6px;padding:8px" onclick="posKeep(${i})">Оставить прежнюю позицию</button>`;
+ return h;
 }
 function posHtml(i,w){
  if(!w.c)return '';
  if(!SM.items.length)return cfg.sink?'<div class="sub" style="margin-top:8px">Позиции смет загрузятся из таблицы («Настройки» → «Обновить списки»).</div>':'';
  if(!smFor(w).length)return `<div class="sub" style="margin-top:8px">В сметах нет позиций с шифром ${esc(shortCipher(w.c))}.</div>`;
- return `<label>Позиция сметы (проектный объём и остаток)</label><input placeholder="Поиск позиции: слово из названия или марка" value="${esc(w.pq||'')}" oninput="posQ(${i},this.value)" style="margin-bottom:6px"><select id="pos${i}" onchange="pickPos(${i},this.value)">${posOpts(w)}</select>`;
+ const cur=w.pos&&smBy(w.pos);
+ if(cur&&!w.pe)return `<label>Позиция сметы</label><div class="pcard sel" onclick="posEdit(${i})"><div class="pn" title="${esc(cur[3])}">${esc(posShort(cur))}</div><span class="pch">изменить</span></div>`;
+ return `<label>Позиция сметы</label><input placeholder="Поиск: слово из названия или диаметр" value="${esc(w.pq||'')}" oninput="posQ(${i},this.value)"><div id="pos${i}">${posCards(i,w)}</div>`;
 }
 function posInfo(i,w){
  const it=w.pos&&smBy(w.pos);if(!it)return '';
@@ -472,8 +496,11 @@ function posInfo(i,w){
  return h;
 }
 function upInfo(i){const e=document.getElementById('pinfo'+i);if(e&&R.works[i])e.innerHTML=posInfo(i,R.works[i])}
-function pickPos(i,v){const w=R.works[i];w.pos=v;if(v){const it=smBy(v);if(it&&!w.unit&&!needDiam(w))w.unit=it[4]}save();newView()}
-function posQ(i,q){const w=R.works[i];w.pq=q;save();const s=document.getElementById('pos'+i);if(s)s.innerHTML=posOpts(w)}
+function pickPos(i,v){const w=R.works[i];w.pos=v;w.pe=0;w.pm=0;if(v){const it=smBy(v);if(it&&!w.unit&&!needDiam(w))w.unit=it[4]}save();newView()}
+function posQ(i,q){const w=R.works[i];w.pq=q;save();const s=document.getElementById('pos'+i);if(s)s.innerHTML=posCards(i,w)}
+function posEdit(i){R.works[i].pe=1;save();newView()}
+function posKeep(i){R.works[i].pe=0;save();newView()}
+function posMore(i){R.works[i].pm=1;posQ(i,R.works[i].pq||'')}
 function overruns(){
  const sum={};R.works.forEach(w=>{if(w.pos&&workName(w))sum[w.pos]=(sum[w.pos]||0)+(jnum(w.vol)||0)});
  return Object.keys(sum).map(p=>{const it=smBy(p);return it&&sum[p]>it[7]+1e-9?`${(it[3]||'').slice(0,60)}: в отчёте ${fmtN(sum[p])} ${it[4]}, остаток по смете ${fmtN(it[7])}`:null}).filter(Boolean);
