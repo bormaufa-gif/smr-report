@@ -507,11 +507,12 @@ const KMAP=[
  [/демонтаж/i,/демонтаж|разборк/i]
 ];
 const kindRule=w=>{const k=w.k&&w.k!==OTHER?w.k:'';return k?KMAP.find(r=>r[0].test(k))||null:null};
-// позиции смет, к которым относится выбранный вид работ (null — правила для вида нет)
+// позиции смет, к которым относятся выбранный вид работ и названия конструкций (null — правила для вида нет)
 function kindHits(w){
  const r=kindRule(w);if(!r)return null;
- return smFor(w).filter(x=>{const n=x[3]||'';return r[1].test(n)&&!(r[2]&&r[2].test(n))&&!ADDON.test(n)});
+ return byMarks(w,smFor(w).filter(x=>{const n=x[3]||'';return r[1].test(n)&&!(r[2]&&r[2].test(n))&&!ADDON.test(n)}));
 }
+const markTxt=w=>(w.nm||[]).map(x=>(x.v||'').trim().split(/\s+/)[0]).filter(Boolean).join(', ');
 // «Трубопровод в помещениях или на открытых площадках…: 219 мм» → «Трубопровод в помещениях или на открытых… · 219 мм»
 function posShort(x){
  const n=String(x[3]||'').replace(/^ДЕМОНТАЖ\.\s*/i,'Демонтаж: '),k=n.lastIndexOf(':'),tail=k>0?n.slice(k+1).trim():'';
@@ -524,10 +525,12 @@ function posCards(i,w){
  const q=(w.pq||'').trim(),hits=!q&&!w.pa?kindHits(w):null;let list=smRank(w,q),h='';
  if(hits&&hits.length){
   list=list.filter(a=>hits.includes(a[1])).sort((a,b)=>(+b[1][7]>0)-(+a[1][7]>0));
-  h=`<div class="sub" style="margin-top:6px">Позиции сметы для «${esc(w.k)}»: ${hits.length} · <a href="#" onclick="posAll(${i});return false">все позиции шифра</a></div>`;
+  h=`<div class="sub" style="margin-top:6px">Позиции сметы для «${esc(w.k)}»${markTxt(w)?' · '+esc(markTxt(w)):''}: ${hits.length} · <a href="#" onclick="posAll(${i});return false">все позиции шифра</a></div>`;
  }else if(!q){
   if(hits)h=`<div class="sub" style="margin-top:6px">Для «${esc(w.k)}» отдельной позиции в смете не найдено — выберите из общего списка.</div>`;
-  list=list.filter(a=>!ADDON.test(a[1][3]||'')&&+a[1][7]>0);if(list.some(a=>a[0]>0))list=list.filter(a=>a[0]>0);
+  list=list.filter(a=>!ADDON.test(a[1][3]||'')&&+a[1][7]>0);
+  if(!w.pa){const nar=byMarks(w,list.map(a=>a[1]));list=list.filter(a=>nar.includes(a[1]))}
+  if(list.some(a=>a[0]>0))list=list.filter(a=>a[0]>0);
  }
  const lim=w.pm?40:6,shown=list.slice(0,lim),cnt={};
  shown.forEach(([,x])=>{const s=posShort(x);cnt[s]=(cnt[s]||0)+1});
@@ -584,9 +587,38 @@ async function loadSmeta(manual,force){
   if(page==='new')newView();
  }catch(e){if(manual)toast('Не удалось получить сметы: '+((e&&e.message)||'нет связи'),4500)}
 }
+// конструктив → группы названий (марок) из РД; пусто — показываем все группы
+const STRG=[[/^фундаменты монолит/i,/фундамент|мачт|узл|сва/i],[/фундаментные плиты|кольцевой/i,/плит/i],[/опоры и стойки/i,/фундамент|узл/i],[/стены/i,/стен/i],[/лотки/i,/лотк/i],[/плиты покрытия/i,/плит|узл/i],[/обвалование/i,/стен|плит/i]];
+function kjGroupsFor(w){
+ const gr=kjGroups(w.c);if(!gr)return gr;
+ const r=STRG.find(x=>x[0].test(w.s||''));if(!r)return gr;
+ const f=gr.filter(g=>r[1].test(g[0]));return f.length?f:gr;
+}
+// есть ли марка в разделе сметы: «Фундамент Фм-1 - 5 шт.», диапазон «Фм-1.1 - Фм-1.7», обрезанное «Фм-10…», «Узел запорной арматуры №1»
+function secHas(sec,mark){
+ sec=String(sec||'');const code=String(mark||'').trim().split(/\s+/)[0];if(!code)return false;
+ const u=/^Узел №(\d+)/i.exec(mark);if(u)return new RegExp('узел[^№]*№\\s*'+u[1]+'(?!\\d)','i').test(sec);
+ const rx=code.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+ if(new RegExp('(^|[^а-яёa-z])'+rx+'(?![\\d.])','i').test(sec))return true;
+ const m=/^([а-яё]+)-(\d+)\.(\d+)$/i.exec(code);if(!m)return false;
+ const L=m[1].toLowerCase(),s=+m[2],n=+m[3];
+ for(const r of sec.matchAll(/([а-яё]+)-(\d+)\.(\d+)\s*-\s*([а-яё]+)-(\d+)\.(\d+)/gi))
+  if(r[1].toLowerCase()===L&&+r[2]===s&&+r[5]===s&&n>=+r[3]&&n<=+r[6])return true;
+ for(const r of sec.matchAll(/([а-яё]+)-(\d+)\.?…/gi))if(r[1].toLowerCase()===L&&+r[2]===s)return true;
+ return false;
+}
+// позиции, суженные по выбранным названиям конструкций. Нет позиции в разделе этой марки — остаются общие разделы
+// без марок («Земляные работы»); марки нет ни в одном разделе сметы — без сужения
+const SECMARK=/[а-яё]+-\d|№\s*\d/i;
+function byMarks(w,items){
+ const ms=(w.nm||[]).map(x=>(x.v||'').trim()).filter(Boolean);if(!ms.length||!items)return items;
+ const f=items.filter(x=>ms.some(m=>secHas(x[2],m)));if(f.length)return f;
+ if(!smFor(w).some(x=>ms.some(m=>secHas(x[2],m))))return items;
+ return items.filter(x=>!SECMARK.test(x[2]||''));
+}
 function marksHtml(i,w){
  if(!w.nm||!w.nm.length)w.nm=[{v:'',o:0}];
- const gr=kjGroups(w.c);
+ const gr=kjGroupsFor(w);
  const rows=w.nm.map((r,j)=>{
   if(!gr)return `<div class="drow"><div class="top"><span>Название ${j+1}</span>${w.nm.length>1?`<b onclick="rmMark(${i},${j})">✕</b>`:''}</div><input placeholder="Марка / название (например Фм-7.1)" value="${esc(r.v)}" oninput="R.works[${i}].nm[${j}].v=this.value;save()"></div>`;
   const all=gr.flatMap(g=>g[1]),other=r.o||(r.v&&!all.includes(r.v));
@@ -595,7 +627,7 @@ function marksHtml(i,w){
   <input placeholder="Название вручную" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(r.v):''}" oninput="R.works[${i}].nm[${j}].v=this.value;save()"></div>`}).join('');
  return `<label>${gr?'Фундамент / плита (название)':'Название конструкции'}</label>${rows}<button class="btn sec" style="margin-top:8px;padding:10px" onclick="addMark(${i})">＋ Ещё конструкция</button>`;
 }
-function pickMark(i,j,v){const r=R.works[i].nm[j];if(v===OTHER){r.o=1;r.v=''}else{r.o=0;r.v=v}save();newView();if(v===OTHER){document.querySelectorAll('#works .work')[i].querySelectorAll('input[placeholder="Название вручную"]')[j].focus()}}
+function pickMark(i,j,v){const r=R.works[i].nm[j];if(v===OTHER){r.o=1;r.v=''}else{r.o=0;r.v=v}autoPos(R.works[i]);save();newView();if(v===OTHER){document.querySelectorAll('#works .work')[i].querySelectorAll('input[placeholder="Название вручную"]')[j].focus()}}
 function addMark(i){R.works[i].nm.push({v:'',o:0});save();newView()}
 function rmMark(i,j){R.works[i].nm.splice(j,1);save();newView()}
 function diamHtml(i,w){
@@ -630,7 +662,7 @@ function pickDiam(i,j,v){const r=R.works[i].ds[j];r.s='';r.so=0;if(v===OTHER){r.
 function addDiam(i){R.works[i].ds.push({d:'',o:0,n:''});save();newView()}
 function rmDiam(i,j){R.works[i].ds.splice(j,1);syncDiam(i);newView()}
 function pickStruct(i,v){
- const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}w.s=v;w.k=v===OTHER?OTHER:'';w.ds=[];w.t='';w.unit=v===OTHER?w.unit:'';save();newView();
+ const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}if(w.s!==v){w.nm=[];w.pos=''}w.s=v;w.k=v===OTHER?OTHER:'';w.ds=[];w.t='';w.unit=v===OTHER?w.unit:'';save();newView();
 }
 function pickCipher(i,v){
  const w=R.works[i];if(dk(w)){w.vol='';w.unit=''}
