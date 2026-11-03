@@ -936,17 +936,23 @@ function reuse(i){
 
 /* ---------- «Сводка за сегодня» (главный экран руководителя) ---------- */
 let SUM=ls.get('sum',null),sumDate=today(),sumOpen='',sumBusy=0;
+// сводку сервер отдаёт только с паролем руководителя (cfg.lk); ключ мастера её не открывает
 async function loadSum(manual){
  if(!cfg.sink||!cfg.key){if(manual)toast('Сначала укажите адрес и ключ в «Настройках»');return}
+ if(!cfg.lk)return;
  if(!manual&&SUM&&SUM.date===sumDate&&Date.now()-SUM.at<5*60000)return;
  sumBusy=1;if(page==='sum')sumView();
  try{
-  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=summary&date='+sumDate+'&key='+encodeURIComponent(cfg.key));
-  const j=await r.json();if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
-  SUM=Object.assign(j,{at:Date.now()});ls.set('sum',SUM);
+  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=summary&date='+sumDate+'&key='+encodeURIComponent(cfg.key)+'&lk='+encodeURIComponent(cfg.lk));
+  const j=await r.json();
+  if(j&&!j.ok&&/пароль/.test(j.error||'')){leadLogout();toast('Пароль руководителя неверный',4500)}
+  else if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
+  else{SUM=Object.assign(j,{at:Date.now()});ls.set('sum',SUM)}
  }catch(e){toast('Сводка не загрузилась: '+((e&&e.message)||'нет связи'),4500)}
  sumBusy=0;if(page==='sum')sumView();
 }
+function leadLogin(){const v=($('#lkIn').value||'').trim();if(!v){toast('Введите пароль руководителя');return}cfg.lk=v;ls.set('cfg',cfg);SUM=null;loadSum(true)}
+function leadLogout(){cfg.lk='';ls.set('cfg',cfg);SUM=null;ls.set('sum',null);sumOpen=''}
 const num=v=>{const x=parseFloat(String(v??'').replace(',','.'));return isNaN(x)?0:x};
 function sumTiles(s){
  const L=(a,f,e)=>a.length?a.map(f).join(''):`<div class="sub">${e}</div>`,row=(t,sub)=>`<div class="item"><div>${t}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
@@ -972,9 +978,16 @@ function sumTiles(s){
 }
 function sumView(){
  $('#hd').textContent='Сводка';
+ if(!cfg.lk){
+  $('#view').innerHTML=`<div class="card"><h3>Вход для руководителя</h3><div class="sub">Сводка по всем мастерам закрыта паролем. Пароль выдаёт ПТО, мастерам он не нужен.</div>
+  <label>Пароль руководителя</label><input id="lkIn" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')leadLogin()">
+  <button class="btn" onclick="leadLogin()">${sumBusy?'Проверяю…':'Войти'}</button></div>
+  <button class="btn sec" onclick="cfg.role='master';ls.set('cfg',cfg);tab('new')">Я мастер — перейти к «Моей смене»</button>`;
+  return;
+ }
  const s=SUM&&SUM.date===sumDate?SUM:null;
  let h=`<div class="card"><div class="grid"><input type="date" value="${sumDate}" onchange="sumDate=this.value||today();sumOpen='';loadSum(true)"><button class="btn sec" style="margin:0" onclick="loadSum(true)">${sumBusy?'Загрузка…':'↻ Обновить'}</button></div>
- <div class="sub" style="margin-top:6px">${s?'Данные из журнала на '+new Date(s.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):(cfg.sink&&cfg.key?'Загружаю данные из журнала…':'Укажите адрес и ключ в «Настройках», чтобы видеть сводку.')}</div></div>`;
+ <div class="xrow" style="margin-top:6px"><div class="sub">${s?'Данные из журнала на '+new Date(s.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):(cfg.sink&&cfg.key?'Загружаю данные из журнала…':'Укажите адрес и ключ в «Настройках», чтобы видеть сводку.')}</div><a href="#" class="sub" onclick="leadLogout();sumView();return false">Выйти</a></div></div>`;
  if(s)h+=sumTiles(s).map(([k,t,n,cls,body])=>`<div class="card tap" onclick="sumOpen=sumOpen==='${k}'?'':'${k}';sumView()"><div class="xrow"><h3 style="margin:0">${t}</h3><span class="badge ${cls}" style="font-size:15px;padding:3px 12px">${n}</span></div>
  ${sumOpen===k?`<div style="margin-top:8px" onclick="event.stopPropagation()">${body}</div>`:''}</div>`).join('')
   +`<div class="sub" style="margin:4px 2px">«Что требует проверки» — отчёты, поданные с нарушением, и пункты «Нет» в чек-листах. «Просроченные заявки» — не оплачены дольше 7 дней.</div>`;
@@ -1037,12 +1050,12 @@ async function testSink(){
  catch(e){toast('Нет ответа. Проверьте адрес и интернет',4500)}
 }
 function dlFile(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
-function backupAll(){dlFile(`otchet_smr_kopiya_${today()}.json`,JSON.stringify({v:1,cfg:Object.assign({},cfg,{key:''}),hist,draft:R,chk:ls.get('chk',[]),req:ls.get('req',[]),ppl,att}),'application/json');toast('Копия сохранена в «Загрузки»')}
+function backupAll(){dlFile(`otchet_smr_kopiya_${today()}.json`,JSON.stringify({v:1,cfg:Object.assign({},cfg,{key:'',lk:''}),hist,draft:R,chk:ls.get('chk',[]),req:ls.get('req',[]),ppl,att}),'application/json');toast('Копия сохранена в «Загрузки»')}
 async function restoreAll(inp){
  const f=inp.files[0];if(!f)return;
  try{const o=JSON.parse(await f.text());if(!o||!o.hist)throw 0;
   if(!confirm('Текущие история и настройки на этом устройстве будут заменены данными из копии. Продолжить?'))return;
-  ls.set('cfg',Object.assign({},o.cfg||cfg,{key:cfg.key||''}));ls.set('hist',o.hist);if(o.draft)ls.set('draft',o.draft);if(o.chk)ls.set('chk',o.chk);if(o.req)ls.set('req',o.req);if(o.ppl)ls.set('ppl',o.ppl);if(o.att)ls.set('att',o.att);location.reload();
+  ls.set('cfg',Object.assign({},o.cfg||cfg,{key:cfg.key||'',lk:cfg.lk||''}));ls.set('hist',o.hist);if(o.draft)ls.set('draft',o.draft);if(o.chk)ls.set('chk',o.chk);if(o.req)ls.set('req',o.req);if(o.ppl)ls.set('ppl',o.ppl);if(o.att)ls.set('att',o.att);location.reload();
  }catch(e){toast('Не удалось прочитать файл копии')}
 }
 async function protectStorage(){
