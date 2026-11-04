@@ -427,6 +427,7 @@ function render(){
  window.scrollTo(0,0);
  if(page==='sum')return sumView();
  if(page==='more')return moreView();
+ if(page==='tech')return techView();
  if(page==='new')return newView();
  if(page==='ppl')return PF?pfView():pplView();
  if(page==='hist')return histView();
@@ -1033,11 +1034,20 @@ function sumView(){
   +`<div class="sub" style="margin:4px 2px">«Что требует проверки» — отчёты, поданные с нарушением, и пункты «Нет» в чек-листах. «Просроченные заявки» — не оплачены дольше 7 дней.</div>`;
  $('#view').innerHTML=h;
 }
+/* ---------- «Тех.карты» ---------- */
+const TECH_FOLDER='1Q54dZJ_CcmIlX6k92SU1IufSif-PGFC8';  // папка «Тех.карты» на Диске: что туда положили — то и видно в приложении
+function techView(){
+ $('#hd').textContent='Тех.карты';
+ $('#view').innerHTML=`<div class="card"><div class="xrow"><h3 style="margin:0">🗂 Технологические карты</h3><a class="sub" href="https://drive.google.com/drive/folders/${TECH_FOLDER}" target="_blank" rel="noopener">Открыть в Диске ↗</a></div>
+ <div class="sub" style="margin-top:6px">Список берётся прямо из папки на Google Диске: новые файлы появляются здесь сами. Нажмите на файл, чтобы открыть.</div></div>
+ <iframe src="https://drive.google.com/embeddedfolderview?id=${TECH_FOLDER}#list" style="width:100%;height:70vh;border:1px solid #d0d7de;border-radius:10px;background:#fff"></iframe>`;
+}
 /* ---------- «Ещё» ---------- */
 function moreView(){
  $('#hd').textContent='Ещё';
  const it=(p,i,t,sub)=>`<div class="card tap" onclick="tab('${p}')"><div class="xrow"><h3 style="margin:0">${i} ${t}</h3><span class="sub">›</span></div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
  $('#view').innerHTML=(role()==='lead'?it('ppl','👷','Люди на объекте','Отметки по фото, рабочие'):'')
+  +it('tech','📐','Тех.карты','Файлы из папки на Диске')
   +it('hist','🗂','История отчётов',hist.length?'Отправлено: '+hist.length:'Отправленных пока нет')
   +it('set','⚙️','Настройки','Режим работы, ключ, списки, копия данных')
   +`<div class="card"><label style="margin-top:0">Режим работы</label>${roleSel()}</div>`;
