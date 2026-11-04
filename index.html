@@ -1035,19 +1035,25 @@ function sumView(){
  $('#view').innerHTML=h;
 }
 /* ---------- «Тех.карты» ---------- */
-const TECH_FOLDER='1Q54dZJ_CcmIlX6k92SU1IufSif-PGFC8';  // папка «Тех.карты» на Диске: что туда положили — то и видно в приложении
+const TECH_FOLDER='1Q54dZJ_CcmIlX6k92SU1IufSif-PGFC8';  // папка на Диске с исходными файлами
+const TECH=[['tech/m11/index.html','🗼','AR-инструкция: мачта М11 · МГФ-30','Монтаж мачты, пошаговая инструкция с чертежами'],
+ ['tech/uza/index.html','🏗','Руководство мастера: УЗА-1, УЗА-2, УЗА-3, УЗА-4','Площадки, КМ/КМД, узлы, разрезы, стоек']];
+function openTech(i){
+ const t=TECH[i];let d=$('#rd');if(!d){d=document.createElement('div');d.id='rd';document.body.appendChild(d)}
+ d.innerHTML=`<div class="rdh"><b>${esc(t[2])}</b><a href="${t[0]}" target="_blank" rel="noopener">В отдельном окне ↗</a><button onclick="closeRD()">✕</button></div><iframe src="${t[0]}"></iframe>`;
+ document.body.classList.add('rdopen');
+}
 function techView(){
  $('#hd').textContent='Тех.карты';
- $('#view').innerHTML=`<div class="card"><div class="xrow"><h3 style="margin:0">🗂 Технологические карты</h3><a class="sub" href="https://drive.google.com/drive/folders/${TECH_FOLDER}" target="_blank" rel="noopener">Открыть в Диске ↗</a></div>
- <div class="sub" style="margin-top:6px">Список берётся прямо из папки на Google Диске: новые файлы появляются здесь сами. Нажмите на файл, чтобы открыть.</div></div>
- <iframe src="https://drive.google.com/embeddedfolderview?id=${TECH_FOLDER}#list" style="width:100%;height:70vh;border:1px solid #d0d7de;border-radius:10px;background:#fff"></iframe>`;
+ $('#view').innerHTML=TECH.map((t,i)=>`<div class="card tap" onclick="openTech(${i})"><div class="xrow"><h3 style="margin:0">${t[1]} ${esc(t[2])}</h3><span class="sub">›</span></div><div class="sub">${esc(t[3])}</div></div>`).join('')
+ +`<div class="sub" style="margin:6px 2px"><a href="https://drive.google.com/drive/folders/${TECH_FOLDER}" target="_blank" rel="noopener">Папка с исходными файлами на Диске ↗</a></div>`;
 }
 /* ---------- «Ещё» ---------- */
 function moreView(){
  $('#hd').textContent='Ещё';
  const it=(p,i,t,sub)=>`<div class="card tap" onclick="tab('${p}')"><div class="xrow"><h3 style="margin:0">${i} ${t}</h3><span class="sub">›</span></div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
  $('#view').innerHTML=(role()==='lead'?it('ppl','👷','Люди на объекте','Отметки по фото, рабочие'):'')
-  +it('tech','📐','Тех.карты','Файлы из папки на Диске')
+  +it('tech','📐','Тех.карты','Инструкции и руководства')
   +it('hist','🗂','История отчётов',hist.length?'Отправлено: '+hist.length:'Отправленных пока нет')
   +it('set','⚙️','Настройки','Режим работы, ключ, списки, копия данных')
   +`<div class="card"><label style="margin-top:0">Режим работы</label>${roleSel()}</div>`;

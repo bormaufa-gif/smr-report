@@ -1,0 +1,775 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AR-инструкция: мачта М11 · МГФ-30</title>
+<style>
+:root{--bg:#121417;--sf:#1c2024;--sf2:#252a2f;--ln:#343b42;--tx:#eceef0;--mu:#99a2ab;--ac:#f2a516;--ok:#4cc38a;--er:#ef5b52}
+*{box-sizing:border-box}html,body{margin:0}body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:96px}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--bg);z-index:5}
+header .t{flex:1;min-width:0}header b{display:block;font-size:15px}header small{color:var(--mu);font-size:12px}
+.ib{min-height:38px;padding:6px 10px;font-size:13px}
+#view{position:relative;height:48vh;min-height:300px;max-height:560px;background:radial-gradient(ellipse at 50% 30%,#1d2329,#0b0d0f);overflow:hidden;touch-action:none}
+#view canvas{display:block}
+#lbl{position:absolute;inset:0;pointer-events:none}
+.tag{background:#000c;border:1px solid var(--ac);color:var(--tx);font-size:11px;padding:2px 6px;border-radius:5px;white-space:nowrap;transform:translateY(-14px)}
+.ovl{position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:6px;flex-wrap:nowrap;z-index:2}.ovl button{min-height:38px;padding:6px 10px;font-size:13px;flex:0 0 auto}
+#note{position:absolute;top:8px;left:8px;right:8px;background:#000b;padding:6px 9px;border-radius:7px;font-size:12px;color:var(--mu);z-index:2}
+button{font:inherit;border:1px solid var(--ln);background:var(--sf);color:var(--tx);border-radius:10px;padding:10px 14px;min-height:44px;cursor:pointer}
+button.pri{background:var(--ac);color:#111;border-color:var(--ac);font-weight:600}
+button.on{border-color:var(--ac);color:var(--ac)}
+button:disabled{color:#5d656d;background:var(--sf);border-color:var(--ln);cursor:default}
+nav#nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid var(--ln);scrollbar-width:none}
+nav#nav button{flex:0 0 auto;padding:6px 11px;min-height:36px;font-size:13px}
+nav#nav button.cur{border-color:var(--ac);color:var(--ac)}nav#nav button.done{background:#173326;border-color:var(--ok)}
+main{padding:14px;max-width:780px;margin:auto}
+h2{font-size:19px;margin:0 0 2px}.src{color:var(--mu);font-size:12px;margin-bottom:10px}
+h3{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:18px 0 6px}
+ol{padding-left:22px;margin:0}li{margin:5px 0}
+.norm{display:grid;grid-template-columns:1fr auto;gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:10px;overflow:hidden}
+.norm div{background:var(--sf);padding:8px 10px}.norm div:nth-child(2n){font-weight:600;color:var(--ac);text-align:right;font-variant-numeric:tabular-nums}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--ln);border-radius:10px;margin:6px 0;background:var(--sf);cursor:pointer}
+label.ck input{width:22px;height:22px;flex:0 0 auto;accent-color:var(--ok);margin:0}
+.ms{display:grid;grid-template-columns:1fr 110px;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--ln);border-radius:10px;margin:6px 0;background:var(--sf)}
+.ms input{width:100%;font:inherit;font-size:16px;padding:8px;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px;text-align:right}
+.ms .st{grid-column:1/-1;font-size:12px;color:var(--mu)}.ms.good{border-color:var(--ok)}.ms.bad{border-color:var(--er)}.ms.good .st{color:var(--ok)}.ms.bad .st{color:var(--er)}
+.calc{padding:10px;border-radius:10px;background:var(--sf2);margin-top:6px;font-size:14px}
+.warn{border-left:4px solid var(--er);background:#2b1c1c;padding:10px 12px;border-radius:6px;margin-top:8px}
+.ask{border-left:4px solid var(--ac);background:#2a2416;padding:10px 12px;border-radius:6px;margin-top:8px}
+.ask ul,.warn ul{margin:4px 0 0;padding-left:18px}
+.figs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.figs figure{margin:0;flex:0 0 150px;background:#fff;border-radius:8px;overflow:hidden;cursor:zoom-in}
+.figs img{width:150px;height:110px;object-fit:contain;display:block}
+.figs figcaption{background:var(--sf);color:var(--mu);font-size:11px;padding:4px 6px;line-height:1.3}
+.photos{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.photos img{width:72px;height:72px;object-fit:cover;border-radius:6px}
+textarea{width:100%;min-height:64px;background:var(--sf);color:var(--tx);border:1px solid var(--ln);border-radius:10px;padding:10px;font:inherit;margin-top:6px}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#121417f2;border-top:1px solid var(--ln);z-index:6}
+.bar button{flex:1}
+.prog{height:4px;background:var(--ln)}.prog i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+#lb,#sheet{position:fixed;inset:0;background:#000e;z-index:20;display:none;overflow:auto}
+#lb{align-items:center;justify-content:center;flex-direction:column;padding:12px}
+#lb img{max-width:100%;max-height:82vh;background:#fff;border-radius:6px}#lb p{color:var(--tx);font-size:13px;text-align:center}
+#sheet .in{max-width:780px;margin:auto;padding:16px;background:var(--bg);min-height:100%}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}td,th{border:1px solid var(--ln);padding:6px 8px;text-align:left}th{background:var(--sf2);font-weight:600}
+#arui{display:none;position:fixed;inset:0;pointer-events:none;z-index:30;font:15px system-ui,sans-serif;color:#fff}
+#arui .top{pointer-events:auto;margin:10px;padding:10px 12px;background:#000b;border-radius:10px}
+#arui .bot{pointer-events:auto;position:absolute;left:10px;right:10px;bottom:16px;display:flex;flex-wrap:wrap;gap:6px}
+#arui button{background:#000c;color:#fff;border-color:#fff4}#arui button.on{border-color:var(--ac);color:var(--ac)}
+</style></head><body>
+<header><div class="t"><b>Мачта М11 · МГФ-30-М(250)-III-3-МО-6-ц</b><small>Сокурская нефтебаза · AR-инструкция по сборке и монтажу</small></div><button class="ib" id="pass">Паспорт</button><button class="ib" id="rep">Отчёт</button></header>
+<div class="prog"><i id="pg"></i></div>
+<div id="view"><div id="note"></div><div id="lbl"></div><div class="ovl"><button class="pri" id="arBtn">Открыть в AR</button><button id="play" class="on">❚❚</button><button id="tags" class="on">Подписи</button><button id="fit">Вид</button></div></div>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div class="bar"><button id="pv">← Назад</button><button class="pri" id="nx">Далее →</button></div>
+<div id="lb"><img id="lbi" alt=""><p id="lbc"></p><button id="lbx">Закрыть</button></div>
+<div id="sheet"><div class="in" id="sheetc"></div></div>
+<div id="arui"><div class="top" id="art"></div><div class="bot"><button id="arp">←</button><button id="arn">→</button><button data-s="1">1:1</button><button data-s="0.1">1:10</button><button data-s="0.02" class="on">1:50</button><button id="arx">Выйти</button></div></div>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {CSS2DRenderer,CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ===== Данные мачты (паспорт МГФ-30, техкарта М11) ===== */
+const SEC=[[5985,487.88],[5980,364.03],[5980,252.96],[5980,213.22],[5980,173.45],[5095,133.19]];
+const F={
+f0:['img/f-000.jpg','Общий вид мачты (инструкция, разд. 4)'],
+f1:['img/f-001.jpg','Рис. 2. Мобильная корона с ОП'],
+f2:['img/f-002.jpg','Рис. 3. Оголовок: ролики тросов и кабеля'],
+f3:['img/f-003.jpg','Рис. 4. Верхняя крышка, оттяжки молниеприёмника'],
+f4:['img/f-004.jpg','Рис. 4.1. Узел разветвления, цепь, разъём'],
+f5:['img/f-005.jpg','Рис. 4.2. Механизм спуска-подъёма'],
+f6:['img/f-006.jpg','Рис. 5. Анкерный блок'],
+f7:['img/f-007.jpg','Рис. 6. Стяжка секций'],
+f8:['img/f-008.jpg','Рис. 7. Корона: ствол, рама, оголовок, молниеприёмник'],
+f9:['img/f-009.jpg','Рис. 8. Узел тросовой оттяжки'],
+f10:['img/f-010.jpg','Схема 1. Запасовка троса на спускной раме'],
+f11:['img/f-011.jpg','Схема 2. Крепление кабеля и цепи'],
+f12:['img/f-012.jpg','Рис. 10. Выставление нижних гаек'],
+f13:['img/f-013.jpg','Табл. 1. Моменты затяжки, кгс·м']};
+const S=[
+{t:'Подготовка',src:'Техкарта М11, разд. 2–3',st:'up',cam:'full',show:['found','anch','pipe','zone','mast'],hl:['zone'],figs:['f0','f6'],
+note:'Мачта в сборе на проектном месте. Красный круг — опасная зона R 40 м (высота 36 м + запас 4 м).',
+do:['Получить наряд-допуск на работы краном и на высоте; на нефтебазе соблюдать пропускной и объектовый режим.','Спланировать площадку: проезд длинномера (12 м) и крана, зона сборки ствола не менее 40 м параллельно фундаменту, нижний фланец — у фундамента.','Проверить крановую площадку по несущей способности и расстояния до ЛЭП и сетей.','Оградить опасную зону подъёма (радиус не менее 36 м + запас).'],
+norm:[['Высота мачты с молниеприёмником','36 м'],['Отметка прожекторов','30 м'],['Масса мачты','1900 кг'],['Бригада на сборке ствола','не менее 3 чел.'],['Кран (ориентир, по ППР)','≈ 50 т']],
+ck:['Фундамент М11 принят по акту, бетон набрал прочность, есть исполнительная схема закладной','В фундаменте 1 труба ПНД D63 для ввода КЛ (ЭН.08), труба заглушена','ППР на подъём утверждён: схема строповки и центр тяжести приложены','Персонал допущен: стропальщики, машинист, высотники, электромонтёр','Опасная зона определена и ограждена'],
+ask:['Раздел КЖ: отметка верха фундамента, выступ шпилек, ориентация закладной','Центр тяжести и точки строповки — у поставщика или расчётом в ППР'],
+warn:'Без подписанного акта на фундамент и утверждённого ППР монтаж не начинать.'},
+{t:'1. Фундамент',src:'Операция 1 · инструкция, рис. 10',st:'none',cam:'found',show:['found','anch','pipe','nuts','raised','axes'],hl:['raised','anch'],figs:['f12','f6'],anim:'nuts',
+note:'18 шпилек М30 на окружности Ø740. Жёлтые — выставленные нижние гайки.',
+do:['Снять верхние гайки и шайбы со шпилек М30, очистить резьбу, проверить, что она не повреждена.','Согнать все нижние гайки до упора вниз.','Выставить уровнем 4–6 наиболее удалённых друг от друга нижних гаек на 20–25 мм выше остальных — на них ляжет фланец.','Нанести на фундамент и фланец оси ориентации мачты: люк и сторона прожекторов по схеме ЭН.05.'],
+norm:[['Шпильки','18 × M30-6g'],['Окружность отверстий','Ø740 мм'],['Фланец / отверстия','Ø850 / 18 × Ø35'],['Подъём опорных гаек','20–25 мм']],
+ms:[{k:'nut',l:'Подъём опорных нижних гаек',u:'мм',min:20,max:25}],
+ck:['Резьба шпилек очищена и цела','Нижние гайки согнаны вниз','4–6 опорных гаек выставлены по уровню','Оси ориентации нанесены'],
+ask:['Длина выступающей части шпилек (лист КЖ)'],warn:'Не повредить резьбу при снятии гаек; поврежденную шпильку — на согласование, не «прогонять».'},
+{t:'2. Раскладка секций',src:'Операция 2',st:'ground',cam:'ground',show:['found','anch','pipe','mast','trestle'],hide:['crown','head','rod','guys','lamps'],hl:['sec'],figs:['f0'],gap:1.6,
+note:'Секции №1–6 на козлах вдоль фундамента, фланец секции №1 — у фундамента.',
+do:['Разгружать секции краном; стропить капроновыми стропами или тросами в резино-тканевых рукавах.','Ленты от транспортных брусков только разрезать.','Разложить секции на козлах в порядке сборки, фланец секции №1 — у фундамента.','Осмотреть цинк; сколы ремонтировать цинконаполненной краской.'],
+tbl:true,
+ck:['Секции №1–6, оголовок, рама, лебёдка, тросы, кабель, молниеприёмник, метизы сверены с паспортом','Цинк без сколов, вмятин и перекосов нет (фото)','Секции подклинены от раскатывания'],
+ask:['Тип прожекторов: ЭН.ОЛ1 (3 × L-lego II 500) или ЭН.05 (1 × 330 + 2 × 500)'],warn:'Оголённые стальные тросы для строповки секций не допускаются.'},
+{t:'3. Сборка ствола',src:'Операция 3 · инструкция, рис. 6',st:'ground',cam:'ground',show:['found','anch','pipe','mast','trestle','marks'],hide:['crown','head','rod','guys','lamps'],hl:['sec','marks'],figs:['f7'],anim:'stack',
+note:'Секции надвигаются друг на друга. Жёлтые кольца — метки 500/750/1000 мм.',
+do:['Уложить на козлы секции №1 и №2 так, чтобы элементы стяжки лежали в одной горизонтальной плоскости.','Нанести маркером метки зоны стяжки: 500, 750 и 1000 мм от торца.','Застропить секцию №2 в центре тяжести, совместить оси и сварные швы, насадить на вершину секции №1.','Установить стяжное устройство (гидравлика или лебёдки 3–5 т): лебёдку — нижним концом к фланцу, верхним к торцевому упору.','Стянуть за 3–4 нагружения, контролируя соосность и усилие; в перерывах обстукивать зону стяжки киянкой или кувалдой через брусок.','Стягивать, пока основание секции не войдёт в зону 500–1000 мм.','Секции №3–№6 — в том же порядке, за нижнюю принимать уже стянутый ствол.'],
+norm:[['Посадка (перекрытие) стыка','500–1000 мм'],['Усилие стяжки','3–5 т'],['Нагружений на стык','3–4'],['Сумма длин секций','35 000 мм'],['Проектный ствол','30 000 мм']],
+ms:[1,2,3,4,5].map(i=>({k:'j'+i,l:`Перекрытие стыка №${i}/№${i+1}`,u:'мм',min:500,max:1000})),calc:'height',
+ck:['Оси и сварные швы секций совмещены','Все 5 стыков в зоне 500–1000 мм','Цинк после стяжки без сколов'],
+ask:['Длины секций дают 35 000 мм: для ствола 30 м перекрытие ~1000 мм на каждом стыке. Подтвердить у изготовителя и промерить после первой стяжки'],
+warn:'Не стоять в линии троса лебёдки и цепи гидроустройства под нагрузкой.'},
+{t:'4. Корона',src:'Операция 4 · инструкция, рис. 7–8, схемы 1–2',st:'ground',cam:'top',show:['mast','trestle','found','anch'],hide:['lamps'],hl:['crown','head','rod','guys','hatch'],figs:['f8','f2','f3','f9','f10','f11'],
+note:'Оголовок, спускная рама и молниеприёмник МО-6,0 на верхней секции.',
+do:['Через верхний конец лежащего ствола продеть спускную раму в сторону основания.','Прикрепить оголовок к фланцу секции №6, болты протянуть по кругу дважды.','Собрать молниеприёмник МО-6,0, установить на оголовок; натянуть три оттяжки через талрепы, запасовать концы, поставить зажимы, создать предварительное натяжение.','В проёме нижней секции закрепить монтажную площадку, на ней — редуктор-лебёдку.','Протянуть через большие ролики три троса, концы через коуши — в карабин узла разветвления. Кабель — между малыми роликами вместе с тросами, без перехлёста.','Кабель с вилкой закрепить хомутами на блоке тросов; нижний конец страховочной цепи — на плите механизма.','Концы тросов на раме запасовать по схеме 1, кабель закрепить по схеме 2.'],
+norm:[['Болты оголовка М14 / М16','4,2 / 6,7 кгс·м'],['Молниеприёмник','6,0 м, 36,29 кг'],['Оголовок / рама','34,72 / 21,51 кг'],['Оттяжки молниеприёмника','3 шт., через талрепы']],
+ck:['Болты оголовка протянуты по кругу дважды, момент по табл. 1','Оттяжки молниеприёмника натянуты равномерно','Тросы и кабель без перехлёста, кабель закреплён хомутами','Редуктор-лебёдка закреплён в проёме секции №1','Страховочная цепь закреплена на плите механизма'],
+ask:['Огневые работы на нефтебазе — по наряду; монтажную площадку предпочтительно крепить на болтах'],warn:'Ролики и тросы проверять при отсутствии людей перед торцом ствола.'},
+{t:'5. Прожекторы',src:'Операция 5 · ЭН.05',st:'ground',cam:'top',show:['mast','trestle','found','anch'],hl:['lamps','crown'],figs:['f1'],
+note:'Три прожектора на кронштейнах спускной рамы, схема несимметричная.',
+do:['Закрепить три кронштейна на спускной раме.','Установить прожекторы по схеме ЭН.05: 1 × L-lego II 330 и 2 × L-lego II 500.','Поставить балансировочные грузы из комплекта (схема несимметричная).','Подключить кабели прожекторов в клеммной коробке IP54 на короне, неиспользуемые вводы закрыть заглушками.'],
+norm:[['Нагрузка на корону','не более 200 кг'],['Кронштейны ОП','3 × 2,85 кг'],['Клеммная коробка','IP54, 7 вводов']],
+ck:['Прожекторы закреплены по ЭН.05','Балансировочные грузы установлены','Кабели подключены, лишние вводы заглушены','Общая масса на короне ≤ 200 кг'],
+ask:['Тип и количество прожекторов — свериться с поставкой до установки (влияет на балансировку)'],warn:'Электромонтаж — электромонтёр с группой по ЭБ, питание не подано.'},
+{t:'6. Подъём',src:'Операция 6 · инструкция, разд. 9',st:'lift',cam:'full',show:['found','anch','pipe','mast','sling','zone','trestle'],hl:['sling','zone'],figs:['f0'],anim:'lift',
+note:'Подъём краном с поворотом в вертикаль. Точка строповки условная — по ППР.',
+do:['Застропить мачту в точке по ППР, под стропы — прокладки для защиты цинка; закрепить две оттяжки для разворота.','Поднять на 0,2–0,3 м, выдержать, проверить стропы, тормоза и устойчивость крана.','Плавно перевести мачту в вертикаль — мачта может проворачиваться вокруг оси.','Навести фланец на шпильки с проектной ориентацией, опустить на выровненные нижние гайки.','Установить и затянуть верхние гайки, контргайки пока не ставить.','Разгрузить кран; расстроповка — с разрешения руководителя работ.'],
+norm:[['Пробный подъём','0,2–0,3 м'],['Ветер при подъёме','не более 10 м/с'],['Опасная зона','R 40 м (36 м + запас)'],['Масса груза','1900 кг + оснастка']],
+ms:[{k:'wind',l:'Скорость ветра перед подъёмом',u:'м/с',min:0,max:10}],
+ck:['Стропы и прокладки по ППР, бирки в сроке','Пробный подъём на 0,2–0,3 м выполнен','Фланец сел на опорные гайки, ориентация люка по проекту','Верхние гайки затянуты до расстроповки'],
+ask:['Тип крана, вылет и точки строповки — по ППР'],warn:'Находиться под мачтой и в опасной зоне запрещено. Подъём только в светлое время, без гололёда, тумана, грозы.'},
+{t:'7. Выверка и затяжка',src:'Операция 7 · инструкция, разд. 10, табл. 1',st:'up',cam:'theo',show:['found','anch','pipe','mast','theo'],hl:['theo'],figs:['f13','f12'],
+note:'Вертикальность проверяют теодолитом с двух взаимно перпендикулярных сторон.',
+do:['Теодолитом с двух перпендикулярных направлений проверить вертикальность; регулировать двумя парами гаек (верхних и нижних).','Затянуть все гайки крепления ствола: М30 — 45,5 кгс·м.','Установить и затянуть контргайки.','Затянуть все нижние гайки.','Открытые части резьбы покрыть антикоррозионным составом.'],
+norm:[['Отклонение от вертикали','≤ 0,005 H ≈ 150 мм'],['Момент М30','45,5 кгс·м ≈ 446 Н·м'],['М24 / М20','22,75 / 13,1 кгс·м'],['М16 / М14','6,7 / 4,2 кгс·м']],
+ms:[{k:'dx',l:'Отклонение верха, ось 1',u:'мм',min:0,max:150},{k:'dy',l:'Отклонение верха, ось 2',u:'мм',min:0,max:150}],
+ck:['Вертикальность в допуске по двум осям','Гайки М30 затянуты на 45,5 кгс·м','Контргайки установлены и затянуты','Нижние гайки затянуты','Резьба покрыта антикоррозионным составом','Исполнительная геосъёмка выполнена'],
+ask:['Допуск 1/75 H в паспорте — отклонение под ветровой нагрузкой, не монтажный (подтвердить у изготовителя)'],warn:'Выверку вести до окончательной затяжки гаек.'},
+{t:'8. Опробование короны',src:'Операция 8 · инструкция, п. 5.10–5.12, 8.7',st:'up',cam:'full',show:['found','anch','pipe','mast','cables'],hl:['crown','lamps','cables'],figs:['f4','f5','f2'],anim:'crown',
+note:'Корона опускается на тросах до 1,2–1,5 м и поднимается обратно.',
+do:['Приподнять корону, проверить горизонтальность; отрегулировать тросы, при необходимости — противовесы.','Отрегулировать длину основного троса: при смотанном тросе узел разветвления доступен в зоне люка.','Спуск: отключить питание, разъединить силовой разъём, разомкнуть страховочную цепь, первый 1 м — вручную рукояткой.','Убедиться, что рама вышла из пазов оголовка и висит ровно; далее электроприводом не более 500 об/мин до 1,2–1,5 м.','Подъём: электроприводом до 0,5–1,0 м от верха, дальше только рукояткой до захода обечайки в пазы. Следить, чтобы кабель не перехлёстывался с тросом.','Зафиксировать корону страховочной цепью, проверить болты, тросы и кабель, закрыть люк.'],
+norm:[['Уровень обслуживания','1,2–1,5 м'],['Ручной спуск в начале','1,0 м'],['Электропривод','≤ 500 об/мин'],['Ручной доводка вверху','последние 0,5–1,0 м']],
+ms:[{k:'low',l:'Высота короны в нижнем положении',u:'м',min:1.2,max:1.5}],
+ck:['Корона горизонтальна, перекоса нет','Спуск и подъём без заеданий и перехлёста','Обечайка зашла в пазы оголовка','Корона зафиксирована страховочной цепью','Люк закрыт'],
+ask:[],warn:'Электропривод в последних 0,5–1,0 м до верха запрещён. Под короной людей не держать; при спуске питание отключено.'},
+{t:'Сдача ИД',src:'Техкарта М11, разд. 7',st:'up',cam:'full',show:['found','anch','pipe','mast'],hl:[],figs:[],
+note:'Мачта смонтирована. Соберите исполнительную документацию.',
+do:['Сформировать комплект ИД и передать куратору; работы внести в общий журнал с привязкой к шифру ГНТ.61.2024.01-11.01.00.ЭН.'],
+ck:['Паспорт, сертификаты на мачту, прожекторы, тросы, кабель','Акт входного контроля и приёмки изделий','Акт приёмки фундамента под монтаж','Акт освидетельствования ответственных конструкций (монтаж мачты)','Исполнительная геодезическая схема мачты','Журнал монтажа и акт контроля затяжки гаек (М30 — 45,5 кгс·м)','Акт опробования мобильной короны','Протоколы ЭН: заземление, молниезащита, изоляция','Наряд-допуск, документы на кран и стропы'],
+ask:['Молниезащита: РД 34.21.122-87 заменён СО 153-34.21.122-2003 — замеры заземления по разделу ЭН'],warn:'Формы и нумерацию сверить с перечнем ИД заказчика.'}];
+
+/* ===== Состояние (в памяти) ===== */
+const st={c:{},m:{},n:{},p:{}};let cur=0,play=true,tags=true;
+
+/* ===== 3D ===== */
+const view=document.getElementById('view');
+const ren=new THREE.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(devicePixelRatio,2));ren.xr.enabled=true;view.prepend(ren.domElement);
+const lr=new CSS2DRenderer({element:document.getElementById('lbl')});
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.05,800);
+sc.add(new THREE.HemisphereLight(0xdfe8ff,0x3a3a30,1.4));const dl=new THREE.DirectionalLight(0xffffff,1.6);dl.position.set(20,40,25);sc.add(dl);
+const oc=new OrbitControls(cam,ren.domElement);oc.enableDamping=true;oc.maxPolarAngle=Math.PI*.495;
+const world=new THREE.Group();sc.add(world);
+const ground=new THREE.Mesh(new THREE.CircleGeometry(60,64).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({color:0x2b2f2a,roughness:1}));ground.position.y=-.3;world.add(ground);
+const grid=new THREE.GridHelper(100,50,0x3d443d,0x323832);grid.position.y=-.29;world.add(grid);
+const P={},HL=[];const mats=[];
+const M=(c,o={})=>{const m=new THREE.MeshStandardMaterial({color:c,metalness:o.m??.55,roughness:o.r??.45,flatShading:!!o.f,transparent:!!o.t,opacity:o.o??1,side:o.s??THREE.FrontSide});mats.push(m);return m};
+const zinc=()=>M(0xb9c0c6,{m:.7,r:.35,f:true});
+function reg(n,o,parent=world,label){o.userData.n=n;P[n]=o;parent.add(o);if(label){const d=document.createElement('div');d.className='tag';d.textContent=label;const l=new CSS2DObject(d);l.position.copy(label.pos||new THREE.Vector3());o.userData.lbl=l;o.add(l)}return o}
+const lab=(o,t,p)=>{const d=document.createElement('div');d.className='tag';d.textContent=t;const l=new CSS2DObject(d);l.position.copy(p);o.userData.lbl=l;o.add(l);return o};
+const cyl=(rt,rb,h,mat,seg=24)=>new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),mat);
+const at=(m,x,y,z)=>{m.position.set(x,y,z);return m};
+// Фундамент (условный; размеры по КЖ не переданы)
+const fd=new THREE.Group();fd.add(at(cyl(.75,.75,1.8,M(0x8d8d86,{m:0,r:.9}),32),0,-.9,0));reg('found',lab(fd,'Фундамент (КЖ — условно)',new THREE.Vector3(.8,-.4,0)));
+const an=new THREE.Group(),nuts=new THREE.Group(),rz=new THREE.Group();const stud=M(0xd0d4d8,{m:.8,r:.3});const nutM=M(0x9aa0a6,{m:.8,r:.4});const nutA=M(0xf2a516,{m:.4,r:.5});
+const RAISE=[0,3,6,9,12,15];
+for(let i=0;i<18;i++){const a=i/18*Math.PI*2,x=Math.cos(a)*.37,z=Math.sin(a)*.37;const s=cyl(.015,.015,.2,stud,8);s.position.set(x,.1,z);an.add(s);
+const nu=new THREE.Mesh(new THREE.CylinderGeometry(.028,.028,.03,6),RAISE.includes(i)?nutA:nutM);nu.position.set(x,RAISE.includes(i)?.04:.017,z);nu.userData.base=nu.position.y;(RAISE.includes(i)?rz:nuts).add(nu)}
+reg('anch',lab(an,'Шпильки 18 × М30, Ø740',new THREE.Vector3(.37,.25,0)));reg('nuts',nuts);reg('raised',lab(rz,'Опорные гайки +20…25 мм',new THREE.Vector3(-.4,.12,0)));
+reg('pipe',lab(cyl(.0315,.0315,.12,M(0x111111,{m:0,r:.8}),12),'ПНД D63',new THREE.Vector3(0,.12,0)));P.pipe.position.y=.0;
+const ax=new THREE.Group();[[1.6,.012,.02],[.02,.012,1.6]].forEach(d=>{const b=new THREE.Mesh(new THREE.BoxGeometry(...d),M(0xef5b52,{m:0,r:1}));b.position.y=.006;ax.add(b)});reg('axes',lab(ax,'Оси ориентации (люк, ЭН.05)',new THREE.Vector3(.8,.05,0)));
+const zn=new THREE.Mesh(new THREE.RingGeometry(39.6,40,96).rotateX(-Math.PI/2),M(0xef5b52,{m:0,r:1,t:true,o:.85,s:THREE.DoubleSide}));zn.position.y=-.27;reg('zone',lab(zn,'Опасная зона R 40 м (36 + запас)',new THREE.Vector3(0,.5,40)));
+// Мачта: pivot у низа фланца, ось +Y (м)
+const mast=new THREE.Group();reg('mast',mast);
+const R=h=>(.3-.175*h/30);
+const flange=new THREE.Group();flange.add(cyl(.425,.425,.03,zinc(),36));flange.children[0].position.y=.015;
+for(let i=0;i<8;i++){const g=new THREE.Mesh(new THREE.BoxGeometry(.12,.25,.012),zinc());const a=i/8*Math.PI*2+.2;g.position.set(Math.cos(a)*.36,.14,Math.sin(a)*.36);g.rotation.y=-a;flange.add(g)}
+reg('flange',flange,mast);
+const secG=[];let z0=0;const OV=1.0;
+SEC.forEach(([L,mkg],i)=>{const h0=z0,h1=z0+L/1000;const rb=R(h0)+.006*(5-i)*0,rt=R(h1);const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,L/1000,16,1,true),zinc());m.material.side=THREE.DoubleSide;
+const g=new THREE.Group();g.add(m);m.position.y=L/2000;g.userData.y0=h0;g.position.y=h0;
+const d=document.createElement('div');d.className='tag';d.textContent=`№${i+1} · ${L} мм`;const l=new CSS2DObject(d);l.position.set(rb+.1,L/2000+(i%2?0.8:-0.8),0);g.add(l);g.userData.lbl=l;g.userData.n='sec';
+mast.add(g);secG.push(g);z0=h1-OV});
+const TOP=z0+OV;// 30.0
+const hatch=new THREE.Mesh(new THREE.BoxGeometry(.04,1,.273),M(0x2b3035,{m:.3}));hatch.position.set(R(1)+.005,1,0);reg('hatch',lab(hatch,'Ревизионный люк, лебёдка',new THREE.Vector3(.1,.6,0)),mast);
+// Метки зоны стяжки
+const mk=new THREE.Group();secG.slice(0,5).forEach((g,i)=>{const top=g.userData.y0+SEC[i][0]/1000;[.5,.75,1].forEach(o=>{const t=new THREE.Mesh(new THREE.TorusGeometry(R(top-o)+.012,.008,6,32),M(0xf2a516,{m:0,r:.6}));t.rotation.x=Math.PI/2;t.position.y=top-o;mk.add(t)})});
+reg('marks',lab(mk,'Метки 500/750/1000 мм',new THREE.Vector3(.3,secG[0].userData.y0+5.5,0)),mast);
+// Оголовок
+const head=new THREE.Group();const hm=cyl(.235,.215,.775,zinc(),9);hm.position.y=.39;head.add(hm);head.add(at(cyl(.25,.25,.02,zinc(),9),0,.79,0));head.position.y=TOP;reg('head',lab(head,'Оголовок короны',new THREE.Vector3(.3,.6,0)),mast);
+// Спускная рама + кронштейны + прожекторы
+const crown=new THREE.Group();const ring=new THREE.Mesh(new THREE.TorusGeometry(.385,.04,6,24),zinc());ring.rotation.x=Math.PI/2;crown.add(ring);
+const lamps=new THREE.Group();const ANG=[90,90+156,90+156+192].map(a=>a*Math.PI/180);// ориентация М11 по паспорту (156°/192°/12°)
+ANG.forEach((a,i)=>{const arm=new THREE.Mesh(new THREE.BoxGeometry(.55,.05,.05),zinc());arm.position.set(Math.cos(a)*.66,0,Math.sin(a)*.66);arm.rotation.y=-a;crown.add(arm);
+const big=i>0;const lp=new THREE.Mesh(new THREE.BoxGeometry(big?.12:.1,big?.62:.48,big?.52:.4),M(0x3a4048,{m:.4,r:.5}));lp.position.set(Math.cos(a)*.98,.12,Math.sin(a)*.98);lp.rotation.y=-a;lp.rotation.z=.35;lamps.add(lp);
+const gl=new THREE.Mesh(new THREE.PlaneGeometry(big?.5:.38,big?.6:.46),new THREE.MeshBasicMaterial({color:0xfff2c4,side:THREE.DoubleSide}));gl.position.set(Math.cos(a)*1.045,.1,Math.sin(a)*1.045);gl.rotation.y=-a+Math.PI/2;lamps.add(gl)});
+const bw=new THREE.Mesh(new THREE.BoxGeometry(.12,.12,.12),M(0x555555));bw.position.set(Math.cos(ANG[0]+Math.PI)*.5,0,Math.sin(ANG[0]+Math.PI)*.5);lamps.add(bw);
+crown.add(lamps);P.lamps=lamps;lamps.userData.n='lamps';lab(lamps,'1 × L-lego 330 + 2 × L-lego 500',new THREE.Vector3(0,.6,0));
+const CROWN_UP=TOP+.2;crown.position.y=CROWN_UP;reg('crown',lab(crown,'Спускная рама (мобильная корона)',new THREE.Vector3(-.6,-.2,0)),mast);
+// Молниеприёмник МО-6,0
+const rod=new THREE.Group();[[.038,3,0],[.024,1.5,3],[.01,1.5,4.5]].forEach(([r,h,y])=>{const c=cyl(r*.8,r,h,zinc(),10);c.position.y=y+h/2;rod.add(c)});rod.position.y=TOP+.8;reg('rod',lab(rod,'Молниеприёмник МО-6,0',new THREE.Vector3(.15,5,0)),mast);
+const gy=new THREE.Group();for(let i=0;i<3;i++){const a=i/3*Math.PI*2;const p1=new THREE.Vector3(0,TOP+.8+3,0),p2=new THREE.Vector3(Math.cos(a)*.28,TOP+.8,Math.sin(a)*.28);gy.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([p1,p2]),new THREE.LineBasicMaterial({color:0xdddddd})))}reg('guys',lab(gy,'Оттяжки ×3 через талрепы',new THREE.Vector3(.3,TOP+2.5,0)),mast);
+// Тросы короны (видны при спуске)
+const cab=new THREE.Group();const cabL=[];for(let i=0;i<3;i++){const a=i/3*Math.PI*2+.5;const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(Math.cos(a)*.2,TOP+.4,Math.sin(a)*.2),new THREE.Vector3(Math.cos(a)*.38,CROWN_UP,Math.sin(a)*.38)]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xf2a516}));cab.add(l);cabL.push(l)}
+reg('cables',lab(cab,'Тросы ×3 + кабель',new THREE.Vector3(.5,TOP-2,0)),mast);
+// Козлы (мир)
+const tr=new THREE.Group();[1,5,10,15,20,25,29].forEach(x=>{const b=new THREE.Mesh(new THREE.BoxGeometry(.15,.6,1),M(0x8a6a42,{m:0,r:.9}));b.position.set(x+1.2,0,0);tr.add(b)});reg('trestle',lab(tr,'Козлы',new THREE.Vector3(6.2,.4,.6)));
+// Строповка (мир, обновляется)
+const slG=new THREE.Group();const slLine=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:0xf2a516}));slG.add(slLine);
+const hook=new THREE.Mesh(new THREE.BoxGeometry(.3,.4,.3),M(0xf2a516,{m:.2}));slG.add(hook);hook.userData.n='sling';reg('sling',slG);lab(hook,'Строповка по ППР (условно)',new THREE.Vector3(.3,0,0));
+// Теодолиты
+const th=new THREE.Group();[[30,0],[0,30]].forEach(([x,z],i)=>{const t=new THREE.Group();for(let k=0;k<3;k++){const l=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,1.6),M(0xf2a516,{m:.1}));const a=k/3*Math.PI*2;l.position.set(Math.cos(a)*.25,.5,Math.sin(a)*.25);l.rotation.set(Math.sin(a)*.3,0,-Math.cos(a)*.3);t.add(l)}
+const hd=new THREE.Mesh(new THREE.BoxGeometry(.25,.3,.2),M(0x333333));hd.position.y=1.4;t.add(hd);t.position.set(x,-.3,z);th.add(t);
+th.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,1.1,z),new THREE.Vector3(0,30,0)]),new THREE.LineDashedMaterial({color:0x4cc38a,dashSize:.6,gapSize:.4})));th.children[th.children.length-1].computeLineDistances()});
+const vt=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,36,0)]),new THREE.LineBasicMaterial({color:0x4cc38a}));th.add(vt);
+reg('theo',lab(th,'Теодолит — 2 оси, допуск ≤150 мм',new THREE.Vector3(30,2,0)));lab(vt,'Ось вертикали',new THREE.Vector3(.3,34,0));th.add(vt);
+
+const GROUND_POS=new THREE.Vector3(1.2,.6,0),UP_POS=new THREE.Vector3(0,.05,0);
+const CAMS={full:[[30,19,40],[0,16,0]],found:[[1.6,1.3,1.8],[0,0,0]],ground:[[16,9,22],[16,.5,0]],top:[[33.5,3.2,4.2],[31.2,.8,0]],theo:[[40,26,46],[8,12,8]]};
+function setCam(k){const c=CAMS[k];cam.position.set(...c[0]);oc.target.set(...c[1]);oc.update()}
+function emis(o,on){o.traverse(m=>{if(m.material&&m.material.emissive){m.material.emissive.setHex(on?0x7a4f00:0)}})}
+let T0=performance.now();
+function apply(){const s=S[cur];T0=performance.now();
+['found','anch','nuts','raised','pipe','axes','zone','mast','trestle','sling','theo'].forEach(n=>P[n].visible=s.show.includes(n));
+['crown','head','rod','guys','lamps','hatch','flange'].forEach(n=>P[n].visible=!(s.hide||[]).includes(n));
+P.marks.visible=s.show.includes('marks');P.cables.visible=s.show.includes('cables');
+// позы
+mast.rotation.set(0,0,0);if(s.st=='ground'){mast.rotation.z=-Math.PI/2;mast.position.copy(GROUND_POS)}else{mast.position.copy(UP_POS)}
+if(s.st=='none')P.mast.visible=false;
+secG.forEach((g,i)=>{g.position.y=g.userData.y0+(s.gap?i*s.gap:0)});
+crown.position.y=CROWN_UP;
+rz.children.forEach(n=>n.position.y=n.userData.base);
+// подсветка
+Object.values(P).forEach(o=>emis(o,false));secG.forEach(g=>emis(g,false));
+s.hl.forEach(n=>{if(n=='sec')secG.forEach(g=>emis(g,true));else if(P[n])emis(P[n],true)});
+// подписи
+const showL=new Set(s.hl);sc.traverse(o=>{if(o.userData.lbl){const n=o.userData.n;o.userData.lbl.visible=tags&&(showL.has(n)||(n=='sec'&&showL.has('sec')))}});
+if(P.theo.visible&&vt.userData.lbl)vt.userData.lbl.visible=tags;
+document.getElementById('note').textContent=s.note;
+if(!ren.xr.isPresenting)setCam(s.cam);}
+function ease(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+function anim(now){const s=S[cur];if(!play)return;const t=(now-T0)/1000;
+if(s.anim=='stack'){const c=(t%7)/7;const k=c<.15?0:c>.75?1:ease((c-.15)/.6);secG.forEach((g,i)=>g.position.y=g.userData.y0+i*1.6*(1-k))}
+if(s.anim=='nuts'){const k=(Math.sin(t*1.6)+1)/2;rz.children.forEach(n=>n.position.y=.017+(n.userData.base-.017)*k)}
+if(s.anim=='lift'){const c=(t%11)/11;let k=c<.12?0:c>.82?1:ease((c-.12)/.7);const lift0=c<.12?Math.min(1,c/.06)*.25:0;
+mast.rotation.z=-Math.PI/2*(1-k);mast.position.lerpVectors(GROUND_POS,UP_POS,k);mast.position.y+=lift0*(1-k);
+const sp=new THREE.Vector3(0,19,0);mast.localToWorld(sp);world.worldToLocal(sp);const hk=sp.clone().add(new THREE.Vector3(0,7,0));hook.position.copy(hk);slLine.geometry.setFromPoints([sp,hk]);P.sling.visible=c<.9}
+if(s.anim=='crown'){const c=(t%14)/14;const k=c<.1?0:c<.45?ease((c-.1)/.35):c<.55?1:c<.9?1-ease((c-.55)/.35):0;const y=CROWN_UP-(CROWN_UP-1.4)*k;crown.position.y=y;
+cabL.forEach((l,i)=>{const a=i/3*Math.PI*2+.5;l.geometry.setFromPoints([new THREE.Vector3(Math.cos(a)*.2,TOP+.4,Math.sin(a)*.2),new THREE.Vector3(Math.cos(a)*.38,y,Math.sin(a)*.38)])})}
+// пульс подсветки
+const pk=(Math.sin(now/300)+1)/2;s.hl.forEach(n=>{const o=n=='sec'?null:P[n];const arr=o?[o]:secG;arr.forEach(x=>x.traverse(m=>{if(m.material&&m.material.emissive)m.material.emissive.setRGB(.45*pk+.1,.29*pk+.06,0)}))})}
+function rs(){const w=view.clientWidth,h=view.clientHeight;ren.setSize(w,h);lr.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',rs);rs();
+/* ===== AR ===== */
+const arBtn=document.getElementById('arBtn'),arui=document.getElementById('arui');let hitSrc=null,placed=false,arScale=.02;
+const ret=new THREE.Mesh(new THREE.RingGeometry(.12,.16,32).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xf2a516}));ret.matrixAutoUpdate=false;ret.visible=false;sc.add(ret);
+let arOK=false;try{arOK=!!(navigator.xr&&await navigator.xr.isSessionSupported('immersive-ar'))}catch(e){}
+if(!arOK){arBtn.textContent='AR — Android';arBtn.disabled=true}
+function arTitle(){const s=S[cur];document.getElementById('art').innerHTML=`<b>${esc(s.t)}</b><br><small>${esc(s.note)}</small><br><small style="opacity:.7">${placed?'Касание — переставить':'Наведите на землю/стол и коснитесь экрана'}</small>`}
+arBtn.onclick=async()=>{try{const ss=await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['hit-test'],optionalFeatures:['dom-overlay'],domOverlay:{root:arui}});
+ren.xr.setReferenceSpaceType('local');await ren.xr.setSession(ss);arui.style.display='block';ground.visible=grid.visible=false;world.visible=false;placed=false;arTitle();
+hitSrc=await ss.requestHitTestSource({space:await ss.requestReferenceSpace('viewer')});
+ss.addEventListener('select',()=>{if(ret.visible){world.position.setFromMatrixPosition(ret.matrix);world.position.y+=.3*arScale;world.scale.setScalar(arScale);world.visible=true;placed=true;arTitle()}});
+ss.addEventListener('end',()=>{hitSrc=null;arui.style.display='none';world.visible=true;world.position.set(0,0,0);world.scale.setScalar(1);ground.visible=grid.visible=true;ret.visible=false;rs();setCam(S[cur].cam)})}catch(e){alertBox('AR не запустился: '+e.message)}};
+arui.querySelectorAll('[data-s]').forEach(b=>b.onclick=e=>{e.stopPropagation();arScale=+b.dataset.s;arui.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('on',x==b));if(placed){world.scale.setScalar(arScale)}});
+document.getElementById('arp').onclick=e=>{e.stopPropagation();if(cur>0){cur--;render()}arTitle()};
+document.getElementById('arn').onclick=e=>{e.stopPropagation();if(cur<S.length-1){cur++;render()}arTitle()};
+document.getElementById('arx').onclick=e=>{e.stopPropagation();ren.xr.getSession()?.end()};
+arui.addEventListener('beforexrselect',e=>{if(e.target.closest('button'))e.preventDefault()});
+ren.setAnimationLoop((now,f)=>{if(f&&hitSrc){const r=f.getHitTestResults(hitSrc);if(r.length&&!placed){ret.visible=true;ret.matrix.fromArray(r[0].getPose(ren.xr.getReferenceSpace()).transform.matrix)}else ret.visible=false}
+anim(now);if(!ren.xr.isPresenting){oc.update();ren.render(sc,cam);lr.render(sc,cam)}else ren.render(sc,cam)});
+document.getElementById('play').onclick=e=>{play=!play;e.target.textContent=play?'❚❚':'▶';e.target.classList.toggle('on',play);if(play)T0=performance.now()};
+document.getElementById('tags').onclick=e=>{tags=!tags;e.target.classList.toggle('on',tags);apply()};
+document.getElementById('fit').onclick=()=>setCam(S[cur].cam);
+
+/* ===== UI ===== */
+const nav=document.getElementById('nav'),main=document.getElementById('main');
+const done=i=>S[i].ck.every((_,j)=>(st.c[i]||[])[j]);
+function mstat(m,v){if(v===''||v==null||isNaN(+v))return['','Введите значение'];v=+v;return v>=m.min&&v<=m.max?['good',`В норме (${m.min}–${m.max} ${m.u})`]:['bad',`Вне нормы: допуск ${m.min}–${m.max} ${m.u}`]}
+function heightCalc(){let sum=0,n=0;for(let i=1;i<=5;i++){const v=st.m['j'+i];if(v!==undefined&&v!==''&&!isNaN(+v)){sum+=+v;n++}}
+if(n<5)return`Введите все 5 перекрытий — посчитаю высоту ствола. Заполнено: ${n}/5.`;const H=35000-sum;const d=H-30000;
+return`Высота ствола: <b>${H.toLocaleString('ru-RU')} мм</b> (проект 30 000, разница ${d>0?'+':''}${d} мм). Допуск вертикали 0,005H = <b>${Math.round(H*.005)} мм</b>.`}
+function render(){apply();
+nav.innerHTML=S.map((s,i)=>`<button class="${i==cur?'cur':''} ${done(i)?'done':''}" data-i="${i}">${esc(s.t)}</button>`).join('');
+nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{cur=+b.dataset.i;render();scrollTo({top:0})});
+nav.children[cur].scrollIntoView({inline:'center',block:'nearest'});
+const s=S[cur],c=st.c[cur]||[],ph=st.p[cur]||[];
+let h=`<h2>${esc(s.t)}</h2><div class="src">Основание: ${esc(s.src)}</div>`;
+h+=`<h3>Порядок действий</h3><ol>${s.do.map(d=>`<li>${esc(d)}</li>`).join('')}</ol>`;
+if(s.norm)h+=`<h3>Нормы</h3><div class="norm">${s.norm.map(([a,b])=>`<div>${esc(a)}</div><div>${esc(b)}</div>`).join('')}</div>`;
+if(s.tbl)h+=`<h3>Секции ствола (паспорт)</h3><table><tr><th>Секция</th><th>Длина, мм</th><th>Масса, кг</th></tr>${SEC.map(([l,m],i)=>`<tr><td>№${i+1}${i==0?' (фланец, люк)':i==5?' (оголовок)':''}</td><td>${l}</td><td>${m}</td></tr>`).join('')}<tr><th>Итого</th><th>35 000</th><th>1624,73</th></tr></table>`;
+if(s.figs.length)h+=`<h3>Рисунки изготовителя</h3><div class="figs">${s.figs.map(k=>`<figure data-f="${k}"><img src="${F[k][0]}" alt="${esc(F[k][1])}" loading="lazy"><figcaption>${esc(F[k][1])}</figcaption></figure>`).join('')}</div>`;
+if(s.ms){h+=`<h3>Замеры</h3>`+s.ms.map(m=>{const v=st.m[m.k]??'';const [cl,tx]=mstat(m,v);return`<div class="ms ${cl}" data-k="${m.k}"><span>${esc(m.l)}, ${m.u}</span><input inputmode="decimal" data-k="${m.k}" value="${esc(v)}" placeholder="${m.min}–${m.max}"><span class="st">${tx}</span></div>`}).join('');if(s.calc)h+=`<div class="calc" id="calc">${heightCalc()}</div>`}
+h+=`<div class="warn"><b>Безопасность.</b> ${esc(s.warn)}</div>`;
+if(s.ask.length)h+=`<div class="ask"><b>Уточнить до начала работ:</b><ul>${s.ask.map(a=>`<li>${esc(a)}</li>`).join('')}</ul></div>`;
+h+=`<h3>Контроль мастера</h3>${s.ck.map((k,j)=>`<label class="ck"><input type="checkbox" data-j="${j}" ${c[j]?'checked':''}><span>${esc(k)}</span></label>`).join('')}`;
+h+=`<h3>Фото и замечания</h3><button id="camb" style="width:100%">📷 Сделать фото</button><input type="file" accept="image/*" capture="environment" id="cam" hidden><div class="photos">${ph.map(p=>`<img src="${p}" alt="фото">`).join('')}</div><textarea id="nt" placeholder="Замечания, фактические значения">${esc(st.n[cur]||'')}</textarea>`;
+main.innerHTML=h;
+main.querySelectorAll('input[type=checkbox]').forEach(x=>x.onchange=()=>{(st.c[cur]=st.c[cur]||[])[x.dataset.j]=x.checked;prog();nav.children[cur].classList.toggle('done',done(cur))});
+main.querySelectorAll('.ms input').forEach(x=>x.oninput=()=>{const v=x.value.replace(',','.');st.m[x.dataset.k]=v;const m=s.ms.find(q=>q.k==x.dataset.k);const [cl,tx]=mstat(m,v);const box=x.parentElement;box.className='ms '+cl;box.querySelector('.st').textContent=tx;const cc=document.getElementById('calc');if(cc)cc.innerHTML=heightCalc()});
+main.querySelectorAll('figure').forEach(f=>f.onclick=()=>{const [src,cap]=F[f.dataset.f];document.getElementById('lbi').src=src;document.getElementById('lbc').textContent=cap;document.getElementById('lb').style.display='flex'});
+document.getElementById('camb').onclick=()=>document.getElementById('cam').click();
+document.getElementById('cam').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const k=Math.min(1,800/im.width),cv=document.createElement('canvas');cv.width=im.width*k;cv.height=im.height*k;cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);(st.p[cur]=st.p[cur]||[]).push(cv.toDataURL('image/jpeg',.65));render()};im.src=URL.createObjectURL(f)};
+document.getElementById('nt').oninput=e=>{st.n[cur]=e.target.value};
+document.getElementById('pv').disabled=cur==0;document.getElementById('nx').textContent=cur==S.length-1?'Сформировать отчёт':'Далее →';prog()}
+function prog(){let a=0,b=0;S.forEach((s,i)=>s.ck.forEach((_,j)=>{b++;if((st.c[i]||[])[j])a++}));document.getElementById('pg').style.width=a/b*100+'%'}
+document.getElementById('pv').onclick=()=>{if(cur>0){cur--;render();scrollTo({top:0})}};
+document.getElementById('nx').onclick=()=>{if(cur<S.length-1){cur++;render();scrollTo({top:0})}else report()};
+document.getElementById('lbx').onclick=document.getElementById('lb').onclick=e=>{if(e.target.tagName!='IMG')document.getElementById('lb').style.display='none'};
+function alertBox(t){const sh=document.getElementById('sheet');document.getElementById('sheetc').innerHTML=`<p>${esc(t)}</p><button id="shx">Закрыть</button>`;sh.style.display='block';document.getElementById('shx').onclick=()=>sh.style.display='none'}
+document.getElementById('pass').onclick=()=>{const sh=document.getElementById('sheet');document.getElementById('sheetc').innerHTML=`<h2>Паспорт мачты М11</h2><div class="src">МГФ-30-М(250)-III-3-МО-6-ц · ООО ПО «Парк Металл» · ГНТ.61.2024.01-11.01.00.ЭН</div>
+<table>${[['Высота','36 м с МО-6,0; прожекторы на 30 м'],['Масса мачты','1900 кг'],['Нагрузка на корону','≤ 200 кг'],['Материал / покрытие','09Г2С; гор. цинк 80–200 мкм'],['Ветровой район','III, 38 кгс/м²'],['Нагрузки на фундамент','N 1,9 т; Q 1,4 т; M 27,3 т·м (±10 %)'],['Крепление','18 шпилек M30-6g; фланец Ø850, отв. Ø740 / 18 × Ø35'],['Ввод кабеля','1 × ПНД D63; коробка IP54 (7 вводов)'],['Прожекторы (ЭН.05)','1 × L-lego II 330 + 2 × L-lego II 500'],['Молниеприёмник / оголовок / рама','36,29 / 34,72 / 21,51 кг'],['Редуктор-лебёдка','40,39 кг']].map(([a,b])=>`<tr><th>${a}</th><td>${b}</td></tr>`).join('')}</table>
+<h3>Моменты затяжки (табл. 1 инструкции), кгс·м</h3><table><tr>${['М14','М16','М20','М24','М30'].map(x=>`<th>${x}</th>`).join('')}</tr><tr>${['4,2','6,7','13,1','22,75','45,5'].map(x=>`<td>${x}</td>`).join('')}</tr></table>
+<h3>Секции</h3><table><tr><th>№</th><th>Длина, мм</th><th>Масса, кг</th></tr>${SEC.map(([l,m],i)=>`<tr><td>${i+1}</td><td>${l}</td><td>${m}</td></tr>`).join('')}</table>
+<h3>Ограничения модели</h3><p style="color:var(--mu)">Диаметры ствола, фундамент и точка строповки показаны условно: раздел КЖ и ППР не переданы. Данные приложения хранятся только до закрытия страницы — сохраняйте отчёт.</p><button id="shx" style="width:100%">Закрыть</button>`;sh.style.display='block';sh.scrollTop=0;document.getElementById('shx').onclick=()=>sh.style.display='none'};
+function report(){const d=new Date().toLocaleString('ru-RU');let h=`<!doctype html><meta charset="utf-8"><title>Отчёт М11</title><style>body{font:14px Arial;max-width:900px;margin:20px auto}h2{font-size:16px;margin-top:22px}.ok{color:#178a50}.no{color:#c23}</style><h1>Отчёт мастера: монтаж мачты М11</h1><p>МГФ-30-М(250)-III-3-МО-6-ц, Сокурская нефтебаза. Сформирован: ${d}</p>`;
+S.forEach((s,i)=>{h+=`<h2>${esc(s.t)} — <span class="${done(i)?'ok':'no'}">${done(i)?'выполнено':'не завершено'}</span></h2><ul>${s.ck.map((k,j)=>`<li>${(st.c[i]||[])[j]?'✔':'✘'} ${esc(k)}</li>`).join('')}</ul>`;
+if(s.ms){h+='<ul>'+s.ms.map(m=>{const v=st.m[m.k];const [cl,tx]=mstat(m,v);return`<li>${esc(m.l)}: <b>${v?esc(v)+' '+m.u:'—'}</b> ${v?`<span class="${cl=='good'?'ok':'no'}">${tx}</span>`:''}</li>`}).join('')+'</ul>';if(s.calc)h+=`<p>${heightCalc()}</p>`}
+if(st.n[i])h+=`<p>Замечания: ${esc(st.n[i])}</p>`;h+=(st.p[i]||[]).map(p=>`<img src="${p}" width="240">`).join(' ')});
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download='otchet_M11_'+new Date().toISOString().slice(0,10)+'.html';document.body.appendChild(a);a.click();a.remove()}
+document.getElementById('rep').onclick=report;
+render();
+</script><script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  const DEFAULT_LINE_HEIGHT = 16;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  const PICK_CAPABILITIES = ["pick"];
+  const PICK_CHAIN_LENGTH = 4;
+  const PICK_MAX_TEXT_CHARS = 120;
+  const PICK_MAX_HTML_CHARS = 300;
+
+  function truncate(value, maxChars) {
+    return value.length > maxChars ? value.slice(0, maxChars - 1) + "…" : value;
+  }
+
+  function isPickableElement(element) {
+    return (
+      element instanceof Element &&
+      element !== document.documentElement &&
+      element !== document.body
+    );
+  }
+
+  function resolvePickTarget(x, y) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+    const element = document.elementFromPoint(x, y);
+    return isPickableElement(element) ? element.closest("svg") || element : null;
+  }
+
+  function pickLabel(element) {
+    if (element.id) return element.localName + "#" + element.id;
+    return [element.localName].concat(Array.from(element.classList).slice(0, 2)).join(".");
+  }
+
+  // Only attributes that help find the element in source. data-* values and URL
+  // query strings or fragments can carry tokens.
+  const PICK_ATTRIBUTES = new Set([
+    "id",
+    "class",
+    "name",
+    "type",
+    "role",
+    "alt",
+    "aria-label",
+    "href",
+    "src",
+  ]);
+
+  function pickAttributeValue(attribute) {
+    return attribute.name === "href" || attribute.name === "src"
+      ? attribute.value.split(/[?#]/)[0]
+      : attribute.value;
+  }
+
+  function describePickElement(element) {
+    const chain = [];
+    for (
+      let current = element;
+      isPickableElement(current) && chain.length < PICK_CHAIN_LENGTH;
+      current = current.parentElement
+    ) {
+      chain.unshift(current);
+    }
+    const attributes = Array.from(element.attributes)
+      .filter((attribute) => PICK_ATTRIBUTES.has(attribute.name))
+      .map((attribute) => ` ${attribute.name}="${pickAttributeValue(attribute).replace(/"/g, "&quot;")}"`)
+      .join("");
+    const text = (element.innerText || element.textContent || "").replace(/\s+/g, " ").trim();
+    return {
+      chain: chain.map(pickLabel),
+      html: truncate(`<${element.localName}${attributes}>`, PICK_MAX_HTML_CHARS),
+      text: text ? truncate(text, PICK_MAX_TEXT_CHARS) : undefined,
+    };
+  }
+
+  // Hover asks once per frame, and innerText on a large section forces layout,
+  // so only the rect is re-read while the pointer stays on the same element.
+  // Clicks ask for fresh details since the page may have changed the element.
+  let lastPick = null;
+
+  function describePickTarget(element, fresh) {
+    if (fresh || lastPick?.element !== element) {
+      lastPick = { element, details: describePickElement(element) };
+    }
+    const rect = element.getBoundingClientRect();
+    return {
+      rect: { x: rect.left, y: rect.top, width: rect.width, height: rect.height },
+      ...lastPick.details,
+    };
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      capabilities: PICK_CAPABILITIES,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_PICK") {
+      const element = resolvePickTarget(event.data.x, event.data.y);
+      postToTrustedTop({
+        type: "INLINE_EDIT_PICK_RESULT",
+        seq: event.data.seq,
+        target: element ? describePickTarget(element, event.data.fresh === true) : null,
+      });
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_BY") {
+      const { deltaX, deltaY, deltaMode } = event.data;
+      if (!scrollForwarding || !Number.isFinite(deltaX) || !Number.isFinite(deltaY)) return;
+      if (deltaMode !== 0 && deltaMode !== 1 && deltaMode !== 2) return;
+      const lineHeight =
+        parseFloat(getComputedStyle(document.documentElement).lineHeight) || DEFAULT_LINE_HEIGHT;
+      const scaleX = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerWidth : 1;
+      const scaleY = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerHeight : 1;
+      // The selection overlay receives the wheel event instead of this iframe.
+      // Instant scrolling preserves trackpad deltas even on smooth-scroll sites.
+      window.scrollBy({ left: deltaX * scaleX, top: deltaY * scaleY, behavior: "instant" });
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body></html>

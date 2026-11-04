@@ -1,0 +1,65 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Руководство мастера: площадки УЗА-1, УЗА-2, УЗА-3, УЗА-4 · КМ/КМД</title><style>
+:root{--bg:#121417;--sf:#1c2024;--sf2:#252a2f;--ln:#343b42;--tx:#eceef0;--mu:#99a2ab;--ac:#f2a516;--ok:#4cc38a;--er:#ef5b52}
+*{box-sizing:border-box}html,body{margin:0}body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:96px}
+header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--bg);z-index:5}
+header .t{flex:1;min-width:0}header b{display:block;font-size:15px}header small{color:var(--mu);font-size:12px}
+.ib{min-height:38px;padding:6px 10px;font-size:13px}
+#view{position:relative;height:48vh;min-height:300px;max-height:560px;background:radial-gradient(ellipse at 50% 30%,#1d2329,#0b0d0f);overflow:hidden;touch-action:none}
+#view canvas{display:block}
+#lbl{position:absolute;inset:0;pointer-events:none}
+.tag{background:#000c;border:1px solid var(--ac);color:var(--tx);font-size:11px;padding:2px 6px;border-radius:5px;white-space:nowrap;transform:translateY(-14px)}
+.ovl{position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:6px;flex-wrap:nowrap;z-index:2}.ovl button{min-height:38px;padding:6px 10px;font-size:13px;flex:0 0 auto}
+#note{position:absolute;top:8px;left:8px;right:8px;background:#000b;padding:6px 9px;border-radius:7px;font-size:12px;color:var(--mu);z-index:2}
+button{font:inherit;border:1px solid var(--ln);background:var(--sf);color:var(--tx);border-radius:10px;padding:10px 14px;min-height:44px;cursor:pointer}
+button.pri{background:var(--ac);color:#111;border-color:var(--ac);font-weight:600}
+button.on{border-color:var(--ac);color:var(--ac)}
+button:disabled{color:#5d656d;background:var(--sf);border-color:var(--ln);cursor:default}
+nav#nav{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid var(--ln);scrollbar-width:none}
+nav#nav button{flex:0 0 auto;padding:6px 11px;min-height:36px;font-size:13px}
+nav#nav button.cur{border-color:var(--ac);color:var(--ac)}nav#nav button.done{background:#173326;border-color:var(--ok)}
+main{padding:14px;max-width:780px;margin:auto}
+h2{font-size:19px;margin:0 0 2px}.src{color:var(--mu);font-size:12px;margin-bottom:10px}
+h3{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:18px 0 6px}
+ol{padding-left:22px;margin:0}li{margin:5px 0}
+.norm{display:grid;grid-template-columns:1fr auto;gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:10px;overflow:hidden}
+.norm div{background:var(--sf);padding:8px 10px}.norm div:nth-child(2n){font-weight:600;color:var(--ac);text-align:right;font-variant-numeric:tabular-nums}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--ln);border-radius:10px;margin:6px 0;background:var(--sf);cursor:pointer}
+label.ck input{width:22px;height:22px;flex:0 0 auto;accent-color:var(--ok);margin:0}
+.ms{display:grid;grid-template-columns:1fr 96px;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--ln);border-radius:10px;margin:6px 0;background:var(--sf)}
+.ms input{width:100%;font:inherit;font-size:16px;padding:8px;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px;text-align:right}
+.ms .st{grid-column:1/-1;font-size:12px;color:var(--mu)}.ms.good{border-color:var(--ok)}.ms.bad{border-color:var(--er)}.ms.good .st{color:var(--ok)}.ms.bad .st{color:var(--er)}
+.calc{padding:10px;border-radius:10px;background:var(--sf2);margin-top:6px;font-size:14px}
+.warn{border-left:4px solid var(--er);background:#2b1c1c;padding:10px 12px;border-radius:6px;margin-top:8px}
+.ask{border-left:4px solid var(--ac);background:#2a2416;padding:10px 12px;border-radius:6px;margin-top:8px}
+.ask ul,.warn ul{margin:4px 0 0;padding-left:18px}
+.figs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.figs figure{margin:0;flex:0 0 150px;background:#fff;border-radius:8px;overflow:hidden;cursor:zoom-in}
+.figs img{width:150px;height:110px;object-fit:contain;display:block}
+.figs figcaption{background:var(--sf);color:var(--mu);font-size:11px;padding:4px 6px;line-height:1.3}
+.photos{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.photos img{width:72px;height:72px;object-fit:cover;border-radius:6px}
+textarea{width:100%;min-height:64px;background:var(--sf);color:var(--tx);border:1px solid var(--ln);border-radius:10px;padding:10px;font:inherit;margin-top:6px}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#121417f2;border-top:1px solid var(--ln);z-index:6}
+.bar button{flex:1}
+.prog{height:4px;background:var(--ln)}.prog i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+#lb,#sheet{position:fixed;inset:0;background:#000e;z-index:20;display:none;overflow:auto}
+#lb{align-items:center;justify-content:center;flex-direction:column;padding:12px}
+#lb img{max-width:100%;max-height:82vh;background:#fff;border-radius:6px}#lb p{color:var(--tx);font-size:13px;text-align:center}
+#sheet .in{max-width:780px;margin:auto;padding:16px;background:var(--bg);min-height:100%}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}td,th{border:1px solid var(--ln);padding:6px 8px;text-align:left}th{background:var(--sf2);font-weight:600}
+
+.seg{display:flex;gap:6px;padding:8px 14px;border-bottom:1px solid var(--ln);background:var(--bg)}
+.seg button{flex:1;min-height:40px;padding:6px 8px;font-size:14px}.seg button.cur{background:var(--ac);color:#111;border-color:var(--ac);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:4px 8px;font-size:12px;font-variant-numeric:tabular-nums}.chip b{color:var(--ac);font-weight:600}.chip i{color:var(--mu);font-style:normal}
+.tag{position:absolute;left:0;top:0;pointer-events:none;will-change:transform}
+.cap{color:var(--mu);font-size:12px;margin-top:6px}
+</style></head><body>
+<header><div class="t"><b id="ttl">Площадка УЗА-2</b><small>Сокурская нефтебаза · руководство мастера по монтажу КМ/КМД</small></div><button class="ib" id="pass">Ведомость</button><button class="ib" id="rep">Отчёт</button></header>
+<div class="seg" id="seg"><button data-u="1">УЗА-1</button><button data-u="2">УЗА-2</button><button data-u="3">УЗА-3</button><button data-u="4">УЗА-4</button></div>
+<div class="prog"><i id="pg"></i></div>
+<div id="view"><div id="note"></div><div id="lbl"></div><div class="ovl"><button id="play" class="on">❚❚</button><button id="tags" class="on">Подписи</button><button id="fit">Вид</button></div></div>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div class="bar"><button id="pv">← Назад</button><button class="pri" id="nx">Далее →</button></div>
+<div id="lb"><img id="lbi" alt=""><p id="lbc"></p><button id="lbx">Закрыть</button></div>
+<div id="sheet"><div class="in" id="sheetc"></div></div>
+<script src="bundle.js"></script></body></html>
