@@ -1036,8 +1036,8 @@ function sumView(){
 }
 /* ---------- «Тех.карты» ---------- */
 const TECH_FOLDER='1Q54dZJ_CcmIlX6k92SU1IufSif-PGFC8';  // папка на Диске с исходными файлами
-const TECH=[['tech/m11/index.html','🗼','AR-инструкция: мачта М11 · МГФ-30','Монтаж мачты, пошаговая инструкция с чертежами'],
- ['tech/uza/index.html','🏗','Руководство мастера: УЗА-1, УЗА-2, УЗА-3, УЗА-4','Площадки, КМ/КМД, узлы, разрезы, стоек']];
+const TECH=[['tech/m11/index.html?v=7','🗼','AR-инструкция: мачта М11 · МГФ-30','Монтаж мачты, пошаговая инструкция с чертежами'],
+ ['tech/uza/index.html?v=7','🏗','Руководство мастера: УЗА-1, УЗА-2, УЗА-3, УЗА-4','Площадки, КМ/КМД, узлы, разрезы, стоек']];
 function openTech(i){
  const t=TECH[i];let d=$('#rd');if(!d){d=document.createElement('div');d.id='rd';document.body.appendChild(d)}
  d.innerHTML=`<div class="rdh"><b>${esc(t[2])}</b><a href="${t[0]}" target="_blank" rel="noopener">В отдельном окне ↗</a><button onclick="closeRD()">✕</button></div><iframe src="${t[0]}"></iframe>`;
