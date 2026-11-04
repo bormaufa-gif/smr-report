@@ -162,30 +162,70 @@ const kjGroups=c=>{const k=Object.keys(KJN).find(x=>(c||'').includes(x));return 
 const hasMarks=w=>markOf(w.c)==='КЖ'&&w.s&&w.s!==OTHER;
 const mk=w=>(w.nm||[]).map(x=>(x.v||'').trim()).filter(Boolean).join(', ');
 const P_='ГНТ.61.2024.01-';
-const RDF={  // шифр -> [id файла на Google Диске, изменение]
- [P_+'11.01.100.КЖ']:['14mDFfw1I8FnNrpfgwVbobbLp8dwmYfNM','Изм. 4'],
- [P_+'11.01.100.ТХ']:['1bsDXwZDf86Yxt5ceXHfx1TH3XnEJGylb','Изм. 4'],
- [P_+'11.01.100.НК']:['1EI-zL9vYYcEMRYvLLNk0toIKvc_S19eF','Изм. 2'],
- [P_+'11.01.00.КЖ']:['1gji2XfM8_Ni9MidNDzKcScHE0wROwzRm','Изм. 3'],
+const RDF={  // шифр -> [id файла на Google Диске, изменение]; все файлы лежат в папке «02_РД» (доступ по ссылке)
+ [P_+'11.01.00.ГП']:['1dMA0Nlxs58BtOUHPyvntMURqmUUCCjXW','Изм. 4'],
+ [P_+'11.01.00.ПОД']:['1c0aTzfSPVnTYrTgGMy37S3pB3S6N5ZhO','Изм. 2'],
+ [P_+'11.01.00.ТХ']:['13tNJFCRMU0pZg61Y6TCAkMxa-DL060Ho',''],
+ [P_+'11.01.00.НВ']:['1E_6Fuq_s1g6zS7ODmn188I4nt9ufRoPe','Изм. 2'],
+ [P_+'11.01.00.НВ1']:['1NLbF-NAoJZZhpiB4VUvHU6DfXYowyHpl','Изм. 3'],
+ [P_+'11.01.00.НК']:['1LrxAku3u6zIdTcXjreiWFw0KWLWvsQjI','Изм. 2'],
  [P_+'11.01.00.ЭС']:['1BWkjQUR2vLHqOdF2HC9qVkDNnqxw_7pE','Изм. 3'],
- [P_+'11.01.00.НВ1']:['11CK3KE_8zfXKXwJUIrQ475Lg8FpM-PLE','Изм. 2'],
+ [P_+'11.01.00.ЭН']:['1_M-2BrBUnRyFp-gUcl5DTUv0XMr7GnqP','Изм. 3'],
+ [P_+'11.01.00.ЭГ']:['1-7OIPpyeaOD6Zie0_6_3Nv_UW0Xnpa4w','Изм. 2'],
+ [P_+'11.01.00.ПС']:['1I238RBpueyrc6ycd3Z22RkXlkn0DvF4S','Изм. 2'],
+ [P_+'11.01.00.СС']:['1U8_mF0uDaPBrgV89vCtfWjaHLeMQ2T5S','Изм. 3'],
+ [P_+'11.01.00.КЖ']:['1gji2XfM8_Ni9MidNDzKcScHE0wROwzRm','Изм. 3'],
+ [P_+'11.01.00.КМ']:['12msTbrmrK2j_svxS_33-mB7M4qiQnhfY','Изм. 2'],
+ [P_+'11.01.00.АК']:['1AK-kacdvq9qcWTdlEfurEL3uvSj6sNRj','Изм. 5'],
+ [P_+'11.01.00.ОГ']:['1Svl3in9Mqk8fi424F8dZRayRcMhOuH3v','Изм. 2'],
+ [P_+'10.02.4.ПТ']:['1G0C1XCd6aO1rKt4V0ls6md9BsnpXW8P8','Изм. 2'],
+ [P_+'10.02.4.АТХ']:['1gINknm-FL5eSYp4LdhLQhNR2yR7uVIJD','Изм. 4'],
  [P_+'10.02.4.КЖ']:['1X71rtPAyGMY3vsqy3Ufrx_RWj_O5EXWa','Изм. 4'],
+ [P_+'10.02.4.КМ']:['1TEKh7NhkEiAxBYpZN5areFALX9S72-SU','Изм. 1'],
+ [P_+'10.02.4.НК']:['19HD0NLCBG9ubUo3okGp5ITSVqcGZ_s0H',''],
+ [P_+'10.02.4.ПС']:['1s2SK1nRlxXdYHfL0Zu49_FqWJdr1XqHP','Изм. 1'],
+ [P_+'10.02.4.СС']:['15xxw11WFBwfihNtOPFpb8FPDyD8CPtDK','Изм. 1'],
  [P_+'10.02.4.ТХ']:['1oZSrf8At599mEE_x4lzPhvLluCjQUlrk','Изм. 3'],
+ [P_+'10.02.4.ЭГ']:['19j2HaPsBMpXglyF61JfGM7yajLkUjWKB',''],
+ [P_+'06.01.5.ПТ']:['1qICNK004chO0b2ZAF_zr8kL6n50L8z5N',''],
+ [P_+'06.01.5.КМ']:['1S5fY7k4q0gDzmln7tfnmTbLiJOggHs4v',''],
+ [P_+'11.06.15.КЖ']:['1VKnPPr7kS_o-i83jnuaeTnhbFvDn6Gv0','Изм. 1'],
+ [P_+'11.09.16.АНК']:['1EuRX_DRO15aLV7RqCia6Zxs1FVT1SeKB','Изм. 3'],
+ [P_+'11.09.16.НК']:['1p_MLaowa4TBy0HtkIn4sORGyuS-lkMSm','Изм. 1'],
+ [P_+'11.09.16.КЖ']:['1Zn_5afCG2jJQIvXv6bpp7XsAD8QP09XR','Изм. 2'],
+ [P_+'05.04.18.ПТ']:['13x5Z5einwKmGWYlA_5qXsb94eTokTDz2','Изм. 2'],
+ [P_+'05.04.18.АК']:['1PXWlFwALwpLCUYY3sOtou5shisahbCkW','Изм. 1'],
+ [P_+'05.04.18.КЖ']:['1yl7K4Yx0KsCW7mBY9_ApWbqVsLDig7F_','Изм. 3'],
+ [P_+'07.01.22.ПТ']:['1RJb2jczcd170yvWCKZzCOKngejhjCDct','Изм. 2'],
+ [P_+'07.01.22.КМ']:['1bRKVB2uX56s-svj-byJwoukIZZ_yTxNQ',''],
+ [P_+'07.01.22.ЭМ']:['1Ie7eqeix5zhMDGEuxwWYYr419fWrK2aY',''],
+ [P_+'05.02.23.АР']:['1Joju7ez_f7z6U2jHylzR9I2EJ33OhQyY',''],
  [P_+'05.02.23.КЖ']:['1wGcmrlAcPEW93cHCNH2Yr8Nysa_LgHTr','Изм. 1'],
  [P_+'05.02.23.ЭМ']:['1tTq7-8IyjrxNXp8OV2ALwcEYK6om2daq','Изм. 1'],
- [P_+'11.09.16.КЖ']:['1Zn_5afCG2jJQIvXv6bpp7XsAD8QP09XR','Изм. 2'],
- [P_+'05.04.18.КЖ']:['1yl7K4Yx0KsCW7mBY9_ApWbqVsLDig7F_','Изм. 3'],
+ [P_+'05.02.23.ВК']:['1H-xlRcsVFlzUKZSUMrA0qIqa9UkatflX','Изм. 2'],
+ [P_+'03.02.36.АР']:['11TkNjyHWMotC4VNKZy15ywSfHXqleuX2',''],
  [P_+'03.02.36.КЖ']:['1yXKu_bN-_mtasRd30d0SGfsio4_J7R5j','Изм. 1'],
+ [P_+'01.09.55.АР']:['1Wo4O7GlFMBjfiZHbRW3QEojat1fR6e-0','Изм. 1'],
+ [P_+'01.09.55.НК']:['1qk-942QCRQXwhJK-KLpgU56A3iDXLdjw','Изм. 1'],
  [P_+'01.09.55.КЖ']:['1fWvWt0biMMmbM78nY60_h57OCogcRUTX','Изм. 3'],
- [P_+'11.06.15.КЖ']:['1VKnPPr7kS_o-i83jnuaeTnhbFvDn6Gv0','Изм. 1']
+ [P_+'11.01.100.КЖ']:['14mDFfw1I8FnNrpfgwVbobbLp8dwmYfNM','Изм. 4'],
+ [P_+'11.01.100.ТХ']:['1bsDXwZDf86Yxt5ceXHfx1TH3XnEJGylb','Изм. 4'],
+ [P_+'11.01.100.НК']:['1EI-zL9vYYcEMRYvLLNk0toIKvc_S19eF','Изм. 2']
 };
-const driveSearch=c=>'https://drive.google.com/drive/search?q='+encodeURIComponent(c);
+const RDD={  // нет отдельного PDF — открываем папку объекта
+ [P_+'10.02.4.КМ1']:'1WHNCaa0WuR6KBvVXzFqsX7TbiACU26uO',
+ [P_+'11.01.100.КМ']:'1OdTsvTg0qoUalr8pTTSYJieaTPLLmZK9'
+};
+const RD_ROOT='1AjRAvEGdR8ttfV9zECoOkhFXEL6BsYjG';  // папка «02_РД»
+const rdLbl=f=>f[1]?'('+f[1]+')':'';
 let RDcur='';
 function openRD(c){
- const f=RDF[c];
- if(!f){window.open(driveSearch(c),'_blank','noopener');return}
+ const f=RDF[c],fo=RDD[c]||RD_ROOT;
  let d=$('#rd');if(!d){d=document.createElement('div');d.id='rd';document.body.appendChild(d)}
- d.innerHTML=`<div class="rdh"><b>${esc(c.replace(P_,''))} · ${esc(f[1])}</b><a href="https://drive.google.com/file/d/${f[0]}/view" target="_blank" rel="noopener">Открыть в Диске ↗</a><button onclick="closeRD()">✕</button></div><iframe src="https://drive.google.com/file/d/${f[0]}/preview" allow="autoplay"></iframe>`;
+ const t=esc(c.replace(P_,''));
+ d.innerHTML=f
+  ?`<div class="rdh"><b>${t}${f[1]?' · '+esc(f[1]):''}</b><a href="https://drive.google.com/file/d/${f[0]}/view" target="_blank" rel="noopener">Открыть в Диске ↗</a><button onclick="closeRD()">✕</button></div><iframe src="https://drive.google.com/file/d/${f[0]}/preview" allow="autoplay"></iframe>`
+  :`<div class="rdh"><b>${t} · папка РД</b><a href="https://drive.google.com/drive/folders/${fo}" target="_blank" rel="noopener">Открыть в Диске ↗</a><button onclick="closeRD()">✕</button></div><iframe src="https://drive.google.com/embeddedfolderview?id=${fo}#list"></iframe>`;
  document.body.classList.add('rdopen');RDcur=c;
 }
 function closeRD(){const d=$('#rd');if(d)d.remove();document.body.classList.remove('rdopen');RDcur=''}
@@ -277,7 +317,7 @@ function cipherSelect(i,val){
  let h=`<select onchange="pickCipher(${i},this.value)"><option value="">— выберите шифр РД —</option>`;
  for(const [g] of GROUPS)h+=`<optgroup label="${esc(g)}">`+CIPHERS.filter(c=>c.g===g).map(c=>`<option value="${esc(c.v)}" ${c.v===val?'selected':''}>${esc(c.l)}</option>`).join('')+`</optgroup>`;
 h+=`<option value="${OTHER}" ${other?'selected':''}>Другое (ввести вручную)</option></select>`;
- if(val&&known)h+=RDF[val]?`<button class="rdbtn" onclick="openRD(${JSON.stringify(val).replace(/"/g,'&quot;')})">📄 Открыть РД (${esc(RDF[val][1])})</button>`:`<button class="rdbtn" onclick="openRD(${JSON.stringify(val).replace(/"/g,'&quot;')})">🔍 Найти РД на Диске</button>`;
+ if(val&&known)h+=`<button class="rdbtn" onclick="openRD(${JSON.stringify(val).replace(/"/g,'&quot;')})">${RDF[val]?'📄 Открыть РД '+esc(rdLbl(RDF[val])):'📁 Открыть папку РД'}</button>`;
  h+=`<input placeholder="Шифр вручную" style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(val):''}" oninput="R.works[${i}].c=this.value;save()">`;
  return h;
 }
