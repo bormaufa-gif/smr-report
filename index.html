@@ -335,7 +335,9 @@ if(!Array.isArray(cfg.lineList)||!cfg.lineList.length||cfg.lineList.join('|')===
 if(!Array.isArray(cfg.techList)||!cfg.techList.length)cfg.techList=DEF_TECH.slice();
 if(!cfg.techV){if(cfg.techList.join('|')===OLD_TECH.join('|'))cfg.techList=DEF_TECH.slice();else DEF_TECH.forEach(x=>{if(!cfg.techList.includes(x))cfg.techList.push(x)});cfg.techV=1;ls.set('cfg',cfg)}
 if(!Array.isArray(cfg.list)||!cfg.list.length)cfg.list=DEF_RESP.slice();
-{const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m){cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
+const IS_PWA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches));   // запущено с экрана «Домой»
+{const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m&&m[1].toUpperCase()!==cfg.key){cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);if(IS_PWA)history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
+if(!IS_PWA&&/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(cfg.key||'')&&!/code=/.test(location.hash))history.replaceState(null,'',location.pathname+location.search+'#code='+cfg.key);   // iPhone: иконка «На экран Домой» хранит данные отдельно — передаём ей код через адрес
 const ROLE_RU={master:'мастер',lead:'руководитель',admin:'администратор'};
 const myRole=()=>cfg.who&&!cfg.who.legacy?cfg.who.role:'';     // роль по личному коду (сервер): master | lead | admin
 const isLeadUser=()=>myRole()==='lead'||myRole()==='admin';
