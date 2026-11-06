@@ -995,6 +995,54 @@ async function loadSum(manual){
 function leadLogin(){const v=($('#lkIn').value||'').trim();if(!v){toast('Введите пароль руководителя');return}cfg.lk=v;ls.set('cfg',cfg);SUM=null;loadSum(true)}
 function leadLogout(){cfg.lk='';ls.set('cfg',cfg);SUM=null;ls.set('sum',null);sumOpen=''}
 const num=v=>{const x=parseFloat(String(v??'').replace(',','.'));return isNaN(x)?0:x};
+/* ---------- расстановка бригад: план (задаёт руководитель) и факт (из ежедневных отчётов мастеров) ---------- */
+// план хранится на устройстве руководителя: cfg.crewPlan[дата] = [{m: мастер, n: рабочих, site: участок}]; на дату без плана берётся ближайший прошлый
+// факт сервер отдаёт в сводке как s.crews = [{who: мастер, people: «Персонал, чел.» из отчёта, ppl: [отмеченные по фото]}]
+let crewEd=0;
+const nkey=x=>String(x||'').toLowerCase().replace(/ё/g,'е').replace(/[^а-яa-z]/g,'');
+function crewPlan(d){const P=cfg.crewPlan||{};if(P[d])return{rows:P[d],from:d};const k=Object.keys(P).filter(x=>x<d).sort().pop();return k?{rows:P[k],from:k}:{rows:[],from:''}}
+function crewRows(){cfg.crewPlan=cfg.crewPlan||{};if(!cfg.crewPlan[sumDate])cfg.crewPlan[sumDate]=crewPlan(sumDate).rows.map(r=>({m:r.m,n:r.n,site:r.site||''}));return cfg.crewPlan[sumDate]}
+function crewSet(i,k,v){crewRows()[i][k]=k==='n'?Math.max(0,parseInt(v)||0):v;ls.set('cfg',cfg)}
+function crewAdd(){crewRows().push({m:'',n:0,site:''});ls.set('cfg',cfg);crewEd=1;sumView()}
+function crewDel(i){crewRows().splice(i,1);ls.set('cfg',cfg);sumView()}
+function crewEdit(){crewRows();crewEd=1;sumView()}
+function crewDone(){cfg.crewPlan[sumDate]=crewRows().filter(r=>(r.m||'').trim()).map(r=>({m:r.m.trim(),n:r.n,site:(r.site||'').trim()}));ls.set('cfg',cfg);crewEd=0;sumView()}
+function crewFact(s,m){                       // null — сервер не отдаёт численность; иначе число из отчёта мастера (0 — отчёта нет)
+ if(!Array.isArray(s.crews))return null;
+ const c=s.crews.find(x=>nkey(x.who)===nkey(m));
+ return c?(num(c.people)||(c.ppl||[]).length):0;
+}
+function crewTile(s){
+ const rows=crewEd?crewRows():crewPlan(sumDate).rows,pl=crewPlan(sumDate);
+ const names=[...new Set([...(cfg.list||[]),...(cfg.meList||[])])];
+ let body='';
+ if(crewEd){
+  body=`<datalist id="crl">${names.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`
+   +rows.map((r,i)=>`<div style="display:flex;gap:6px;align-items:center;margin:6px 0"><input list="crl" placeholder="Мастер" value="${esc(r.m)}" oninput="crewSet(${i},'m',this.value)" style="flex:1;min-width:0"><input type="number" inputmode="numeric" min="0" placeholder="чел." value="${r.n||''}" oninput="crewSet(${i},'n',this.value)" style="width:70px"><button onclick="crewDel(${i})" style="border:0;background:#fadcdc;color:#a42424;border-radius:8px;width:34px;height:34px;min-height:0;padding:0;flex:none">×</button></div>
+   <input placeholder="Участок / объект (необязательно)" value="${esc(r.site||'')}" oninput="crewSet(${i},'site',this.value)" style="width:100%;margin-bottom:4px">`).join('')
+   +`<div class="sub">${rows.length?'':'Добавьте мастеров и укажите, сколько рабочих в подчинении у каждого. '}План действует на ${sumDate.split('-').reverse().join('.')} и на следующие дни, пока вы не зададите новый.</div>
+   <button class="btn sec" onclick="crewAdd()">＋ Добавить мастера</button><button class="btn" onclick="crewDone()">Готово</button>`;
+  return['crew','Расстановка бригад',rows.filter(r=>r.m).length?rows.reduce((a,r)=>a+(r.n||0),0)+' чел. по плану':'нет плана','',body];
+ }
+ const row=(t,sub)=>`<div class="item"><div>${t}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
+ let pn=0,fn=0,known=s&&Array.isArray(s.crews);
+ if(!rows.length)body='<div class="sub">План расстановки не задан. Нажмите «Изменить расстановку» и укажите мастеров и количество рабочих в их подчинении.</div>';
+ else{
+  body=(pl.from&&pl.from!==sumDate?`<div class="sub">Плана на этот день нет — показан план от ${pl.from.split('-').reverse().join('.')}.</div>`:'')
+  +rows.map(r=>{
+   const f=crewFact(s,r.m),sent=(s.submitted||[]).some(x=>nkey(x)===nkey(r.m));pn+=r.n||0;if(f)fn+=f;
+   let st;
+   if(f===null)st=sent?'отчёт сдан':'<span style="color:#a42424">отчёт не сдан</span>';
+   else if(!sent&&!f)st='<span style="color:#a42424">отчёт не сдан</span>';
+   else{const d=f-(r.n||0);st=f?`факт — <b>${f}</b>`+(d<0?` · <b style="color:#a42424">не хватает ${-d}</b>`:d>0?` · <b style="color:#8a5a00">больше плана на ${d}</b>`:' · <b style="color:#1b6b2f">по плану</b>'):'в отчёте численность не указана'}
+   return row(`<b>${esc(r.m)}</b>${r.site?' · '+esc(r.site):''}`,`план — ${r.n||0} чел. · ${st}`)}).join('')
+  +(known?`<div class="sub" style="margin-top:8px">Итого: план ${pn} чел., факт ${fn} чел.</div>`:`<div class="sub" style="margin-top:8px">Итого по плану: ${pn} чел. Факт появится, когда сервер начнёт отдавать численность из отчётов (см. инструкцию по обновлению скрипта приёма).</div>`);
+  const extra=known?s.crews.filter(c=>!rows.some(r=>nkey(r.m)===nkey(c.who))&&(num(c.people)||(c.ppl||[]).length)):[];
+  if(extra.length)body+=`<div class="brig">Не в плане расстановки</div>`+extra.map(c=>row(`<b>${esc(c.who)}</b>`,`факт — ${num(c.people)||(c.ppl||[]).length} чел.`)).join('');
+ }
+ body+=`<button class="btn sec" onclick="crewEdit()">✎ Изменить расстановку</button>`;
+ return['crew','Расстановка бригад',rows.length?(known?fn+' из '+pn:pn+' чел. план'):'нет плана',known&&pn&&fn<pn?'warn':(known&&pn?'ok':''),body];
+}
 function sumTiles(s){
  const L=(a,f,e)=>a.length?a.map(f).join(''):`<div class="sub">${e}</div>`,row=(t,sub)=>`<div class="item"><div>${t}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
  const bySite={};s.done.forEach(d=>(bySite[d.site]??=[]).push(d));
@@ -1002,6 +1050,7 @@ function sumTiles(s){
  return [
   ['miss','Кто не сдал отчёт',s.missing.length,s.missing.length?'bad':'ok',
    L(s.missing,n=>row(esc(n)),'Все мастера, которых контролируем, сдали отчёт.')+(s.submitted.length?`<div class="sub" style="margin-top:8px">Сдали: ${esc(s.submitted.join(', '))}</div>`:'')],
+  crewTile(s),
   ['done','Что выполнено',s.done.length,'',
    Object.keys(bySite).length?Object.entries(bySite).map(([site,a])=>`<div class="brig">${esc(site)} · ${a.length}</div>`+a.map(d=>row(`${esc(d.work)} — <b>${esc(String(d.vol))} ${esc(d.unit)}</b>`,esc(d.who))).join('')).join('')
     +(s.tech.length?`<div class="brig">Техника</div>`+s.tech.map(t=>row(`${esc(t.n)} — <b>${esc(String(t.h))} маш.-ч</b>`,esc(t.who))).join(''):''):'<div class="sub">За этот день в журнале нет работ.</div>'],
