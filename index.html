@@ -1005,7 +1005,10 @@ function crewRows(){cfg.crewPlan=cfg.crewPlan||{};if(!cfg.crewPlan[sumDate])cfg.
 function crewSet(i,k,v){crewRows()[i][k]=k==='n'?Math.max(0,parseInt(v)||0):v;ls.set('cfg',cfg)}
 function crewAdd(){crewRows().push({m:'',n:0,site:''});ls.set('cfg',cfg);crewEd=1;sumView()}
 function crewDel(i){crewRows().splice(i,1);ls.set('cfg',cfg);sumView()}
-function crewEdit(){crewRows();crewEd=1;sumView()}
+const crewNames=()=>[...new Set((cfg.list&&cfg.list.length?cfg.list:(cfg.meList||[])).map(x=>String(x||'').trim()).filter(Boolean))];   // «Список ответственных» из настроек
+function crewFill(){const r=crewRows();let n=0;crewNames().forEach(m=>{if(!r.some(x=>nkey(x.m)===nkey(m))){r.push({m,n:0,site:''});n++}});ls.set('cfg',cfg);return n}
+function crewFillBtn(){const n=crewFill();crewEd=1;sumView();toast(n?'Добавлено мастеров из списка ответственных: '+n:'Все мастера из списка уже в расстановке')}
+function crewEdit(){crewRows();if(!crewPlan(sumDate).rows.length||!crewRows().length)crewFill();crewEd=1;sumView()}
 function crewDone(){cfg.crewPlan[sumDate]=crewRows().filter(r=>(r.m||'').trim()).map(r=>({m:r.m.trim(),n:r.n,site:(r.site||'').trim()}));ls.set('cfg',cfg);crewEd=0;sumView()}
 function crewFact(s,m){                       // null — сервер не отдаёт численность; иначе число из отчёта мастера (0 — отчёта нет)
  if(!Array.isArray(s.crews))return null;
@@ -1014,19 +1017,19 @@ function crewFact(s,m){                       // null — сервер не от
 }
 function crewTile(s){
  const rows=crewEd?crewRows():crewPlan(sumDate).rows,pl=crewPlan(sumDate);
- const names=[...new Set([...(cfg.list||[]),...(cfg.meList||[])])];
+ const names=crewNames();
  let body='';
  if(crewEd){
   body=`<datalist id="crl">${names.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>`
    +rows.map((r,i)=>`<div style="display:flex;gap:6px;align-items:center;margin:6px 0"><input list="crl" placeholder="Мастер" value="${esc(r.m)}" oninput="crewSet(${i},'m',this.value)" style="flex:1;min-width:0"><input type="number" inputmode="numeric" min="0" placeholder="чел." value="${r.n||''}" oninput="crewSet(${i},'n',this.value)" style="width:70px"><button onclick="crewDel(${i})" style="border:0;background:#fadcdc;color:#a42424;border-radius:8px;width:34px;height:34px;min-height:0;padding:0;flex:none">×</button></div>
    <input placeholder="Участок / объект (необязательно)" value="${esc(r.site||'')}" oninput="crewSet(${i},'site',this.value)" style="width:100%;margin-bottom:4px">`).join('')
-   +`<div class="sub">${rows.length?'':'Добавьте мастеров и укажите, сколько рабочих в подчинении у каждого. '}План действует на ${sumDate.split('-').reverse().join('.')} и на следующие дни, пока вы не зададите новый.</div>
-   <button class="btn sec" onclick="crewAdd()">＋ Добавить мастера</button><button class="btn" onclick="crewDone()">Готово</button>`;
+   +`<div class="sub">${rows.length?'':'Мастера берутся из «Список ответственных» (Ещё → Настройки): укажите, сколько рабочих у каждого, лишних удалите. '}План действует на ${sumDate.split('-').reverse().join('.')} и на следующие дни, пока вы не зададите новый.</div>
+   <button class="btn sec" onclick="crewFillBtn()">👷 Подтянуть из списка ответственных</button><button class="btn sec" onclick="crewAdd()">＋ Добавить мастера вручную</button><button class="btn" onclick="crewDone()">Готово</button>`;
   return['crew','Расстановка бригад',rows.filter(r=>r.m).length?rows.reduce((a,r)=>a+(r.n||0),0)+' чел. по плану':'нет плана','',body];
  }
  const row=(t,sub)=>`<div class="item"><div>${t}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`;
  let pn=0,fn=0,known=s&&Array.isArray(s.crews);
- if(!rows.length)body='<div class="sub">План расстановки не задан. Нажмите «Изменить расстановку» и укажите мастеров и количество рабочих в их подчинении.</div>';
+ if(!rows.length)body='<div class="sub">План расстановки не задан. Нажмите «Изменить расстановку»: мастера подтянутся из списка ответственных, останется указать число рабочих.</div>';
  else{
   body=(pl.from&&pl.from!==sumDate?`<div class="sub">Плана на этот день нет — показан план от ${pl.from.split('-').reverse().join('.')}.</div>`:'')
   +rows.map(r=>{
