@@ -335,6 +335,10 @@ if(!Array.isArray(cfg.lineList)||!cfg.lineList.length||cfg.lineList.join('|')===
 if(!Array.isArray(cfg.techList)||!cfg.techList.length)cfg.techList=DEF_TECH.slice();
 if(!cfg.techV){if(cfg.techList.join('|')===OLD_TECH.join('|'))cfg.techList=DEF_TECH.slice();else DEF_TECH.forEach(x=>{if(!cfg.techList.includes(x))cfg.techList.push(x)});cfg.techV=1;ls.set('cfg',cfg)}
 if(!Array.isArray(cfg.list)||!cfg.list.length)cfg.list=DEF_RESP.slice();
+{const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m){cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
+const ROLE_RU={master:'мастер',lead:'руководитель',admin:'администратор'};
+const myRole=()=>cfg.who&&!cfg.who.legacy?cfg.who.role:'';     // роль по личному коду (сервер): master | lead | admin
+const isLeadUser=()=>myRole()==='lead'||myRole()==='admin';
 let hist=ls.get('hist',[]);                          // отправленные отчёты
 let SM=ls.get('smeta',{at:0,items:[]});              // позиции смет из таблицы: [позиция, шифр РД, раздел, название, ед., объём, выполнено, остаток]
 let R=ls.get('draft',null);                          // черновик
@@ -431,6 +435,7 @@ function render(){
  if(page==='new')return newView();
  if(page==='ppl')return PF?pfView():pplView();
  if(page==='hist')return histView();
+ if(page==='adm')return admView();
  if(page==='chk'||page==='req')return xView(page);
  setView();
 }
@@ -920,8 +925,13 @@ async function loadLists(manual,force){
  try{
   const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=lists&key='+encodeURIComponent(cfg.key));
   const j=await r.json();
+  if(j&&j.blocked){cfg.who=null;ls.set('cfg',cfg);toast('Ваш доступ закрыт администратором',6000);return}
   if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
-  if(Array.isArray(j.names)&&j.names.length){cfg.meList=j.names;if(!cfg.list.length)cfg.list=j.names.slice()}
+  if(j.me){const was=myRole();cfg.who=j.me;if(!j.me.legacy&&j.me.name){cfg.me=j.me.name;if(!cfg.resp)cfg.resp=j.me.name;if(!cfg.applicant)cfg.applicant=j.me.name}
+   if(!j.me.legacy&&was!==j.me.role){cfg.role=isLeadUser()?'lead':'master';ls.set('cfg',cfg);if(manual)toast('Вы вошли: '+j.me.name+' ('+ROLE_RU[j.me.role]+')',4500);setTimeout(()=>tab(cfg.role==='lead'?'sum':'new'),50)}}
+  if(Array.isArray(j.tech)&&j.tech.length)cfg.techList=j.tech;
+  if(Array.isArray(j.lines)&&j.lines.length)cfg.lineList=j.lines;
+  if(Array.isArray(j.names)&&j.names.length){cfg.meList=j.names;if(!cfg.list.length||j.respCentral)cfg.list=j.names.slice()}
   if(Array.isArray(j.requests))cfg.regReq=j.requests;
   if(j.nextReq)cfg.nextReq=j.nextReq;
   cfg.listsAt=Date.now();ls.set('cfg',cfg);
@@ -980,13 +990,13 @@ let SUM=ls.get('sum',null),sumDate=today(),sumOpen='',sumBusy=0;
 // сводку сервер отдаёт только с паролем руководителя (cfg.lk); ключ мастера её не открывает
 async function loadSum(manual){
  if(!cfg.sink||!cfg.key){if(manual)toast('Сначала укажите адрес и ключ в «Настройках»');return}
- if(!cfg.lk)return;
+ if(!cfg.lk&&!isLeadUser())return;
  if(!manual&&SUM&&SUM.date===sumDate&&Date.now()-SUM.at<5*60000)return;
  sumBusy=1;if(page==='sum')sumView();
  try{
-  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=summary&date='+sumDate+'&key='+encodeURIComponent(cfg.key)+'&lk='+encodeURIComponent(cfg.lk));
+  const r=await fetch(cfg.sink+(cfg.sink.includes('?')?'&':'?')+'action=summary&date='+sumDate+'&key='+encodeURIComponent(cfg.key)+(cfg.lk?'&lk='+encodeURIComponent(cfg.lk):''));
   const j=await r.json();
-  if(j&&!j.ok&&/пароль/.test(j.error||'')){leadLogout();toast('Пароль руководителя неверный',4500)}
+  if(j&&!j.ok&&/пароль/.test(j.error||'')){const hadLk=!!cfg.lk;leadLogout();toast(hadLk?'Пароль руководителя неверный':'Сводка доступна только руководителю',4500)}
   else if(!j||!j.ok)throw new Error((j&&j.error)||'отказ');
   else{SUM=Object.assign(j,{at:Date.now()});ls.set('sum',SUM)}
  }catch(e){toast('Сводка не загрузилась: '+((e&&e.message)||'нет связи'),4500)}
@@ -1071,8 +1081,8 @@ function sumTiles(s){
 }
 function sumView(){
  $('#hd').textContent='Сводка';
- if(!cfg.lk){
-  $('#view').innerHTML=`<div class="card"><h3>Вход для руководителя</h3><div class="sub">Сводка по всем мастерам закрыта паролем. Пароль выдаёт ПТО, мастерам он не нужен.</div>
+ if(!cfg.lk&&!isLeadUser()){
+  $('#view').innerHTML=`<div class="card"><h3>Вход для руководителя</h3><div class="sub">Сводка по всем мастерам закрыта. Войдите по личному коду руководителя (ссылка-приглашение или «Настройки») или по старому паролю ниже.</div>
   <label>Пароль руководителя</label><input id="lkIn" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')leadLogin()">
   <button class="btn" onclick="leadLogin()">${sumBusy?'Проверяю…':'Войти'}</button></div>
   <button class="btn sec" onclick="cfg.role='master';ls.set('cfg',cfg);tab('new')">Я мастер — перейти к «Моей смене»</button>`;
@@ -1080,7 +1090,7 @@ function sumView(){
  }
  const s=SUM&&SUM.date===sumDate?SUM:null;
  let h=`<div class="card"><div class="grid"><input type="date" value="${sumDate}" onchange="sumDate=this.value||today();sumOpen='';loadSum(true)"><button class="btn sec" style="margin:0" onclick="loadSum(true)">${sumBusy?'Загрузка…':'↻ Обновить'}</button></div>
- <div class="xrow" style="margin-top:6px"><div class="sub">${s?'Данные из журнала на '+new Date(s.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):(cfg.sink&&cfg.key?'Загружаю данные из журнала…':'Укажите адрес и ключ в «Настройках», чтобы видеть сводку.')}</div><a href="#" class="sub" onclick="leadLogout();sumView();return false">Выйти</a></div></div>`;
+ <div class="xrow" style="margin-top:6px"><div class="sub">${s?'Данные из журнала на '+new Date(s.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):(cfg.sink&&cfg.key?'Загружаю данные из журнала…':'Укажите адрес и ключ в «Настройках», чтобы видеть сводку.')}</div>${cfg.lk?`<a href="#" class="sub" onclick="leadLogout();sumView();return false">Выйти</a>`:''}</div></div>`;
  if(s)h+=sumTiles(s).map(([k,t,n,cls,body])=>`<div class="card tap" onclick="sumOpen=sumOpen==='${k}'?'':'${k}';sumView()"><div class="xrow"><h3 style="margin:0">${t}</h3><span class="badge ${cls}" style="font-size:15px;padding:3px 12px">${n}</span></div>
  ${sumOpen===k?`<div style="margin-top:8px" onclick="event.stopPropagation()">${body}</div>`:''}</div>`).join('')
   +`<div class="sub" style="margin:4px 2px">«Что требует проверки» — отчёты, поданные с нарушением, и пункты «Нет» в чек-листах. «Просроченные заявки» — не оплачены дольше 7 дней.</div>`;
@@ -1100,6 +1110,104 @@ function techView(){
  $('#view').innerHTML=TECH.map((t,i)=>`<div class="card tap" onclick="openTech(${i})"><div class="xrow"><h3 style="margin:0">${t[1]} ${esc(t[2])}</h3><span class="sub">›</span></div><div class="sub">${esc(t[3])}</div></div>`).join('')
  +`<div class="sub" style="margin:6px 2px"><a href="https://drive.google.com/drive/folders/${TECH_FOLDER}" target="_blank" rel="noopener">Папка с исходными файлами на Диске ↗</a></div>`;
 }
+/* ---------- «Администрирование»: пользователи и личные коды, общий ключ, общие списки, журнал доступа ---------- */
+// всё хранится на сервере (лист «Пользователи» журнала); коды показываются один раз — при выдаче
+let ADM=null,admBusy=0,admOpen='users';
+const APP_LINK=location.origin+location.pathname;
+async function adm(op,extra){
+ if(!cfg.sink||!cfg.key){toast('Сначала укажите адрес и код в «Настройках»');return null}
+ admBusy=1;if(page==='adm')admView();
+ const x=await postJSON(Object.assign({kind:'admin',op,key:cfg.key},extra||{}));
+ admBusy=0;
+ let j=null;
+ if(x.opaque)toast('Сервер не ответил. Проверьте, что скрипт приёма обновлён до версии с администрированием',6000);
+ else if(x.err)toast(x.err,5000);
+ else if(x.j&&!x.j.ok)toast('Отказ: '+(x.j.error||'ошибка'),5000);
+ else{j=x.j;ADM=j}
+ if(page==='adm')admView();
+ return j;
+}
+function admCode(name,code){            // окно с выданным кодом
+ const link=APP_LINK+'#code='+code,msg=`Отчёт СМР — доступ для ${name}.\nОткройте ссылку на своём телефоне (код сохранится сам):\n${link}\n\nКод вручную: ${code}\nНикому не пересылайте эту ссылку.`;
+ const d=document.createElement('div');d.className='dlg';d.id='admDlg';
+ d.innerHTML=`<div><h3 style="margin-top:0">Код для ${esc(name)}</h3>
+ <div style="font:700 26px/1.2 ui-monospace,Menlo,monospace;letter-spacing:2px;text-align:center;padding:12px;background:#eef1f5;border-radius:10px;user-select:all">${esc(code)}</div>
+ <div class="sub" style="margin-top:8px">Код показывается один раз. Отправьте ссылку человеку лично. Если код потерян — выдайте новый, старый перестанет работать.</div>
+ <button class="btn" id="admShare">Отправить ссылку</button><button class="btn sec" id="admCopy">Скопировать текст</button><button class="btn sec" onclick="document.getElementById('admDlg').remove()">Готово</button></div>`;
+ document.body.appendChild(d);
+ const copy=async()=>{try{await navigator.clipboard.writeText(msg)}catch(e){const t=document.createElement('textarea');t.value=msg;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}toast('Скопировано')};
+ d.querySelector('#admCopy').onclick=copy;
+ d.querySelector('#admShare').onclick=async()=>{if(navigator.share){const r=await tryShare({text:msg});if(r.startsWith('err'))copy()}else copy()};
+}
+async function admAdd(){
+ const n=($('#admName').value||'').trim(),r=$('#admRole').value;
+ if(!n){toast('Введите ФИО');return}
+ const j=await adm('add',{name:n,role:r});
+ if(j&&j.code)admCode(j.name,j.code);
+}
+async function admImport(){
+ if(!confirm('Создать личные коды всем из листа «Ответственные», у кого их ещё нет?'))return;
+ const j=await adm('import');
+ if(!j)return;
+ if(!j.added||!j.added.length){toast('Все ответственные уже есть в списке пользователей');return}
+ const txt=j.added.map(a=>`${a.name}: ${APP_LINK}#code=${a.code}  (код ${a.code})`).join('\n');
+ dlFile(`kody_dostupa_${today()}.txt`,'Личные коды «Отчёт СМР». Раздайте каждому лично, затем удалите файл.\n\n'+txt,'text/plain');
+ toast(`Создано кодов: ${j.added.length}. Список сохранён в «Загрузки» — раздайте лично и удалите файл`,8000);
+}
+async function admReset(id,name){if(!confirm(`Выдать новый код для ${name}? Старый код сразу перестанет работать.`))return;const j=await adm('reset',{id});if(j&&j.code)admCode(j.name,j.code)}
+function admSet(id,o){adm('set',Object.assign({id},o))}
+function admDel(id,name){if(confirm(`Удалить пользователя ${name}? Его код перестанет работать. Отчёты в журнале останутся.`))adm('del',{id})}
+function admLists(){
+ const g=id=>($('#'+id).value||'').split('\n').map(x=>x.trim()).filter(Boolean);
+ adm('config',{tech:g('admTech'),lines:g('admLines'),resp:g('admResp')}).then(j=>{if(j)toast('Списки сохранены. Телефоны получат их при следующем обновлении списков')});
+}
+function admShared(on){
+ if(!on&&!confirm('Отключить общий ключ? Все, кто ещё не получил личный код, перестанут отправлять отчёты.'))return admView();
+ adm('config',{allowShared:on});
+}
+function admView(){
+ $('#hd').textContent='Администрирование';
+ if(myRole()!=='admin'){$('#view').innerHTML=`<div class="empty">Раздел доступен только администратору. Войдите по личному коду администратора в «Настройках».</div>`;return}
+ if(!ADM){$('#view').innerHTML=`<div class="empty">${admBusy?'Загружаю…':'Нет данных'}</div>`;if(!admBusy)adm('state');return}
+ const A=ADM,us=A.users||[],act=us.filter(u=>u.active),never=act.filter(u=>!u.seen).length;
+ const sec=(k,t,n,body)=>`<div class="card"><div class="xrow tap" style="cursor:pointer" onclick="admOpen=admOpen==='${k}'?'':'${k}';admView()"><h3 style="margin:0">${t}</h3><span class="badge">${n}</span></div>${admOpen===k?`<div style="margin-top:10px">${body}</div>`:''}</div>`;
+ const roleOpt=(cur)=>Object.entries(ROLE_RU).map(([v,t])=>`<option value="${v}" ${v===cur?'selected':''}>${t}</option>`).join('');
+ const me=cfg.who||{};
+ const order={admin:0,lead:1,master:2};
+ const users=us.slice().sort((a,b)=>(b.active-a.active)||(order[a.role]-order[b.role])||a.name.localeCompare(b.name,'ru')).map(u=>{
+  const self=u.id===me.id||(u.name===me.name&&u.role==='admin');
+  return `<div style="border-top:1px solid #e3e8ef;padding:10px 0">
+  <div class="xrow"><b style="${u.active?'':'color:#8a94a3;text-decoration:line-through'}">${esc(u.name)}</b><span class="badge ${u.role==='admin'?'warn':u.role==='lead'?'':'ok'}">${ROLE_RU[u.role]}</span></div>
+  <div class="sub">${u.active?'':'<b style="color:#a42424">заблокирован</b> · '}${u.seen?'последний вход '+esc(u.seen):'ещё не входил'}${u.note?' · '+esc(u.note):''}</div>
+  ${self?'<div class="sub">это вы</div>':`<div class="grid" style="margin-top:6px"><select onchange="admSet('${u.id}',{role:this.value})">${roleOpt(u.role)}</select>
+  <button class="btn sec" style="margin:0;padding:10px" onclick="admSet('${u.id}',{active:${!u.active}})">${u.active?'Заблокировать':'Разблокировать'}</button>
+  <button class="btn sec" style="margin:0;padding:10px" onclick="admReset('${u.id}',${esc(JSON.stringify(u.name))})">Новый код</button>
+  <button class="btn del" style="margin:0;padding:10px" onclick="admDel('${u.id}',${esc(JSON.stringify(u.name))})">Удалить</button></div>`}</div>`}).join('');
+ const L=A.lists||{};
+ let h=`<div class="card"><div class="xrow"><div><b>${esc(me.name||'')}</b><div class="sub">администратор</div></div><button class="btn sec" style="margin:0;width:auto;padding:10px 14px" onclick="adm('state')">${admBusy?'…':'↻'}</button></div></div>`;
+ h+=sec('users','👥 Пользователи',`${act.length} активн.`,
+  `<label style="margin-top:0">ФИО (как в журнале)</label><input id="admName" placeholder="Иванов И.И." list="meL2"><datalist id="meL2">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+  <label>Роль</label><select id="admRole">${roleOpt('master')}</select>
+  <button class="btn" onclick="admAdd()">Добавить и выдать код</button>
+  <button class="btn sec" onclick="admImport()">Выдать коды всем из «Ответственных»</button>
+  <div class="sub" style="margin:8px 0">Мастер подаёт отчёты только от своего имени. Руководитель видит сводку без пароля. Администратор управляет этим разделом.</div>${users||'<div class="sub">Пользователей пока нет</div>'}`);
+ h+=sec('sec','🔒 Защита',A.allowShared?'общий ключ вкл.':'только личные коды',
+  `<label style="margin-top:0;display:flex;gap:10px;align-items:center"><input type="checkbox" style="width:auto" ${A.allowShared?'checked':''} onchange="admShared(this.checked)"> Разрешить старый общий ключ</label>
+  <div class="sub">Пока включено, приложение со старым общим ключом продолжает работать — отчёт подписывается ФИО, которое человек ввёл сам. Раздайте личные коды и отключите. ${never?`<b>Ещё не входили по личному коду: ${never}.</b>`:'Все активные пользователи уже входили.'}</div>
+  <div class="sub" style="margin-top:8px">Старый пароль руководителя ${A.hasLeadPass?'задан и продолжает работать. Когда руководители получат личные коды, удалите свойство LEAD_KEY в настройках скрипта.':'не задан.'}</div>`);
+ h+=sec('lists','📋 Общие списки',`${(L.tech||[]).length+(L.lines||[]).length+(L.resp||[]).length} строк`,
+  `<div class="sub" style="margin-bottom:6px">Если список заполнен, все телефоны берут его вместо своего. Пустой — у каждого остаётся свой.</div>
+  <label>Ответственные (для выбора в отчёте)</label><textarea id="admResp" style="min-height:110px">${esc((L.resp||[]).join('\n'))}</textarea>
+  <label>Техника</label><textarea id="admTech" style="min-height:140px">${esc((L.tech||cfg.techList).join('\n'))}</textarea>
+  <label>Линии трубопроводов</label><textarea id="admLines" style="min-height:140px">${esc((L.lines||cfg.lineList).join('\n'))}</textarea>
+  <button class="btn" onclick="admLists()">Сохранить для всех</button>`);
+ h+=sec('log','🗒 Журнал доступа',(A.log||[]).length,
+  (A.log||[]).length?`<div style="max-height:420px;overflow:auto">${A.log.map(r=>`<div style="border-top:1px solid #e3e8ef;padding:6px 0"><div class="xrow"><span class="sub">${esc(r[0])}</span><span class="sub">${esc(r[1])}</span></div><div><b style="font-weight:600">${esc(r[3])}</b> ${esc(r[4])}</div></div>`).join('')}</div>`:'<div class="sub">Записей пока нет</div>');
+ h+=sec('svc','🧰 Обслуживание',A.ids||0,
+  `<div class="sub">Отметок о принятых отчётах и заявках в хранилище скрипта: ${A.ids||0}. Они защищают от дублей; старые (больше 120 дней) удаляются каждую ночь. Хранилище скрипта ограничено ~500 КБ.</div>
+  <button class="btn sec" onclick="adm('prune').then(j=>j&&toast('Удалено старых отметок: '+j.removed))">Очистить сейчас</button>`);
+ $('#view').innerHTML=h;
+}
 /* ---------- «Ещё» ---------- */
 function moreView(){
  $('#hd').textContent='Ещё';
@@ -1107,10 +1215,11 @@ function moreView(){
  $('#view').innerHTML=(role()==='lead'?it('ppl','👷','Люди на объекте','Отметки по фото, рабочие'):'')
   +it('tech','📐','Тех.карты','Инструкции и руководства')
   +it('hist','🗂','История отчётов',hist.length?'Отправлено: '+hist.length:'Отправленных пока нет')
+  +(myRole()==='admin'?it('adm','🛡','Администрирование','Пользователи, коды доступа, общие списки, журнал доступа'):'')
   +it('set','⚙️','Настройки','Режим работы, ключ, списки, копия данных')
   +`<div class="card"><label style="margin-top:0">Режим работы</label>${roleSel()}</div>`;
 }
-const roleSel=()=>`<select onchange="cfg.role=this.value;ls.set('cfg',cfg);tab(this.value==='lead'?'sum':'new')"><option value="master" ${role()==='master'?'selected':''}>Мастер / прораб — «Моя смена»</option><option value="lead" ${role()==='lead'?'selected':''}>Руководитель — «Сводка за сегодня»</option></select>`;
+const roleSel=()=>myRole()==='master'?`<div class="sub">Мастер / прораб — «Моя смена» (задано администратором)</div>`:`<select onchange="cfg.role=this.value;ls.set('cfg',cfg);tab(this.value==='lead'?'sum':'new')"><option value="master" ${role()==='master'?'selected':''}>Мастер / прораб — «Моя смена»</option><option value="lead" ${role()==='lead'?'selected':''}>Руководитель — «Сводка за сегодня»</option></select>`;
 
 /* настройки */
 function setView(){
@@ -1127,10 +1236,12 @@ function setView(){
  <div class="sub" style="margin-top:6px">Показываются в разделах ТХ. Впишите свои линии: например, «Л-1 нефть, Ду200».</div></div>
  <div class="card"><h3>Сбор отчётов в Google Таблицу</h3>
  <div class="sub">Отчёт попадает в «Журнал работ» (по строке на работу и технику) и в «Контроль отчётов (КТУ)». Заявка создаёт лист «Заявка N» в «Реестре заявок на закупку». Адрес и ключ — после установки скрипта приёма.</div>
- <label>Кто подаёт отчёт (как в таблице «Ответственные»)</label><input list="meL" value="${esc(cfg.me)}" oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О. как в таблице"><datalist id="meL">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+ ${cfg.who&&!cfg.who.legacy?`<div class="banner ok" style="margin:10px 0 0">Вы вошли по личному коду: ${esc(cfg.who.name)} · ${ROLE_RU[cfg.who.role]||''}</div>`:(cfg.who&&cfg.who.legacy?`<div class="banner no" style="margin:10px 0 0">Сейчас используется общий ключ. Попросите у администратора личный код — общий ключ скоро отключат.</div>`:'')}
+ <label>Кто подаёт отчёт (как в таблице «Ответственные»)</label><input list="meL" value="${esc(cfg.me)}" ${myRole()?'readonly title="Задаётся администратором"':''} oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О. как в таблице"><datalist id="meL">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
  <label>Составитель заявок (ФИО в листе заявки)</label><input value="${esc(cfg.applicant)}" oninput="cfg.applicant=this.value;ls.set('cfg',cfg)" placeholder="Фамилия Имя Отчество">
  <label>Адрес приёма отчётов</label><input value="${esc(cfg.sink)}" oninput="cfg.sink=this.value.trim();ls.set('cfg',cfg)" placeholder="https://script.google.com/macros/s/.../exec">
- <label>Ключ</label><input value="${esc(cfg.key)}" oninput="cfg.key=this.value.replace(/\s+/g,'');ls.set('cfg',cfg)" placeholder="Ключ доступа" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+ <label>Личный код доступа</label><input type="password" value="${esc(cfg.key)}" onfocus="this.type='text'" onblur="this.type='password'" oninput="cfg.key=this.value.replace(/\s+/g,'');cfg.who=null;ls.set('cfg',cfg)" onchange="loadLists(true,true)" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters" autocorrect="off" autocomplete="off" spellcheck="false">
+ <div class="sub" style="margin-top:6px">Код выдаёт администратор (ссылкой или текстом). Не пересылайте его: всё, что отправлено с вашим кодом, записывается на ваше имя.</div>
  <button class="btn sec" onclick="testSink()">Проверить связь</button><button class="btn sec" onclick="syncAll(true).then(()=>syncReqs(true)).then(()=>syncChks(true))">Отправить неотправленные</button><button class="btn sec" onclick="loadLists(true);loadSmeta(true)">Обновить списки и сметы</button>
  <div class="sub" style="margin-top:6px">${cfg.listsAt?'Списки из таблицы получены '+new Date(cfg.listsAt).toLocaleString('ru-RU'):'Списки из таблицы ещё не загружались.'} · позиций смет: ${SM.items.length}</div></div>
  <div class="card"><h3>Распознавание лиц</h3>
