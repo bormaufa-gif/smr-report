@@ -338,6 +338,7 @@ if(!Array.isArray(cfg.list)||!cfg.list.length)cfg.list=DEF_RESP.slice();
 const IS_PWA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches));   // запущено с экрана «Домой»
 {const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m&&m[1].toUpperCase()!==cfg.key){cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);if(IS_PWA)history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
 if(!IS_PWA&&/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(cfg.key||'')&&!/code=/.test(location.hash))history.replaceState(null,'',location.pathname+location.search+'#code='+cfg.key);   // iPhone: иконка «На экран Домой» хранит данные отдельно — передаём ей код через адрес
+const meName=()=>(cfg.who&&!cfg.who.legacy&&cfg.who.name)||(cfg.me||'').trim();   // ФИО владельца учётной записи = ответственный
 const ROLE_RU={master:'мастер',lead:'руководитель',admin:'администратор'};
 const myRole=()=>cfg.who&&!cfg.who.legacy?cfg.who.role:'';     // роль по личному коду (сервер): master | lead | admin
 const isLeadUser=()=>myRole()==='lead'||myRole()==='admin';
@@ -347,7 +348,7 @@ let R=ls.get('draft',null);                          // черновик
 let photos=[];                                       // фото текущего отчёта (в память)
 let page=cfg.role==='lead'?'sum':'new';
 const newWork=()=>({c:'',co:0,s:'',ln:'',k:'',ds:[],nm:[],t:'',vol:'',unit:'',pos:'',pq:''});
-function blank(){return{date:today(),resp:cfg.resp||'',t1:cfg.t1||'',t2:cfg.t2||'',works:[newWork()],people:'',tech:[{n:'',o:0,h:''}],idle:[],other:'',problems:'',plan:''}}
+function blank(){return{date:today(),resp:meName()||cfg.resp||'',t1:cfg.t1||'',t2:cfg.t2||'',works:[newWork()],people:'',tech:[{n:'',o:0,h:''}],idle:[],other:'',problems:'',plan:''}}
 if(!R||!R.works||R.works.some(w=>!('c'in w)))R=blank();   // старый формат черновика
 if(!Array.isArray(R.idle))R.idle=[];                      // простои: {r: причина, h: часы, w: кто решает, c: что именно}
 if(typeof R.tech==='string')R.tech=R.tech.split(',').map(x=>x.trim()).filter(Boolean);
@@ -442,10 +443,9 @@ function render(){
  setView();
 }
 function respSelect(){
- const known=cfg.list.includes(R.resp),other=R.resp&&!known;
- return `<select onchange="pickResp(this.value)"><option value="">— выберите ответственного —</option>`+cfg.list.map(n=>`<option ${n===R.resp?'selected':''}>${esc(n)}</option>`).join('')+`<option value="${OTHER}" ${other?'selected':''}>Другой (ввести вручную)</option></select><input id="respOther" placeholder="Фамилия И.О." style="margin-top:8px;${other?'':'display:none'}" value="${other?esc(R.resp):''}" oninput="R.resp=this.value;save()">`;
+ const n=meName();if(n&&R.resp!==n){R.resp=n;save()}
+ return n?`<div style="padding:10px 12px;border:1px solid #d5dce6;border-radius:10px;background:#f8fafc">${esc(n)}</div>`:`<div class="banner no" style="margin:4px 0 0;font-weight:500">Войдите по личному коду («Настройки» → «Личный код доступа») — отчёт запишется на ваше имя.</div>`;
 }
-function pickResp(v){const o=$('#respOther');if(v===OTHER){o.style.display='';o.value='';R.resp='';o.focus()}else{o.style.display='none';R.resp=v}save()}
 /* ---------- «Моя смена» (главный экран мастера) ---------- */
 function newView(){
  const sent=hist.some(h=>h.date===today()),prev=prevSnap(),sites=[...new Set(R.works.filter(w=>w.c).map(w=>shortCipher(w.c)))];
@@ -807,9 +807,8 @@ function preview(){
  ${pr.length?`<div class="banner no" style="margin-top:8px;font-weight:500">Неполный отчёт — по распоряжению это может повлиять на КТУ:<br>• ${pr.map(esc).join('<br>• ')}</div>`:''}
  <div class="card" style="max-height:38vh;overflow:auto;background:#f8fafc"><pre>${esc(buildText(R))}</pre>${photos.length?`<div class="sub" style="margin-top:6px">📷 Фото: ${photos.length}</div>`:''}</div>
  ${cfg.sink?`<div class="sub" style="margin:0 2px 6px">В журнал уйдёт строк: ${buildRows(R).length}${pr.length?' · в КТУ будет отметка «Подал с нарушением»':''}</div>`:''}
- ${cfg.sink&&!(cfg.me||'').trim()?'<div class="banner no" style="font-weight:500">Не указано, кто подаёт отчёт («Настройки»): отчёт запишется на ответственного из формы.</div>':''}
- ${cfg.sink&&(cfg.me||'').trim()&&(cfg.meList||[]).length&&!cfg.meList.includes(cfg.me.trim())?`<div class="banner no" style="font-weight:500">«${esc(cfg.me)}» нет в таблице «Ответственные» — будет добавлен(а) в неё.</div>`:''}
- ${isDesktop()
+ ${cfg.sink&&!meName()?'<div class="banner no" style="font-weight:500">Вы не вошли по личному коду («Настройки»): отчёт запишется на ответственного из формы.</div>':''}
+  ${isDesktop()
   ?`<div class="banner no" style="font-weight:500;margin-top:8px">На компьютере Max не появляется в меню «Поделиться». Нажмите кнопку ниже: текст отчёта скопируется, затем вставьте его в Max (Ctrl+V).</div>
  <button class="btn" onclick="copyText(true,'Текст скопирован. Откройте Max и вставьте в группу (Ctrl+V)')">Скопировать отчёт для Max</button>
  ${photos.length?`<button class="btn sec" onclick="savePhotos()">Сохранить фото (${photos.length}) для вложения</button>`:''}
@@ -900,7 +899,7 @@ async function syncAll(manual){
 }
 /* ---------- заявки → «Реестр заявок на закупку», списки из таблиц ---------- */
 let syncingR=false;
-function reqPayload(r){return {kind:'request',key:cfg.key||'',id:String(r.id),num:parseInt(r.num)||0,date:r.date,section:r.section||'',cipher:r.cipher||'',applicant:cfg.applicant||'',items:r.items.filter(i=>(i.n||'').trim()).map(i=>({n:i.n.trim(),u:(i.u||'').trim(),q:(i.q||'').trim(),d:fd(i.d||''),p:(i.p||'').trim()})),sentAt:new Date().toLocaleString('ru-RU')}}
+function reqPayload(r){return {kind:'request',key:cfg.key||'',id:String(r.id),num:parseInt(r.num)||0,date:r.date,section:r.section||'',cipher:r.cipher||'',applicant:meName()||cfg.applicant||'',items:r.items.filter(i=>(i.n||'').trim()).map(i=>({n:i.n.trim(),u:(i.u||'').trim(),q:(i.q||'').trim(),d:fd(i.d||''),p:(i.p||'').trim()})),sentAt:new Date().toLocaleString('ru-RU')}}
 async function syncReqs(manual){
  if(!cfg.sink||syncingR)return;
  const todo=xall('req').map(reqNorm).filter(r=>r.queued&&r.sent!==1&&r.sent!==2);
@@ -1161,7 +1160,7 @@ function admSet(id,o){adm('set',Object.assign({id},o))}
 function admDel(id,name){if(confirm(`Удалить пользователя ${name}? Его код перестанет работать. Отчёты в журнале останутся.`))adm('del',{id})}
 function admLists(){
  const g=id=>($('#'+id).value||'').split('\n').map(x=>x.trim()).filter(Boolean);
- adm('config',{tech:g('admTech'),lines:g('admLines'),resp:g('admResp')}).then(j=>{if(j)toast('Списки сохранены. Телефоны получат их при следующем обновлении списков')});
+ adm('config',{tech:g('admTech'),lines:g('admLines'),resp:[]}).then(j=>{if(j)toast('Списки сохранены. Телефоны получат их при следующем обновлении списков')});
 }
 function admShared(on){
  if(!on&&!confirm('Отключить общий ключ? Все, кто ещё не получил личный код, перестанут отправлять отчёты.'))return admView();
@@ -1197,9 +1196,8 @@ function admView(){
   `<label style="margin-top:0;display:flex;gap:10px;align-items:center"><input type="checkbox" style="width:auto" ${A.allowShared?'checked':''} onchange="admShared(this.checked)"> Разрешить старый общий ключ</label>
   <div class="sub">Пока включено, приложение со старым общим ключом продолжает работать — отчёт подписывается ФИО, которое человек ввёл сам. Раздайте личные коды и отключите. ${never?`<b>Ещё не входили по личному коду: ${never}.</b>`:'Все активные пользователи уже входили.'}</div>
   <div class="sub" style="margin-top:8px">Старый пароль руководителя ${A.hasLeadPass?'задан и продолжает работать. Когда руководители получат личные коды, удалите свойство LEAD_KEY в настройках скрипта.':'не задан.'}</div>`);
- h+=sec('lists','📋 Общие списки',`${(L.tech||[]).length+(L.lines||[]).length+(L.resp||[]).length} строк`,
+ h+=sec('lists','📋 Общие списки',`${(L.tech||[]).length+(L.lines||[]).length} строк`,
   `<div class="sub" style="margin-bottom:6px">Если список заполнен, все телефоны берут его вместо своего. Пустой — у каждого остаётся свой.</div>
-  <label>Ответственные (для выбора в отчёте)</label><textarea id="admResp" style="min-height:110px">${esc((L.resp||[]).join('\n'))}</textarea>
   <label>Техника</label><textarea id="admTech" style="min-height:140px">${esc((L.tech||cfg.techList).join('\n'))}</textarea>
   <label>Линии трубопроводов</label><textarea id="admLines" style="min-height:140px">${esc((L.lines||cfg.lineList).join('\n'))}</textarea>
   <button class="btn" onclick="admLists()">Сохранить для всех</button>`);
@@ -1228,19 +1226,12 @@ function setView(){
  $('#hd').textContent='Настройки';
  $('#view').innerHTML=`<div class="card"><label style="margin-top:0">Режим работы</label>${roleSel()}
  <div class="sub" style="margin-top:6px">Руководителю главным экраном станет сводка по всем мастерам за день.</div></div>
- <div class="card"><label style="margin-top:0">Список ответственных (по одному на строку)</label>
- <textarea style="min-height:160px" oninput="cfg.list=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.list.join('\n'))}</textarea>
- <div class="sub" style="margin-top:6px">Этот список показывается в поле «Ответственный» на экране отчёта.</div></div>
  <div class="card"><label style="margin-top:0">Список техники (по одной на строку)</label>
  <textarea style="min-height:160px" oninput="cfg.techList=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.techList.join('\n'))}</textarea></div>
- <div class="card"><label style="margin-top:0">Линии трубопроводов (по одной на строку)</label>
- <textarea style="min-height:160px" oninput="cfg.lineList=this.value.split('\\n').map(x=>x.trim()).filter(Boolean);ls.set('cfg',cfg)">${esc(cfg.lineList.join('\n'))}</textarea>
- <div class="sub" style="margin-top:6px">Показываются в разделах ТХ. Впишите свои линии: например, «Л-1 нефть, Ду200».</div></div>
  <div class="card"><h3>Сбор отчётов в Google Таблицу</h3>
  <div class="sub">Отчёт попадает в «Журнал работ» (по строке на работу и технику) и в «Контроль отчётов (КТУ)». Заявка создаёт лист «Заявка N» в «Реестре заявок на закупку». Адрес и ключ — после установки скрипта приёма.</div>
  ${cfg.who&&!cfg.who.legacy?`<div class="banner ok" style="margin:10px 0 0">Вы вошли по личному коду: ${esc(cfg.who.name)} · ${ROLE_RU[cfg.who.role]||''}</div>`:(cfg.who&&cfg.who.legacy?`<div class="banner no" style="margin:10px 0 0">Сейчас используется общий ключ. Попросите у администратора личный код — общий ключ скоро отключат.</div>`:'')}
- <label>Кто подаёт отчёт (как в таблице «Ответственные»)</label><input list="meL" value="${esc(cfg.me)}" ${myRole()?'readonly title="Задаётся администратором"':''} oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О. как в таблице"><datalist id="meL">${(cfg.meList||[]).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
- <label>Составитель заявок (ФИО в листе заявки)</label><input value="${esc(cfg.applicant)}" oninput="cfg.applicant=this.value;ls.set('cfg',cfg)" placeholder="Фамилия Имя Отчество">
+ ${myRole()?'':`<label>Ваше ФИО (пока нет личного кода)</label><input value="${esc(cfg.me)}" oninput="cfg.me=this.value;ls.set('cfg',cfg)" placeholder="Фамилия И.О.">`}
  <label>Адрес приёма отчётов</label><input value="${esc(cfg.sink)}" oninput="cfg.sink=this.value.trim();ls.set('cfg',cfg)" placeholder="https://script.google.com/macros/s/.../exec">
  <label>Личный код доступа</label><input type="password" value="${esc(cfg.key)}" onfocus="this.type='text'" onblur="this.type='password'" oninput="cfg.key=this.value.replace(/\s+/g,'');cfg.who=null;ls.set('cfg',cfg)" onchange="loadLists(true,true)" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters" autocorrect="off" autocomplete="off" spellcheck="false">
  <div class="sub" style="margin-top:6px">Код выдаёт администратор (ссылкой или текстом). Не пересылайте его: всё, что отправлено с вашим кодом, записывается на ваше имя.</div>
@@ -1255,7 +1246,7 @@ function setView(){
  <label class="btn sec" style="text-align:center">Восстановить из файла<input type="file" accept=".json" hidden onchange="restoreAll(this)"></label>
  <div class="sub" id="persistInfo" style="margin-top:8px"></div></div>
  <div class="card"><div class="sub">Шифры РД взяты из состава рабочей документации ГНТ.61.2024.01-СРД (Изм. 4). Данные хранятся только на этом телефоне.</div></div>
- <button class="btn sec" onclick="if(confirm('Вернуть списки по умолчанию? Ваши правки списков будут потеряны.')){cfg.list=DEF_RESP.slice();cfg.techList=DEF_TECH.slice();cfg.lineList=DEF_LINES.slice();ls.set('cfg',cfg);setView()}">Вернуть списки по умолчанию</button>`;
+ <button class="btn sec" onclick="if(confirm('Вернуть списки по умолчанию? Ваши правки списков будут потеряны.')){cfg.techList=DEF_TECH.slice();cfg.lineList=DEF_LINES.slice();ls.set('cfg',cfg);setView()}">Вернуть списки по умолчанию</button>`;
  protectStorage();
 }
 function toast(m,ms){document.querySelectorAll('.toast').forEach(e=>e.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);clearTimeout(tt);tt=setTimeout(()=>t.remove(),ms||3200)}
