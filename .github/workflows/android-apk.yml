@@ -21,11 +21,41 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Build installable test APK
+      - name: Prepare private signing key
+        shell: bash
+        env:
+          KEY_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          for var in KEY_B64 STORE_PASSWORD KEY_PASSWORD KEY_ALIAS; do
+            if [[ -z "${!var}" ]]; then echo "Missing signing secret: $var"; exit 1; fi
+          done
+          umask 077
+          printf '%s' "$KEY_B64" | base64 --decode > "$RUNNER_TEMP/pts-ai-release.p12"
+      - name: Build signed release APK
         working-directory: android
-        run: gradle :app:assembleDebug --no-daemon
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/pts-ai-release.p12
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: gradle :app:assembleRelease --no-daemon
+      - name: Verify release signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android/app/build/outputs/apk/release/app-release.apk | tee "$RUNNER_TEMP/signature.txt"
+          grep -qi 'ecd9256a5de0c08ddf4508006bf23db245576c172794d44757d7f45a8aa7ba43' "$RUNNER_TEMP/signature.txt"
       - uses: actions/upload-artifact@v4
         with:
-          name: smr-report-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: pts-ai-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
           retention-days: 30
+      - name: Remove temporary signing key
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/pts-ai-release.p12"
