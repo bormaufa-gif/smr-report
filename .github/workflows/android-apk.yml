@@ -1,11 +1,19 @@
 name: Build Android APK
 on:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish APK to GitHub Releases'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ['android/**', '.github/workflows/android-apk.yml']
 permissions:
   contents: read
+concurrency:
+  group: android-release-main
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,27 +43,66 @@ jobs:
           done
           umask 077
           printf '%s' "$KEY_B64" | base64 --decode > "$RUNNER_TEMP/pts-ai-release.p12"
-      - name: Build signed release APK
+      - name: Check and build signed APK
         working-directory: android
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/pts-ai-release.p12
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-        run: gradle :app:assembleRelease --no-daemon
-      - name: Verify release signature
+        run: gradle :app:lintRelease :app:testReleaseUnitTest :app:assembleRelease --no-daemon
+      - name: Verify signature and version
         shell: bash
         run: |
           set -euo pipefail
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs android/app/build/outputs/apk/release/app-release.apk | tee "$RUNNER_TEMP/signature.txt"
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          TOOLS="$ANDROID_HOME/build-tools/35.0.0"
+          "$TOOLS/apksigner" verify --verbose --print-certs "$APK" | tee "$RUNNER_TEMP/signature.txt"
           grep -qi 'ecd9256a5de0c08ddf4508006bf23db245576c172794d44757d7f45a8aa7ba43' "$RUNNER_TEMP/signature.txt"
+          "$TOOLS/aapt" dump badging "$APK" > "$RUNNER_TEMP/badging.txt"
+          grep -F "versionName='1.1.$GITHUB_RUN_NUMBER'" "$RUNNER_TEMP/badging.txt"
+          grep -F "versionCode='$((100 + GITHUB_RUN_NUMBER))'" "$RUNNER_TEMP/badging.txt"
+          cd android/app/build/outputs/apk/release
+          sha256sum app-release.apk > app-release.apk.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: pts-ai-release-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: |
+            android/app/build/outputs/apk/release/app-release.apk
+            android/app/build/outputs/apk/release/app-release.apk.sha256
           if-no-files-found: error
           retention-days: 30
       - name: Remove temporary signing key
         if: always()
         shell: bash
         run: rm -f "$RUNNER_TEMP/pts-ai-release.p12"
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.event.head_commit.message == 'Prepare distributable PTS Ai release'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pts-ai-release-apk
+          path: release
+      - name: Publish versioned APK
+        working-directory: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          sha256sum --check app-release.apk.sha256
+          TAG="v1.1.$GITHUB_RUN_NUMBER"
+          cat > notes.md <<'NOTES'
+          ПТС Ai для Android 8.0 и новее.
+
+          Вход по коду, отчёты, диктовка с проверкой текста и кнопка «Проверить обновления».
+          Для установки скачайте app-release.apk. Обновления скачиваются через браузер; установка подтверждается пользователем.
+          APK подписан релизным ключом. Контрольная сумма — в app-release.apk.sha256.
+          Перед массовой рассылкой организатору необходимо проверить вход, отправку отчёта, диктовку и обновления на телефоне. Автоматические проверки не заменяют проверку на устройстве.
+          NOTES
+          gh release create "$TAG" app-release.apk app-release.apk.sha256 --target "$GITHUB_SHA" --title "ПТС Ai 1.1.$GITHUB_RUN_NUMBER" --notes-file notes.md --latest
