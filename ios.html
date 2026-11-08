@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ПТС Ai — iPhone</title>
+<style>
+html,body{margin:0;height:100%;font:16px system-ui,-apple-system,sans-serif;background:#eef1f5}iframe{display:block;border:0;width:100%;height:100%;height:100dvh}dialog{box-sizing:border-box;width:calc(100% - 24px);max-width:520px;max-height:85vh;overflow:auto;border:0;border-radius:16px;padding:20px;color:#1b2430}dialog::backdrop{background:#0008}dialog textarea{box-sizing:border-box;width:100%;min-height:140px;font:16px system-ui;padding:10px}dialog button{font:16px system-ui;min-height:44px;padding:10px 14px;margin:5px;border:0;border-radius:10px;background:#dde6f0;color:#1f4e79}#start,#apply{background:#1f4e79;color:white}h2{font-size:20px;margin-top:0}#status{white-space:pre-wrap}button:disabled{opacity:.5}
+</style>
+</head>
+<body>
+<iframe id="app" title="Форма отчёта СМР" allow="microphone 'self'"></iframe>
+<dialog id="voice" aria-labelledby="title">
+<h2 id="title">Диктовка</h2>
+<p>Речь может обрабатываться сервером сервиса распознавания. Запись начнётся только после нажатия «Начать». Отчёт автоматически не отправляется.</p>
+<p id="status" role="status" aria-live="polite"></p>
+<button id="start" type="button">Начать</button><button id="stop" type="button" disabled>Остановить</button>
+<label for="draft">Проверьте и исправьте текст перед добавлением:</label>
+<textarea id="draft"></textarea>
+<button id="apply" type="button">Добавить в поле</button><button id="cancel" type="button">Отмена</button>
+</dialog>
+<script>
+'use strict';
+const frame=document.getElementById('app'), modal=document.getElementById('voice'), draft=document.getElementById('draft'), status=document.getElementById('status');
+const start=document.getElementById('start'), stop=document.getElementById('stop'), apply=document.getElementById('apply');
+const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let target=null, original='', recognition=null, timer=null, observer=null, originHash='';
+function endRecording(){
+ clearTimeout(timer);timer=null;
+ const r=recognition;recognition=null;
+ if(r){r.onresult=r.onerror=r.onend=null;try{r.abort()}catch(e){}}
+ start.disabled=!Recognition;stop.disabled=true;apply.disabled=false;draft.readOnly=false;
+}
+function cancel(){endRecording();target=null;if(modal.open)modal.close()}
+function openVoice(field){
+ if(!field.isConnected||field.readOnly||field.disabled)return;
+ if(typeof modal.showModal!=='function'){alert('Обновите Safari или используйте микрофон клавиатуры iPhone.');return}
+ cancel();target=field;original=field.value;originHash=frame.contentWindow.location.hash;draft.value='';
+ status.textContent=Recognition?'Нажмите «Начать» и разрешите доступ к микрофону и распознаванию.':'Распознавание в этом режиме недоступно. Откройте страницу в Safari. Можно также надиктовать текст микрофоном клавиатуры в поле ниже.';
+ start.disabled=!Recognition;modal.showModal();
+}
+start.onclick=()=>{
+ if(recognition||!Recognition)return;
+ const r=new Recognition();recognition=r;r.lang='ru-RU';r.continuous=false;r.interimResults=false;r.maxAlternatives=1;
+ const before=draft.value;start.disabled=true;stop.disabled=false;apply.disabled=true;draft.readOnly=true;
+ status.textContent='Ожидаем разрешение. После его выдачи произнесите короткую фразу.';
+ r.onstart=()=>{if(recognition===r)status.textContent='Слушаю… Произнесите текст.'};
+ r.onresult=e=>{
+  if(recognition!==r)return;
+  let words=[];for(let i=0;i<e.results.length;i++)if(e.results[i].isFinal)words.push(e.results[i][0].transcript);
+  draft.value=[before,words.join(' ')].filter(Boolean).join(' ');
+ };
+ r.onerror=e=>{
+  if(recognition!==r)return;
+  const messages={'not-allowed':'Доступ запрещён. Проверьте разрешения Safari.','service-not-allowed':'Сервис распознавания недоступен в этом режиме. Откройте страницу в Safari и проверьте настройки Siri и диктовки.','audio-capture':'Микрофон недоступен.','no-speech':'Речь не распознана. Попробуйте ещё раз.','network':'Ошибка связи с сервисом распознавания.','language-not-supported':'Русский язык недоступен в сервисе распознавания.'};
+  status.textContent=(messages[e.error]||'Диктовка прервана.')+' Можно использовать микрофон клавиатуры в поле ниже.';endRecording();
+ };
+ r.onend=()=>{if(recognition===r){status.textContent=draft.value.trim()?'Проверьте текст. Он ещё не добавлен в отчёт.':'Текст не получен. Повторите или воспользуйтесь клавиатурой.';endRecording()}};
+ try{r.start();timer=setTimeout(()=>{if(recognition===r){endRecording();status.textContent='Диктовка остановлена по таймеру. Проверьте текст или повторите.'}},30000)}catch(e){endRecording();status.textContent='Не удалось запустить диктовку. Откройте страницу в Safari или используйте микрофон клавиатуры.'}
+};
+stop.onclick=()=>{if(recognition){stop.disabled=true;status.textContent='Завершаем распознавание…';try{recognition.stop()}catch(e){endRecording()}}};
+apply.onclick=()=>{
+ const text=draft.value.trim();if(!text){status.textContent='Сначала надиктуйте или введите текст.';return}
+ if(!target||!target.isConnected||target.ownerDocument!==frame.contentDocument||target.disabled||target.readOnly||target.value!==original||frame.contentWindow.location.hash!==originHash){status.textContent='Поле отчёта изменилось. Скопируйте текст, закройте это окно и снова выберите нужное поле.';return}
+ const value=original+(original&&!/\s$/.test(original)?'\n':'')+text;
+ if(value.length>10000||(target.maxLength>=0&&value.length>target.maxLength)){status.textContent='Текст слишком длинный для поля. Сократите его.';return}
+ const field=target;field.value=value;
+ field.dispatchEvent(new frame.contentWindow.Event('input',{bubbles:true}));
+ if(field.isConnected)field.dispatchEvent(new frame.contentWindow.Event('change',{bubbles:true}));
+ cancel();if(field.isConnected)field.focus();
+};
+document.getElementById('cancel').onclick=cancel;
+modal.addEventListener('cancel',e=>{e.preventDefault();cancel()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&recognition){endRecording();status.textContent='Диктовка остановлена при уходе со страницы. Проверьте текст.'}});
+window.addEventListener('pagehide',cancel);
+frame.addEventListener('load',()=>{
+ cancel();if(observer)observer.disconnect();
+ let doc;try{doc=frame.contentDocument;if(!doc||frame.contentWindow.location.origin!==location.origin)return}catch(e){return}
+ const scan=()=>{
+  doc.querySelectorAll('textarea').forEach(field=>{
+   if(field.disabled||field.readOnly||field.dataset.iosVoice)return;
+   field.dataset.iosVoice='1';const button=doc.createElement('button');button.type='button';button.textContent='🎤 Надиктовать';button.className='btn sec';button.style.cssText='min-height:44px;margin:6px 0 10px;font-size:16px';
+   button.onclick=()=>openVoice(field);field.insertAdjacentElement('afterend',button);
+  });
+ };
+ scan();observer=new MutationObserver(scan);observer.observe(doc.body,{childList:true,subtree:true});
+});
+frame.src='./index.html'+location.search+location.hash;
+</script>
+</body>
+</html>
