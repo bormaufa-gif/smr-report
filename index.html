@@ -100,7 +100,9 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
 const fd=s=>s?s.split('-').reverse().join('.'):'';
-const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Не удалось сохранить на телефоне')}}};
+const USER_KEYS=new Set(['hist','draft','smeta','sum','chk','req','ppl','att']);   // данные конкретного пользователя: хранятся отдельно для каждого кода доступа
+const nsKey=k=>{if(!USER_KEYS.has(k))return k;let key='';try{key=(JSON.parse(localStorage.getItem('cfg')||'{}').key||'')}catch(e){}return key?k+'@'+key:k};
+const ls={get(k,d){try{const nk=nsKey(k);let v=localStorage.getItem(nk);if(v==null&&nk!==k){v=localStorage.getItem(k);if(v!=null){localStorage.setItem(nk,v);localStorage.removeItem(k)}}return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(nsKey(k),JSON.stringify(v))}catch(e){toast('Не удалось сохранить на телефоне')}}};
 
 /* ---------- шифры РД (из «Состав РД», ГНТ.61.2024.01-СРД Изм. 4) ---------- */
 const PRJ='ГНТ.61.2024.01-';
@@ -336,7 +338,7 @@ if(!Array.isArray(cfg.techList)||!cfg.techList.length)cfg.techList=DEF_TECH.slic
 if(!cfg.techV){if(cfg.techList.join('|')===OLD_TECH.join('|'))cfg.techList=DEF_TECH.slice();else DEF_TECH.forEach(x=>{if(!cfg.techList.includes(x))cfg.techList.push(x)});cfg.techV=1;ls.set('cfg',cfg)}
 if(!Array.isArray(cfg.list)||!cfg.list.length)cfg.list=DEF_RESP.slice();
 const IS_PWA=!!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches));   // запущено с экрана «Домой»
-{const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m&&m[1].toUpperCase()!==cfg.key){cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);if(IS_PWA)history.replaceState(null,'',location.pathname+location.search);setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
+{const m=/[#&]code=([A-Za-z0-9-]{10,20})/.exec(location.hash||'');if(m&&m[1].toUpperCase()!==cfg.key){const had=!!cfg.key;cfg.key=m[1].toUpperCase();cfg.who=null;cfg.lk='';ls.set('cfg',cfg);if(IS_PWA)history.replaceState(null,'',location.pathname+location.search);if(had){location.reload()}else setTimeout(()=>{toast('Код доступа сохранён. Проверяю…');loadLists(true,true)},300)}}
 if(!IS_PWA&&/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(cfg.key||'')&&!/code=/.test(location.hash))history.replaceState(null,'',location.pathname+location.search+'#code='+cfg.key);   // iPhone: иконка «На экран Домой» хранит данные отдельно — передаём ей код через адрес
 const meName=()=>(cfg.who&&!cfg.who.legacy&&cfg.who.name)||(cfg.me||'').trim();   // ФИО владельца учётной записи = ответственный
 const ROLE_RU={master:'мастер',lead:'руководитель',admin:'администратор'};
@@ -879,7 +881,7 @@ async function postJSON(obj){
 }
 async function syncOne(h){
  const x=await postJSON(payloadOf(h));
- if(x.opaque){h.sync=2;h.err='';return true}
+ if(x.opaque){h.sync=3;h.err='сервер не подтвердил приём';return false}   // ответ не получен: повторим позже, сервер не дублирует по id
  if(x.err){h.err=x.err;return false}
  const j=x.j;
  if(j&&j.ok){h.sync=1;h.err='';return true}
@@ -893,7 +895,7 @@ async function syncAll(manual){
  syncing=true;let ok=0,bad=0;
  for(const h of todo.reverse()){(await syncOne(h))?ok++:bad++}
  syncing=false;ls.set('hist',hist);if(ok)loadSmeta(false,true);
- if(manual||bad)toast(bad?`В таблицу не ушло: ${bad}. Проверьте интернет и настройки.`:`Отправлено в таблицу: ${ok}`,4500);
+ if(manual||bad)toast(bad?`Не подтверждено сервером: ${bad}. Отчёты сохранены и будут отправлены повторно.`:`Отправлено в таблицу: ${ok}`,4500);
  else if(ok)toast('Отчёт отправлен в таблицу');
  if(page==='hist')histView();
 }
@@ -907,7 +909,7 @@ async function syncReqs(manual){
  syncingR=true;let ok=0,bad=0,last='';
  for(const r of todo){
   const x=await postJSON(reqPayload(r));
-  if(x.opaque){r.sent=2;r.err='';r.queued=0;ok++}
+  if(x.opaque){r.sent=3;r.err='сервер не подтвердил приём';bad++;last=r.err}
   else if(x.err){r.err=x.err;bad++;last=x.err}
   else if(x.j&&x.j.ok){r.sent=1;r.err='';r.queued=0;if(x.j.num)r.num=String(x.j.num);ok++}
   else{r.err=(x.j&&x.j.error)||'сервер отклонил';bad++;last=r.err}
@@ -952,7 +954,7 @@ async function syncChks(manual){
  syncingC=true;let ok=0,bad=0,last='';
  for(const r of todo){
   const x=await postJSON(chkPayload(r));
-  if(x.opaque){r.sync=2;r.err='';ok++}
+  if(x.opaque){r.sync=3;r.err='сервер не подтвердил приём';bad++;last=r.err}
   else if(x.err){r.err=x.err;bad++;last=x.err}
   else if(x.j&&x.j.ok){r.sync=1;r.err='';ok++}
   else{r.err=(x.j&&x.j.error)||'сервер отклонил';bad++;last=r.err}
@@ -970,6 +972,7 @@ function syncBadge(h){
  if(!cfg.sink)return '';
  if(h.sync===1)return '<span class="badge ok">✓ в таблице</span>';
  if(h.sync===2)return '<span class="badge ok">✓ отправлен</span>';
+ if(h.sync===3)return '<span class="badge warn">⏳ ждёт подтверждения сервера</span>';
  return `<span class="badge warn">⏳ ждёт отправки${h.err?': '+esc(h.err):''}</span>`;
 }
 function histView(){
