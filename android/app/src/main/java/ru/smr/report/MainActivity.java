@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
-import android.view.View;
-import android.view.WindowInsets;
 import android.webkit.*;
 import android.widget.*;
 
@@ -22,6 +20,12 @@ public class MainActivity extends Activity {
   });
   setContentView(root); showLogin();
  }
+ private void addUpdateButton() {
+  Button update = new Button(this);
+  update.setText("Проверить обновления");
+  update.setOnClickListener(v -> UpdateChecker.check(this, update));
+  root.addView(update);
+ }
  private void showLogin() {
   if (web != null) { web.stopLoading(); web.destroy(); web = null; }
   root.removeAllViews();
@@ -29,10 +33,12 @@ public class MainActivity extends Activity {
   EditText code = new EditText(this); code.setSingleLine(true); code.setHint("Код доступа"); code.setInputType(0x00080001); root.addView(code);
   Button enter = new Button(this); enter.setText("Войти"); root.addView(enter);
   enter.setOnClickListener(v -> { String value = code.getText().toString().trim(); if (value.isEmpty()) { code.setError("Введите код"); return; } openReport(value); });
+  addUpdateButton();
  }
  private void openReport(String code) {
   root.removeAllViews();
   Button change = new Button(this); change.setText("Сменить код"); change.setOnClickListener(v -> showLogin()); root.addView(change);
+  addUpdateButton();
   web = new WebView(this); root.addView(web, new LinearLayout.LayoutParams(-1,0,1));
   WebSettings settings = web.getSettings(); settings.setJavaScriptEnabled(true); settings.setDomStorageEnabled(true); settings.setAllowFileAccess(false); settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
   CookieManager.getInstance().setAcceptCookie(true);
