@@ -1,0 +1,20 @@
+{
+  "name": "ПТС Отчёт СМР",
+  "short_name": "Отчёт СМР",
+  "description": "Ежедневный отчёт о выполненных СМР",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1f4e79",
+  "background_color": "#eef1f5",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
